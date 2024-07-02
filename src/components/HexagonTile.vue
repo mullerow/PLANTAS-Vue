@@ -13,12 +13,13 @@
         transform: `translateX(${hexagon.additionalXShiftOfHexagon}px)translateY(${hexagon.additionalYShiftOfHexagon}px)`
       }"
     >
-      <img src="@/assets/images/ground-soil.png" alt="soil-ground" />
+      <img :src="`${hexagon.backgroundImage}`" alt="soil-ground" />
     </div>
     <div class="option-window" v-if="optionwindow">
-      OPTIONEN von {{ optionHexagonId }}
+      <h3>OPTIONEN von {{ optionHexagonId }}</h3>
       <hr />
-      Koordinaten: {{ optionHexagonXKoordinate }} : {{ optionHexagonYKoordinate }}
+      Koordinaten: {{ optionHexagonXKoordinate }} : {{ optionHexagonYKoordinate }} <br />
+      FeldTyp: {{ hexagonTypeName }}
     </div>
   </div>
 </template>
@@ -32,7 +33,8 @@ export default {
       optionwindow: false,
       optionHexagonId: null,
       optionHexagonXKoordinate: null,
-      optionHexagonYKoordinate: null
+      optionHexagonYKoordinate: null,
+      hexagonTypeName: ''
     }
   },
   methods: {
@@ -49,6 +51,7 @@ export default {
       this.optionHexagonId = hexagon.hexagonId
       this.optionHexagonXKoordinate = hexagon.hexagonXCoordinate
       this.optionHexagonYKoordinate = hexagon.hexagonYCoordinate
+      this.hexagonTypeName = hexagon.hexagonType
     }
   }
 }
@@ -70,6 +73,7 @@ export default {
   background-color: goldenrod;
   cursor: pointer;
   border: 2px solid green;
+  box-shadow: 0px 0px 200px red;
 }
 .gameboard-container {
   display: flex;
@@ -82,12 +86,14 @@ export default {
 .option-window {
   width: 200px;
   height: 500px;
-  background-color: rgb(0, 195, 255);
-  text-align: center;
+  background-color: #00524e;
+  text-align: start;
   position: absolute;
   left: 550px;
   border: 2px solid black;
   border-radius: 5px;
+  color: wheat;
+  padding-left: 5px;
 }
 h2 {
   font-size: 12px;

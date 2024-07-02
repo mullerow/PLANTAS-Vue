@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-
+import soilGroundImage from '@/assets/images/ground-soil.png'
+import skyImage from '@/assets/images/blue-sky.png'
 export const storeData = defineStore('store', {
   state: () => ({
     playgroundData: {
@@ -12,8 +13,11 @@ export const storeData = defineStore('store', {
     createHexagons() {
       for (let y = 1; y <= this.playgroundData.amountRows; y++) {
         for (let x = 1; x <= this.playgroundData.amountColumns; x++) {
+          // verschieben der hexagone
           let yShiftOfHexagon = 0
           let xShiftOfHexagon = 0
+          let backgroundImageHexagon = ''
+          let hexagonType = ''
           if (y % 2 === 0) {
             xShiftOfHexagon = 25
           }
@@ -42,12 +46,22 @@ export const storeData = defineStore('store', {
           } else if (y === 13) {
             yShiftOfHexagon = -156
           }
+          // hinzufügen der hintergrundbilder
+          if (y < 10) {
+            backgroundImageHexagon = skyImage
+            hexagonType = 'freier Himmel'
+          } else {
+            backgroundImageHexagon = soilGroundImage
+            hexagonType = 'freier Boden'
+          }
           let hexagonObject = {
             hexagonId: y * this.playgroundData.amountColumns + x - 10,
             hexagonXCoordinate: x,
             hexagonYCoordinate: y,
             additionalYShiftOfHexagon: yShiftOfHexagon,
-            additionalXShiftOfHexagon: xShiftOfHexagon
+            additionalXShiftOfHexagon: xShiftOfHexagon,
+            backgroundImage: backgroundImageHexagon,
+            hexagonType: hexagonType
           }
           this.playgroundData.hexagonData.push(hexagonObject)
         }
