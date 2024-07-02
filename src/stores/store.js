@@ -5,7 +5,7 @@ export const storeData = defineStore('store', {
     playgroundData: {
       hexagonData: [],
       amountColumns: 10,
-      amountRows: 10
+      amountRows: 13
     }
   }),
   actions: {
@@ -35,6 +35,12 @@ export const storeData = defineStore('store', {
             yShiftOfHexagon = -104
           } else if (y === 10) {
             yShiftOfHexagon = -117
+          } else if (y === 11) {
+            yShiftOfHexagon = -130
+          } else if (y === 12) {
+            yShiftOfHexagon = -143
+          } else if (y === 13) {
+            yShiftOfHexagon = -156
           }
           let hexagonObject = {
             hexagonId: y * this.playgroundData.amountColumns + x - 10,

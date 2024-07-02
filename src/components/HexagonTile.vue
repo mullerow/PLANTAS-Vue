@@ -1,11 +1,11 @@
 <template>
-  <div class="hexagon-container">
+  <div class="gameboard-container">
     <div
       class="hexagon-tile"
-      v-for="(hexagon, index) in store.playgroundData.hexagonData"
+      v-for="hexagon in store.playgroundData.hexagonData"
       :key="hexagon.hexagonId"
       @mouseover="handleMouseHover(hexagon)"
-      @click="openOptionWindow(index)"
+      @click="openOptionWindow(hexagon)"
       :class="{
         'hexagon-tile': true
       }"
@@ -13,9 +13,13 @@
         transform: `translateX(${hexagon.additionalXShiftOfHexagon}px)translateY(${hexagon.additionalYShiftOfHexagon}px)`
       }"
     >
-      <h2>{{ hexagon.hexagonXCoordinate }} : {{ hexagon.hexagonYCoordinate }}</h2>
+      <img src="@/assets/images/ground-soil.png" alt="soil-ground" />
     </div>
-    <div class="option-window" v-if="optionwindow">OPTIONEN von {{ optionHexagonId }}</div>
+    <div class="option-window" v-if="optionwindow">
+      OPTIONEN von {{ optionHexagonId }}
+      <hr />
+      Koordinaten: {{ optionHexagonXKoordinate }} : {{ optionHexagonYKoordinate }}
+    </div>
   </div>
 </template>
 
@@ -26,7 +30,9 @@ export default {
     return {
       store: storeData(),
       optionwindow: false,
-      optionHexagonId: null
+      optionHexagonId: null,
+      optionHexagonXKoordinate: null,
+      optionHexagonYKoordinate: null
     }
   },
   methods: {
@@ -38,9 +44,11 @@ export default {
     handleMouseHover(hexagon) {
       hexagon.hovered = true
     },
-    openOptionWindow(index) {
+    openOptionWindow(hexagon) {
       this.optionwindow = true
-      this.optionHexagonId = index
+      this.optionHexagonId = hexagon.hexagonId
+      this.optionHexagonXKoordinate = hexagon.hexagonXCoordinate
+      this.optionHexagonYKoordinate = hexagon.hexagonYCoordinate
     }
   }
 }
@@ -61,12 +69,15 @@ export default {
 .hexagon-tile:hover {
   background-color: goldenrod;
   cursor: pointer;
+  border: 2px solid green;
 }
-.hexagon-container {
+.gameboard-container {
   display: flex;
   flex-wrap: wrap;
   width: 500px;
+  height: 500px;
   position: relative;
+  background-color: gray;
 }
 .option-window {
   width: 200px;
@@ -75,9 +86,11 @@ export default {
   text-align: center;
   position: absolute;
   left: 550px;
+  border: 2px solid black;
+  border-radius: 5px;
 }
 h2 {
-  font-size: 16px;
+  font-size: 12px;
   font-weight: bold;
 }
 </style>
