@@ -79,7 +79,7 @@ export default {
 .gameboard-container {
   display: flex;
   flex-wrap: wrap;
-  width: 500px;
+  width: 800px;
   height: 500px;
   position: relative;
   background-color: gray;
@@ -90,7 +90,7 @@ export default {
   background-color: #00524e;
   text-align: start;
   position: absolute;
-  left: 550px;
+  left: 800px;
   border: 2px solid black;
   border-radius: 5px;
   color: wheat;

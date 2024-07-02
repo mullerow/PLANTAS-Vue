@@ -5,7 +5,7 @@ export const storeData = defineStore('store', {
   state: () => ({
     playgroundData: {
       hexagonData: [],
-      amountColumns: 10,
+      amountColumns: 16,
       amountRows: 13
     }
   }),
