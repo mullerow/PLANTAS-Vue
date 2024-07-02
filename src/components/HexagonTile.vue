@@ -2,9 +2,10 @@
   <div class="hexagon-container">
     <div
       class="hexagon-tile"
-      v-for="hexagon in store.playgroundData.hexagonData"
+      v-for="(hexagon, index) in store.playgroundData.hexagonData"
       :key="hexagon.hexagonId"
       @mouseover="handleMouseHover(hexagon)"
+      @click="openOptionWindow(index)"
       :class="{
         'hexagon-tile': true
       }"
@@ -14,6 +15,7 @@
     >
       <h2>{{ hexagon.hexagonXCoordinate }} : {{ hexagon.hexagonYCoordinate }}</h2>
     </div>
+    <div class="option-window" v-if="optionwindow">OPTIONEN von {{ optionHexagonId }}</div>
   </div>
 </template>
 
@@ -22,7 +24,9 @@ import { storeData } from '@/stores/store.js'
 export default {
   data() {
     return {
-      store: storeData()
+      store: storeData(),
+      optionwindow: false,
+      optionHexagonId: null
     }
   },
   methods: {
@@ -33,6 +37,10 @@ export default {
     },
     handleMouseHover(hexagon) {
       hexagon.hovered = true
+    },
+    openOptionWindow(index) {
+      this.optionwindow = true
+      this.optionHexagonId = index
     }
   }
 }
@@ -52,11 +60,21 @@ export default {
 }
 .hexagon-tile:hover {
   background-color: goldenrod;
+  cursor: pointer;
 }
 .hexagon-container {
   display: flex;
   flex-wrap: wrap;
   width: 500px;
+  position: relative;
+}
+.option-window {
+  width: 200px;
+  height: 500px;
+  background-color: rgb(0, 195, 255);
+  text-align: center;
+  position: absolute;
+  left: 550px;
 }
 h2 {
   font-size: 16px;
