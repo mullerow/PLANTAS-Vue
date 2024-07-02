@@ -1,6 +1,12 @@
 <template>
-  <div class="hexagon-tile" v-for="hexagon in store.temporaryData.testArray" :key="hexagon">
-    <h2>{{ hexagon }}</h2>
+  <div class="hexagon-container">
+    <div
+      class="hexagon-tile"
+      v-for="hexagon in store.playgroundData.hexagonData"
+      :key="hexagon.hexagonId"
+    >
+      <h2>{{ hexagon.hexagonId }}</h2>
+    </div>
   </div>
 </template>
 
@@ -17,15 +23,21 @@ export default {
 
 <style scoped>
 .hexagon-tile {
-  height: 200px;
-  width: 200px;
-  background-color: red;
+  height: 50px;
+  width: 50px;
+  background-color: dodgerblue;
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.hexagon-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 500px;
 }
 h2 {
-  z-index: 10;
-  font-size: 50px;
-  margin-left: 85px;
-  padding-top: 55px;
+  font-size: 30px;
 }
 </style>

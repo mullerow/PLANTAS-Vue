@@ -12,6 +12,9 @@ export default {
     return {
       store: storeData()
     }
+  },
+  created() {
+    this.store.createHexagons()
   }
 }
 </script>
