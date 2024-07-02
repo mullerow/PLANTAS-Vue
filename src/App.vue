@@ -1,11 +1,5 @@
 <template>
-  <div class="hexagon-tile">Hallo</div>
+  <RouterView />
 </template>
-
-<style>
-.hexagon-tile {
-  height: 200px;
-  width: 200px;
-  background-color: red;
-}
-</style>
+<script></script>
+<style></style>
