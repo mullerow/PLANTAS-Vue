@@ -10,7 +10,8 @@
         'hexagon-tile': true
       }"
       :style="{
-        transform: `translateX(${hexagon.additionalXShiftOfHexagon}px)translateY(${hexagon.additionalYShiftOfHexagon}px)`
+        transform: `translateX(${hexagon.additionalXShiftOfHexagon}px)translateY(${hexagon.additionalYShiftOfHexagon}px)`,
+        filter: `brightness(${hexagon.brightnessLevel})`
       }"
     >
       <img :src="`${hexagon.backgroundImage}`" alt="soil-ground" />
@@ -84,7 +85,7 @@ export default {
   background-color: gray;
 }
 .option-window {
-  width: 200px;
+  width: 250px;
   height: 500px;
   background-color: #00524e;
   text-align: start;
@@ -94,6 +95,7 @@ export default {
   border-radius: 5px;
   color: wheat;
   padding-left: 5px;
+  line-height: 1.5rem;
 }
 h2 {
   font-size: 12px;

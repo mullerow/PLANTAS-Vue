@@ -18,25 +18,36 @@ export const storeData = defineStore('store', {
           let xShiftOfHexagon = 0
           let backgroundImageHexagon = ''
           let hexagonType = ''
+          let brightness = 1
           if (y % 2 === 0) {
             xShiftOfHexagon = 25
           }
-          if (y === 2) {
+          if (y === 1) {
+            brightness = 1.5
+          } else if (y === 2) {
+            brightness = 1.4
             yShiftOfHexagon = -13
           } else if (y === 3) {
             yShiftOfHexagon = -26
+            brightness = 1.3
           } else if (y === 4) {
             yShiftOfHexagon = -39
+            brightness = 1.2
           } else if (y === 5) {
             yShiftOfHexagon = -52
+            brightness = 1.1
           } else if (y === 6) {
             yShiftOfHexagon = -65
+            brightness = 1.0
           } else if (y === 7) {
             yShiftOfHexagon = -78
+            brightness = 0.9
           } else if (y === 8) {
             yShiftOfHexagon = -91
+            brightness = 0.8
           } else if (y === 9) {
             yShiftOfHexagon = -104
+            brightness = 0.7
           } else if (y === 10) {
             yShiftOfHexagon = -117
           } else if (y === 11) {
@@ -61,7 +72,8 @@ export const storeData = defineStore('store', {
             additionalYShiftOfHexagon: yShiftOfHexagon,
             additionalXShiftOfHexagon: xShiftOfHexagon,
             backgroundImage: backgroundImageHexagon,
-            hexagonType: hexagonType
+            hexagonType: hexagonType,
+            brightnessLevel: brightness
           }
           this.playgroundData.hexagonData.push(hexagonObject)
         }
