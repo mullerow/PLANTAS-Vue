@@ -4,8 +4,15 @@
       class="hexagon-tile"
       v-for="hexagon in store.playgroundData.hexagonData"
       :key="hexagon.hexagonId"
+      @mouseover="handleMouseHover(hexagon)"
+      :class="{
+        'hexagon-tile': true
+      }"
+      :style="{
+        transform: `translateX(${hexagon.additionalXShiftOfHexagon}px)translateY(${hexagon.additionalYShiftOfHexagon}px)`
+      }"
     >
-      <h2>{{ hexagon.hexagonId }}</h2>
+      <h2>{{ hexagon.hexagonXCoordinate }} : {{ hexagon.hexagonYCoordinate }}</h2>
     </div>
   </div>
 </template>
@@ -16,6 +23,16 @@ export default {
   data() {
     return {
       store: storeData()
+    }
+  },
+  methods: {
+    shiftEvenRowsOfHexagons(hexagon) {
+      if (hexagon.hexagonYCoordinate % 2 === 0) {
+        return true
+      } else return false
+    },
+    handleMouseHover(hexagon) {
+      hexagon.hovered = true
     }
   }
 }
@@ -31,6 +48,10 @@ export default {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
+  position: relative;
+}
+.hexagon-tile:hover {
+  background-color: goldenrod;
 }
 .hexagon-container {
   display: flex;
@@ -38,6 +59,7 @@ export default {
   width: 500px;
 }
 h2 {
-  font-size: 30px;
+  font-size: 16px;
+  font-weight: bold;
 }
 </style>
