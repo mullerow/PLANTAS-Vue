@@ -21,6 +21,16 @@
       <hr />
       Koordinaten: {{ optionHexagonXKoordinate }} : {{ optionHexagonYKoordinate }} <br />
       FeldTyp: {{ hexagonTypeName }}
+      <div class="container mt-5">
+        <div class="dropdown" @click="toggleDropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button">Wähle Ausprägung</button>
+          <div v-if="isDropdownOpen" class="dropdown-menu">
+            <a class="dropdown-item" href="#">Blatt LvL 1</a>
+            <a class="dropdown-item" href="#">Stiel LvL 2</a>
+            <a class="dropdown-item" href="#">Blatt LvL 2</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -35,7 +45,8 @@ export default {
       optionHexagonId: null,
       optionHexagonXKoordinate: null,
       optionHexagonYKoordinate: null,
-      hexagonTypeName: ''
+      hexagonTypeName: '',
+      isDropdownOpen: false
     }
   },
   methods: {
@@ -53,6 +64,9 @@ export default {
       this.optionHexagonXKoordinate = hexagon.hexagonXCoordinate
       this.optionHexagonYKoordinate = hexagon.hexagonYCoordinate
       this.hexagonTypeName = hexagon.hexagonType
+    },
+    toggleDropdown() {
+      this.isDropdownOpen = !this.isDropdownOpen
     }
   }
 }
@@ -100,5 +114,27 @@ export default {
 h2 {
   font-size: 12px;
   font-weight: bold;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  background-color: aquamarine;
+}
+
+.dropdown-menu {
+  display: block;
+  position: absolute;
+  background-color: white;
+  width: 200px;
+}
+
+.dropdown-item {
+  padding: 6px 12px;
+  display: block;
+}
+
+.dropdown-item:hover {
+  background-color: #ddd;
 }
 </style>
