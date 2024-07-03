@@ -83,12 +83,11 @@ export default {
   justify-content: center;
   flex-wrap: wrap;
   position: relative;
+  border: 2px solid transparent;
 }
 .hexagon-tile:hover {
-  background-color: goldenrod;
   cursor: pointer;
-  border: 2px solid green;
-  box-shadow: 0px 0px 200px red;
+  border: 2px solid red;
 }
 .gameboard-container {
   display: flex;
