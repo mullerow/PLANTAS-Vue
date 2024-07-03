@@ -62,7 +62,7 @@ export default {
 .hexagon-tile {
   height: 50px;
   width: 50px;
-  background-color: dodgerblue;
+  background-color: #2895d8;
   clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
   display: flex;
   align-items: center;
@@ -92,7 +92,7 @@ export default {
   position: absolute;
   left: 800px;
   border: 2px solid black;
-  border-radius: 5px;
+  border-radius: 0px 5px 5px 0px;
   color: wheat;
   padding-left: 5px;
   line-height: 1.5rem;

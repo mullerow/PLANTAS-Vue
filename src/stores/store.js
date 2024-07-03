@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import soilGroundImage from '@/assets/images/ground-soil.png'
 import skyImage from '@/assets/images/blue-sky.png'
+import seedling50 from '@/assets/images/seedling50x50.png'
 export const storeData = defineStore('store', {
   state: () => ({
     playgroundData: {
@@ -64,6 +65,11 @@ export const storeData = defineStore('store', {
           } else {
             backgroundImageHexagon = soilGroundImage
             hexagonType = 'freier Boden'
+          }
+          // Start Keimlingimage
+          if (x === 8 && y === 9) {
+            backgroundImageHexagon = seedling50
+            hexagonType = 'eigener Keimling'
           }
           let hexagonObject = {
             hexagonId: y * this.playgroundData.amountColumns + x - 10,
