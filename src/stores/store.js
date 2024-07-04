@@ -17,13 +17,15 @@ export const storeData = defineStore('store', {
   actions: {
     createHexagons() {
       for (let y = 1; y <= this.playgroundData.amountRows; y++) {
+        let xShiftOfHexagon = 13
         for (let x = 1; x <= this.playgroundData.amountColumns; x++) {
-          // verschieben der hexagone
+          // verschieben der hexagone, sodass diese eine lückenlose Fläch ergeben
           let yShiftOfHexagon = 0
-          let xShiftOfHexagon = 0
+
           let backgroundImageHexagon = ''
           let hexagonType = ''
           let brightness = 1
+          xShiftOfHexagon -= 13
           if (x % 2 === 0) {
             yShiftOfHexagon += 22
           }
@@ -62,45 +64,6 @@ export const storeData = defineStore('store', {
             yShiftOfHexagon -= 120
           } else if (y === 13) {
             yShiftOfHexagon -= 130
-          }
-          if (x === 2) {
-            xShiftOfHexagon = -13
-          } else if (x === 3) {
-            xShiftOfHexagon = -26
-          } else if (x === 4) {
-            xShiftOfHexagon = -39
-          } else if (x === 5) {
-            xShiftOfHexagon = -52
-          } else if (x === 6) {
-            xShiftOfHexagon = -65
-          } else if (x === 7) {
-            xShiftOfHexagon = -78
-          } else if (x === 8) {
-            xShiftOfHexagon = -91
-          } else if (x === 9) {
-            xShiftOfHexagon = -104
-          } else if (x === 10) {
-            xShiftOfHexagon = -117
-          } else if (x === 11) {
-            xShiftOfHexagon = -130
-          } else if (x === 12) {
-            xShiftOfHexagon = -143
-          } else if (x === 13) {
-            xShiftOfHexagon = -156
-          } else if (x === 14) {
-            xShiftOfHexagon = -169
-          } else if (x === 15) {
-            xShiftOfHexagon = -182
-          } else if (x === 16) {
-            xShiftOfHexagon = -195
-          } else if (x === 17) {
-            xShiftOfHexagon = -208
-          } else if (x === 18) {
-            xShiftOfHexagon = -221
-          } else if (x === 19) {
-            xShiftOfHexagon = -234
-          } else if (x === 20) {
-            xShiftOfHexagon = -247
           }
           // hinzufügen der hintergrundbilder
           if (y < 10) {
