@@ -3,8 +3,9 @@ import soilGroundImage from '@/assets/images/ground-soil.png'
 import skyImage from '@/assets/images/blue-sky.png'
 import seedling50 from '@/assets/images/seedling50x50.png'
 import stemLvl1 from '@/assets/images/stem-lvl1.png'
-import leafLvl1Left from '@/assets/images/leaf-lvl1-left-1.png'
-import leafLvl1right from '@/assets/images/leaf-lvl1-right-1.png'
+import leafLvl1Left from '@/assets/images/leafs/leaf-lvl1-left-1.png'
+import leafLvl1right from '@/assets/images/leafs/leaf-lvl1-right-1.png'
+import leafLvl1straight from '@/assets/images/leafs/leaf-lvl1-straight1.png'
 
 export const storeData = defineStore('store', {
   state: () => ({
@@ -21,7 +22,6 @@ export const storeData = defineStore('store', {
         for (let x = 1; x <= this.playgroundData.amountColumns; x++) {
           // verschieben der hexagone, sodass diese eine lückenlose Fläch ergeben
           let yShiftOfHexagon = 0
-
           let backgroundImageHexagon = ''
           let hexagonType = ''
           let brightness = 1
@@ -78,17 +78,21 @@ export const storeData = defineStore('store', {
             backgroundImageHexagon = seedling50
             hexagonType = 'eigener Keimling'
           }
-          if (x === 7 && y === 9) {
+          if (x === 6 && y === 9) {
             backgroundImageHexagon = stemLvl1
-            hexagonType = 'eigener Keimling'
+            hexagonType = 'Stamm Lvl 1'
+          }
+          if (x === 5 && y === 9) {
+            backgroundImageHexagon = leafLvl1Left
+            hexagonType = 'Blatt Lvl 1 links'
+          }
+          if (x === 7 && y === 9) {
+            backgroundImageHexagon = leafLvl1right
+            hexagonType = 'Blatt Lvl 1 rechts'
           }
           if (x === 6 && y === 8) {
-            backgroundImageHexagon = leafLvl1Left
-            hexagonType = 'eigener Keimling'
-          }
-          if (x === 7 && y === 8) {
-            backgroundImageHexagon = leafLvl1right
-            hexagonType = 'eigener Keimling'
+            backgroundImageHexagon = leafLvl1straight
+            hexagonType = 'Blatt Lvl 1 nach oben'
           }
           ///// Erzeugen des Objekts für die individuellen HexagonDaten
           let hexagonObject = {
