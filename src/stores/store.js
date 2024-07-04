@@ -10,7 +10,7 @@ export const storeData = defineStore('store', {
   state: () => ({
     playgroundData: {
       hexagonData: [],
-      amountColumns: 16,
+      amountColumns: 20,
       amountRows: 13
     }
   }),
@@ -24,43 +24,83 @@ export const storeData = defineStore('store', {
           let backgroundImageHexagon = ''
           let hexagonType = ''
           let brightness = 1
-          if (y % 2 === 0) {
-            xShiftOfHexagon = 25
+          if (x % 2 === 0) {
+            yShiftOfHexagon += 22
           }
           if (y === 1) {
-            brightness = 1.5
+            yShiftOfHexagon -= 10
+            brightness = 1.7
           } else if (y === 2) {
-            brightness = 1.4
-            yShiftOfHexagon = -13
+            yShiftOfHexagon -= 20
+            brightness = 1.6
           } else if (y === 3) {
-            yShiftOfHexagon = -26
-            brightness = 1.3
+            yShiftOfHexagon -= 30
+            brightness = 1.5
           } else if (y === 4) {
-            yShiftOfHexagon = -39
-            brightness = 1.2
+            yShiftOfHexagon -= 40
+            brightness = 1.4
           } else if (y === 5) {
-            yShiftOfHexagon = -52
-            brightness = 1.1
+            yShiftOfHexagon -= 50
+            brightness = 1.3
           } else if (y === 6) {
-            yShiftOfHexagon = -65
-            brightness = 1.0
+            yShiftOfHexagon -= 60
+            brightness = 1.2
           } else if (y === 7) {
-            yShiftOfHexagon = -78
-            brightness = 0.9
+            yShiftOfHexagon -= 70
+            brightness = 1.1
           } else if (y === 8) {
-            yShiftOfHexagon = -91
-            brightness = 0.8
+            yShiftOfHexagon -= 80
+            brightness = 1.0
           } else if (y === 9) {
-            yShiftOfHexagon = -104
-            brightness = 0.7
+            yShiftOfHexagon -= 90
+            brightness = 0.9
           } else if (y === 10) {
-            yShiftOfHexagon = -117
+            yShiftOfHexagon -= 100
           } else if (y === 11) {
-            yShiftOfHexagon = -130
+            yShiftOfHexagon -= 110
           } else if (y === 12) {
-            yShiftOfHexagon = -143
+            yShiftOfHexagon -= 120
           } else if (y === 13) {
-            yShiftOfHexagon = -156
+            yShiftOfHexagon -= 130
+          }
+          if (x === 2) {
+            xShiftOfHexagon = -13
+          } else if (x === 3) {
+            xShiftOfHexagon = -26
+          } else if (x === 4) {
+            xShiftOfHexagon = -39
+          } else if (x === 5) {
+            xShiftOfHexagon = -52
+          } else if (x === 6) {
+            xShiftOfHexagon = -65
+          } else if (x === 7) {
+            xShiftOfHexagon = -78
+          } else if (x === 8) {
+            xShiftOfHexagon = -91
+          } else if (x === 9) {
+            xShiftOfHexagon = -104
+          } else if (x === 10) {
+            xShiftOfHexagon = -117
+          } else if (x === 11) {
+            xShiftOfHexagon = -130
+          } else if (x === 12) {
+            xShiftOfHexagon = -143
+          } else if (x === 13) {
+            xShiftOfHexagon = -156
+          } else if (x === 14) {
+            xShiftOfHexagon = -169
+          } else if (x === 15) {
+            xShiftOfHexagon = -182
+          } else if (x === 16) {
+            xShiftOfHexagon = -195
+          } else if (x === 17) {
+            xShiftOfHexagon = -208
+          } else if (x === 18) {
+            xShiftOfHexagon = -221
+          } else if (x === 19) {
+            xShiftOfHexagon = -234
+          } else if (x === 20) {
+            xShiftOfHexagon = -247
           }
           // hinzufügen der hintergrundbilder
           if (y < 10) {

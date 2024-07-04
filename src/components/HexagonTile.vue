@@ -77,22 +77,22 @@ export default {
   height: 50px;
   width: 50px;
   background-color: #2895d8;
-  clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+  clip-path: polygon(25% 5%, 75% 5%, 100% 50%, 75% 95%, 25% 95%, 0% 50%);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
   position: relative;
-  border: 2px solid transparent;
+  _border-top: 2px solid #1f72a5;
 }
 .hexagon-tile:hover {
   cursor: pointer;
-  border: 2px solid red;
+  border-top: 2px solid red;
 }
 .gameboard-container {
   display: flex;
   flex-wrap: wrap;
-  width: 800px;
+  width: 1000px;
   height: 500px;
   position: relative;
   background-color: gray;
@@ -103,7 +103,7 @@ export default {
   background-color: #00524e;
   text-align: start;
   position: absolute;
-  left: 800px;
+  left: 745px;
   border: 2px solid black;
   border-radius: 0px 5px 5px 0px;
   color: wheat;
