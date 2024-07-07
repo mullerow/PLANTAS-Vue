@@ -74,7 +74,8 @@ export const storeData = defineStore('store', {
           }
           ///// Erzeugen des Objekts für die individuellen HexagonDaten
           let hexagonObject = {
-            hexagonId: y * this.playgroundData.amountColumns + x - 10,
+            hexagonId:
+              y * this.playgroundData.amountColumns + x - this.playgroundData.amountColumns,
             hexagonXCoordinate: x,
             hexagonYCoordinate: y,
             additionalYShiftOfHexagon: yShiftOfHexagon,
@@ -84,6 +85,65 @@ export const storeData = defineStore('store', {
             brightnessLevel: brightness
           }
           this.playgroundData.hexagonData.push(hexagonObject)
+        }
+      }
+    },
+    checkForDevelopmentOptions(hexagon) {
+      if (hexagon.hexagonType === 'freier Himmel') {
+        console.log('freier Himmel')
+        this.checkForConnectionToPlant(hexagon)
+      } else if (hexagon.hexagonType === 'freier Boden') {
+        console.log('freier Boden')
+        this.checkForConnectionToPlant(hexagon)
+      } else {
+        console.log('Fläche schon bebaut')
+      }
+      console.log('hexa', hexagon.hexagonId)
+    },
+    checkForConnectionToPlant(hexagon) {
+      let yCoodinateNeighbourHexagon = null
+      for (let deltaY = -1; deltaY <= 1; deltaY++) {
+        for (let deltaX = -1; deltaX <= 1; deltaX++) {
+          /// Notwendige Korrekturen für die versetzten kacheln
+          if (
+            (deltaX === -1 && deltaY === 1) ||
+            (deltaX === 1 && deltaY === 1) ||
+            (deltaX === 0 && deltaY === 0)
+          ) {
+            continue
+          }
+          if (hexagon.hexagonXCoordinate % 2 === 0 && deltaX !== 0) {
+            yCoodinateNeighbourHexagon = hexagon.hexagonYCoordinate + deltaY + 1
+          } else {
+            yCoodinateNeighbourHexagon = hexagon.hexagonYCoordinate + deltaY
+          }
+          let xCoodinateNeighbourHexagon = hexagon.hexagonXCoordinate + deltaX
+
+          console.log(
+            '----------------------------------------------------------------------------------'
+          )
+          console.log('xCoodinateNeighbourHexagon', xCoodinateNeighbourHexagon)
+          console.log('yCoodinateNeighbourHexagon', yCoodinateNeighbourHexagon)
+          if (
+            yCoodinateNeighbourHexagon <= 0 ||
+            xCoodinateNeighbourHexagon <= 0 ||
+            xCoodinateNeighbourHexagon > this.playgroundData.amountColumns ||
+            yCoodinateNeighbourHexagon > this.playgroundData.amountRows
+          ) {
+            console.log('AUßERHALB!')
+            continue
+          }
+          let idNeighbourHexagon =
+            yCoodinateNeighbourHexagon * this.playgroundData.amountColumns +
+            xCoodinateNeighbourHexagon -
+            this.playgroundData.amountColumns
+          console.log('idNeighbourHexagon', idNeighbourHexagon)
+
+          if (
+            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType === 'freier Boden'
+          ) {
+            console.log('freier BODEN JAWOHL!')
+          }
         }
       }
     }

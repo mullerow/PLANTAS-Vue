@@ -14,6 +14,7 @@
         filter: `brightness(${hexagon.brightnessLevel})`
       }"
     >
+      {{ hexagon.hexagonXCoordinate }} {{ hexagon.hexagonYCoordinate }}
       <img :src="`${hexagon.backgroundImage}`" alt="soil-ground" />
     </div>
     <div class="option-window" v-if="optionwindow">
@@ -64,6 +65,7 @@ export default {
       this.optionHexagonXKoordinate = hexagon.hexagonXCoordinate
       this.optionHexagonYKoordinate = hexagon.hexagonYCoordinate
       this.hexagonTypeName = hexagon.hexagonType
+      this.store.checkForDevelopmentOptions(hexagon)
     },
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen
@@ -98,7 +100,7 @@ export default {
   background-color: gray;
 }
 .option-window {
-  width: 250px;
+  width: 255px;
   height: 550px;
   background-color: #00524e;
   text-align: start;
