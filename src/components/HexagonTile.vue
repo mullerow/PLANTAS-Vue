@@ -1,5 +1,5 @@
 <template>
-  <div class="gameboard-container">
+  <div class="hexagon-field-container">
     <div
       class="hexagon-tile"
       v-for="hexagon in store.playgroundData.hexagonData"
@@ -89,17 +89,17 @@ export default {
   cursor: pointer;
   border-top: 2px solid red;
 }
-.gameboard-container {
+.hexagon-field-container {
   display: flex;
   flex-wrap: wrap;
   width: 1000px;
-  height: 500px;
+  height: 550px;
   position: relative;
   background-color: gray;
 }
 .option-window {
   width: 250px;
-  height: 500px;
+  height: 550px;
   background-color: #00524e;
   text-align: start;
   position: absolute;

@@ -6,6 +6,7 @@ import stemLvl1 from '@/assets/images/stem-lvl1-2.png'
 import leafLvl1Left from '@/assets/images/leafs/leaf-lvl1-left-1.png'
 import leafLvl1right from '@/assets/images/leafs/leaf-lvl1-right-1.png'
 import leafLvl1straight from '@/assets/images/leafs/leaf-lvl1-straight1.png'
+import rootLvl1Center from '@/assets/images/roots/root-center-lvl1-1.png'
 
 export const storeData = defineStore('store', {
   state: () => ({
@@ -93,6 +94,10 @@ export const storeData = defineStore('store', {
           if (x === 6 && y === 8) {
             backgroundImageHexagon = leafLvl1straight
             hexagonType = 'Blatt Lvl 1 nach oben'
+          }
+          if ((x === 6 && y === 10) || (x === 8 && y === 10)) {
+            backgroundImageHexagon = rootLvl1Center
+            hexagonType = 'Wurzel Lvl 1 Zentral'
           }
           ///// Erzeugen des Objekts für die individuellen HexagonDaten
           let hexagonObject = {
