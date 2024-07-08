@@ -118,12 +118,6 @@ export const storeData = defineStore('store', {
             yCoodinateNeighbourHexagon = hexagon.hexagonYCoordinate + deltaY
           }
           let xCoodinateNeighbourHexagon = hexagon.hexagonXCoordinate + deltaX
-
-          console.log(
-            '----------------------------------------------------------------------------------'
-          )
-          console.log('xCoodinateNeighbourHexagon', xCoodinateNeighbourHexagon)
-          console.log('yCoodinateNeighbourHexagon', yCoodinateNeighbourHexagon)
           if (
             yCoodinateNeighbourHexagon <= 0 ||
             xCoodinateNeighbourHexagon <= 0 ||
@@ -141,15 +135,16 @@ export const storeData = defineStore('store', {
               'freier Boden' &&
             this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType !== 'freier Himmel'
           ) {
-            console.log('Hier Darf gewuzelt werden!')
             this.playgroundData.connectionToThePlant = true
           }
         }
       }
     },
     buildPlantpart(hexagonId) {
-      this.playgroundData.hexagonData[hexagonId - 1].backgroundImage = rootLvl1Center
-      this.playgroundData.hexagonData[hexagonId - 1].hexagonType = 'Wurzel Lvl 1 Zentral'
+      if (this.playgroundData.hexagonData[hexagonId - 1].hexagonType === 'freier Boden') {
+        this.playgroundData.hexagonData[hexagonId - 1].backgroundImage = rootLvl1Center
+        this.playgroundData.hexagonData[hexagonId - 1].hexagonType = 'Wurzel Lvl 1 Zentral'
+      }
     }
   },
   getters: {}

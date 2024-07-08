@@ -24,7 +24,7 @@
 <style scoped>
 .display-ressource-container {
   background-color: silver;
-  z-index: 3;
+  z-index: 5;
   height: 90px;
   width: 1000px;
   line-height: 1.5rem;
