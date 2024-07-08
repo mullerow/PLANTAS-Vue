@@ -13,7 +13,8 @@ export const storeData = defineStore('store', {
     playgroundData: {
       hexagonData: [],
       amountColumns: 20,
-      amountRows: 13
+      amountRows: 13,
+      connectionToThePlant: false
     }
   }),
   actions: {
@@ -98,7 +99,6 @@ export const storeData = defineStore('store', {
       } else {
         console.log('Fläche schon bebaut')
       }
-      console.log('hexa', hexagon.hexagonId)
     },
     checkForConnectionToPlant(hexagon) {
       let yCoodinateNeighbourHexagon = null
@@ -130,22 +130,26 @@ export const storeData = defineStore('store', {
             xCoodinateNeighbourHexagon > this.playgroundData.amountColumns ||
             yCoodinateNeighbourHexagon > this.playgroundData.amountRows
           ) {
-            console.log('AUßERHALB!')
             continue
           }
           let idNeighbourHexagon =
             yCoodinateNeighbourHexagon * this.playgroundData.amountColumns +
             xCoodinateNeighbourHexagon -
             this.playgroundData.amountColumns
-          console.log('idNeighbourHexagon', idNeighbourHexagon)
-
           if (
-            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType === 'freier Boden'
+            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType !==
+              'freier Boden' &&
+            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType !== 'freier Himmel'
           ) {
-            console.log('freier BODEN JAWOHL!')
+            console.log('Hier Darf gewuzelt werden!')
+            this.playgroundData.connectionToThePlant = true
           }
         }
       }
+    },
+    buildPlantpart(hexagonId) {
+      this.playgroundData.hexagonData[hexagonId - 1].backgroundImage = rootLvl1Center
+      this.playgroundData.hexagonData[hexagonId - 1].hexagonType = 'Wurzel Lvl 1 Zentral'
     }
   },
   getters: {}

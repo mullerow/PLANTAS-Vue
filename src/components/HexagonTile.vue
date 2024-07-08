@@ -14,7 +14,7 @@
         filter: `brightness(${hexagon.brightnessLevel})`
       }"
     >
-      {{ hexagon.hexagonXCoordinate }} {{ hexagon.hexagonYCoordinate }}
+      <!--{{ hexagon.hexagonXCoordinate }} {{ hexagon.hexagonYCoordinate }}-->
       <img :src="`${hexagon.backgroundImage}`" alt="soil-ground" />
     </div>
     <div class="option-window" v-if="optionwindow">
@@ -26,7 +26,13 @@
         <div class="dropdown" @click="toggleDropdown">
           <button class="btn btn-primary dropdown-toggle" type="button">Wähle Ausprägung</button>
           <div v-if="isDropdownOpen" class="dropdown-menu">
-            <a class="dropdown-item" href="#">Blatt LvL 1</a>
+            <button
+              v-if="store.playgroundData.connectionToThePlant"
+              class="dropdown-item"
+              @click="this.store.buildPlantpart(optionHexagonId)"
+            >
+              Wurzel LvL 1
+            </button>
             <a class="dropdown-item" href="#">Stiel LvL 2</a>
             <a class="dropdown-item" href="#">Blatt LvL 2</a>
           </div>
@@ -60,6 +66,7 @@ export default {
       hexagon.hovered = true
     },
     openOptionWindow(hexagon) {
+      this.store.playgroundData.connectionToThePlant = false
       this.optionwindow = true
       this.optionHexagonId = hexagon.hexagonId
       this.optionHexagonXKoordinate = hexagon.hexagonXCoordinate
