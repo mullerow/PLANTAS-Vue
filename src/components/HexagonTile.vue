@@ -14,7 +14,6 @@
         filter: `brightness(${hexagon.brightnessLevel})`
       }"
     >
-      <!--{{ hexagon.hexagonXCoordinate }} {{ hexagon.hexagonYCoordinate }}-->
       <img :src="`${hexagon.backgroundImage}`" alt="soil-ground" />
     </div>
     <div class="option-window" v-if="optionwindow">
@@ -27,11 +26,18 @@
           <button class="btn btn-primary dropdown-toggle" type="button">Wähle Ausprägung</button>
           <div v-if="isDropdownOpen" class="dropdown-menu">
             <button
-              v-if="store.playgroundData.connectionToThePlant"
+              v-if="store.playgroundData.connectionToThePlant && hexagonCategory !== 'root1'"
               class="dropdown-item"
               @click="this.store.buildPlantpart(optionHexagonId)"
             >
               Wurzel LvL 1
+            </button>
+            <button
+              v-if="store.playgroundData.connectionToThePlant && hexagonCategory === 'root1'"
+              class="dropdown-item"
+              @click="this.store.buildPlantpart(optionHexagonId)"
+            >
+              Wurzel LvL 2
             </button>
             <a class="dropdown-item" href="#">Stiel LvL 2</a>
             <a class="dropdown-item" href="#">Blatt LvL 2</a>
@@ -53,6 +59,7 @@ export default {
       optionHexagonXKoordinate: null,
       optionHexagonYKoordinate: null,
       hexagonTypeName: '',
+      hexagonCategory: '',
       isDropdownOpen: false
     }
   },
@@ -71,7 +78,8 @@ export default {
       this.optionHexagonId = hexagon.hexagonId
       this.optionHexagonXKoordinate = hexagon.hexagonXCoordinate
       this.optionHexagonYKoordinate = hexagon.hexagonYCoordinate
-      this.hexagonTypeName = hexagon.hexagonType
+      this.hexagonTypeName = hexagon.hexagonType[1]
+      this.hexagonCategory = hexagon.hexagonType[0]
       this.store.checkForDevelopmentOptions(hexagon)
     },
     toggleDropdown() {

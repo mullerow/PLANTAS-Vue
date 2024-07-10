@@ -7,6 +7,7 @@ import leafLvl1Left from '@/assets/images/leafs/leaf-lvl1-left-1.png'
 import leafLvl1right from '@/assets/images/leafs/leaf-lvl1-right-1.png'
 import leafLvl1straight from '@/assets/images/leafs/leaf-lvl1-straight1.png'
 import rootLvl1Center from '@/assets/images/roots/root-center-lvl1-1.png'
+import rootLvl2Center from '@/assets/images/roots/root-center-lvl2-1.png'
 
 export const storeData = defineStore('store', {
   state: () => ({
@@ -40,7 +41,7 @@ export const storeData = defineStore('store', {
             yShiftOfHexagon += 22
           }
           yShiftOfHexagon = yShiftOfHexagon + additionalIncreaseOfYShift
-          // hinzufügen der hintergrundbilder
+          // hinzufügen der hintergrundbilder für den Start bzw. Tests
           if (y < 10) {
             backgroundImageHexagon = skyImage
             hexagonType = ['empty sky', 'freier Himmel']
@@ -73,6 +74,7 @@ export const storeData = defineStore('store', {
             backgroundImageHexagon = rootLvl1Center
             hexagonType = ['root1', 'Wurzel Lvl 1 Zentral']
           }
+
           ///// Erzeugen des Objekts für die individuellen HexagonDaten
           let hexagonObject = {
             hexagonId:
@@ -96,6 +98,8 @@ export const storeData = defineStore('store', {
       } else if (hexagon.hexagonType[0] === 'empty soil') {
         console.log('freier Boden')
         this.checkForConnectionToPlant(hexagon)
+      } else if (hexagon.hexagonType[0] === 'root1') {
+        this.checkForConnectionToPlant(hexagon)
       } else {
         console.log('Fläche schon bebaut')
       }
@@ -104,7 +108,7 @@ export const storeData = defineStore('store', {
       let yCoodinateNeighbourHexagon = null
       for (let deltaY = -1; deltaY <= 1; deltaY++) {
         for (let deltaX = -1; deltaX <= 1; deltaX++) {
-          /// Notwendige Korrekturen für die versetzten kacheln
+          /// Notwendige koordinaten Korrekturen für die versetzten kacheln
           if (
             (deltaX === -1 && deltaY === 1) ||
             (deltaX === 1 && deltaY === 1) ||
@@ -145,14 +149,14 @@ export const storeData = defineStore('store', {
       if (this.playgroundData.hexagonData[hexagonId - 1].hexagonType[0] === 'empty soil') {
         this.playgroundData.hexagonData[hexagonId - 1].backgroundImage = rootLvl1Center
         this.playgroundData.hexagonData[hexagonId - 1].hexagonType = [
-          'root',
+          'root1',
           'Wurzel Lvl 1 Zentral'
         ]
       } else if (this.playgroundData.hexagonData[hexagonId - 1].hexagonType[0] === 'root1') {
-        this.playgroundData.hexagonData[hexagonId - 1].backgroundImage = rootLvl1Center
+        this.playgroundData.hexagonData[hexagonId - 1].backgroundImage = rootLvl2Center
         this.playgroundData.hexagonData[hexagonId - 1].hexagonType = [
-          'root',
-          'Wurzel Lvl 1 Zentral'
+          'root2',
+          'Wurzel Lvl 2 Zentral'
         ]
       }
     }
