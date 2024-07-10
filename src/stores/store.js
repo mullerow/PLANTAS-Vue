@@ -33,7 +33,7 @@ export const storeData = defineStore('store', {
           // verschieben der hexagone, sodass diese eine lückenlose Fläch ergeben
           let yShiftOfHexagon = 0
           let backgroundImageHexagon = ''
-          let hexagonType = ''
+          let hexagonType = []
 
           xShiftOfHexagon -= 13
           if (x % 2 === 0) {
@@ -43,35 +43,35 @@ export const storeData = defineStore('store', {
           // hinzufügen der hintergrundbilder
           if (y < 10) {
             backgroundImageHexagon = skyImage
-            hexagonType = 'freier Himmel'
+            hexagonType = ['empty sky', 'freier Himmel']
           } else {
             backgroundImageHexagon = soilGroundImage
-            hexagonType = 'freier Boden'
+            hexagonType = ['empty soil', 'freier Boden']
           }
           // Start Keimlingimage
           if (x === 8 && y === 9) {
             backgroundImageHexagon = seedling50
-            hexagonType = 'eigener Keimling'
+            hexagonType = ['seemling', 'eigener Keimling']
           }
           if (x === 6 && y === 9) {
             backgroundImageHexagon = stemLvl1
-            hexagonType = 'Stamm Lvl 1'
+            hexagonType = ['stam', 'Stamm Lvl 1']
           }
           if (x === 5 && y === 9) {
             backgroundImageHexagon = leafLvl1Left
-            hexagonType = 'Blatt Lvl 1 links'
+            hexagonType = ['leaf', 'Blatt Lvl 1 links']
           }
           if (x === 7 && y === 9) {
             backgroundImageHexagon = leafLvl1right
-            hexagonType = 'Blatt Lvl 1 rechts'
+            hexagonType = ['leaf', 'Blatt Lvl 1 rechts']
           }
           if (x === 6 && y === 8) {
             backgroundImageHexagon = leafLvl1straight
-            hexagonType = 'Blatt Lvl 1 nach oben'
+            hexagonType = ['leaf', 'Blatt Lvl 1 nach oben']
           }
           if ((x === 6 && y === 10) || (x === 8 && y === 10)) {
             backgroundImageHexagon = rootLvl1Center
-            hexagonType = 'Wurzel Lvl 1 Zentral'
+            hexagonType = ['root', 'Wurzel Lvl 1 Zentral']
           }
           ///// Erzeugen des Objekts für die individuellen HexagonDaten
           let hexagonObject = {
@@ -90,10 +90,10 @@ export const storeData = defineStore('store', {
       }
     },
     checkForDevelopmentOptions(hexagon) {
-      if (hexagon.hexagonType === 'freier Himmel') {
+      if (hexagon.hexagonType[0] === 'empty sky') {
         console.log('freier Himmel')
         this.checkForConnectionToPlant(hexagon)
-      } else if (hexagon.hexagonType === 'freier Boden') {
+      } else if (hexagon.hexagonType[0] === 'empty soil') {
         console.log('freier Boden')
         this.checkForConnectionToPlant(hexagon)
       } else {
@@ -131,9 +131,10 @@ export const storeData = defineStore('store', {
             xCoodinateNeighbourHexagon -
             this.playgroundData.amountColumns
           if (
-            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType !==
+            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[1] !==
               'freier Boden' &&
-            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType !== 'freier Himmel'
+            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[1] !==
+              'freier Himmel'
           ) {
             this.playgroundData.connectionToThePlant = true
           }
@@ -141,10 +142,14 @@ export const storeData = defineStore('store', {
       }
     },
     buildPlantpart(hexagonId) {
-      if (this.playgroundData.hexagonData[hexagonId - 1].hexagonType === 'freier Boden') {
+      if (this.playgroundData.hexagonData[hexagonId - 1].hexagonType[0] === 'empty soil') {
         this.playgroundData.hexagonData[hexagonId - 1].backgroundImage = rootLvl1Center
-        this.playgroundData.hexagonData[hexagonId - 1].hexagonType = 'Wurzel Lvl 1 Zentral'
+        this.playgroundData.hexagonData[hexagonId - 1].hexagonType = [
+          'root',
+          'Wurzel Lvl 1 Zentral'
+        ]
       }
+      // else if()
     }
   },
   getters: {}
