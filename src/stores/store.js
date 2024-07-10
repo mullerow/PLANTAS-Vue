@@ -23,7 +23,7 @@ export const storeData = defineStore('store', {
       let brightness = 1.7
       for (let y = 1; y <= this.playgroundData.amountRows; y++) {
         let xShiftOfHexagon = 13
-        additionalIncreaseOfYShift -= 10
+        additionalIncreaseOfYShift -= 6
         if (y <= 9) {
           brightness -= 0.1
         } else {
@@ -55,23 +55,23 @@ export const storeData = defineStore('store', {
           }
           if (x === 6 && y === 9) {
             backgroundImageHexagon = stemLvl1
-            hexagonType = ['stam', 'Stamm Lvl 1']
+            hexagonType = ['stam1', 'Stamm Lvl 1']
           }
           if (x === 5 && y === 9) {
             backgroundImageHexagon = leafLvl1Left
-            hexagonType = ['leaf', 'Blatt Lvl 1 links']
+            hexagonType = ['leaf1', 'Blatt Lvl 1 links']
           }
           if (x === 7 && y === 9) {
             backgroundImageHexagon = leafLvl1right
-            hexagonType = ['leaf', 'Blatt Lvl 1 rechts']
+            hexagonType = ['leaf1', 'Blatt Lvl 1 rechts']
           }
           if (x === 6 && y === 8) {
             backgroundImageHexagon = leafLvl1straight
-            hexagonType = ['leaf', 'Blatt Lvl 1 nach oben']
+            hexagonType = ['leaf1', 'Blatt Lvl 1 nach oben']
           }
           if ((x === 6 && y === 10) || (x === 8 && y === 10)) {
             backgroundImageHexagon = rootLvl1Center
-            hexagonType = ['root', 'Wurzel Lvl 1 Zentral']
+            hexagonType = ['root1', 'Wurzel Lvl 1 Zentral']
           }
           ///// Erzeugen des Objekts für die individuellen HexagonDaten
           let hexagonObject = {
@@ -148,8 +148,13 @@ export const storeData = defineStore('store', {
           'root',
           'Wurzel Lvl 1 Zentral'
         ]
+      } else if (this.playgroundData.hexagonData[hexagonId - 1].hexagonType[0] === 'root1') {
+        this.playgroundData.hexagonData[hexagonId - 1].backgroundImage = rootLvl1Center
+        this.playgroundData.hexagonData[hexagonId - 1].hexagonType = [
+          'root',
+          'Wurzel Lvl 1 Zentral'
+        ]
       }
-      // else if()
     }
   },
   getters: {}
