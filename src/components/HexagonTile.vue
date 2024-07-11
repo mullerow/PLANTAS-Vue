@@ -43,6 +43,12 @@
             <a class="dropdown-item" href="#">Blatt LvL 2</a>
           </div>
         </div>
+        <div>
+          verfügbare Ressourcen: <br />
+          Wasser: 10 g/d<br />
+          Stickstoff: 0,1 g/d<br />
+          Phosphor: 0 g/d
+        </div>
       </div>
     </div>
   </div>
@@ -100,7 +106,6 @@ export default {
   justify-content: center;
   flex-wrap: wrap;
   position: relative;
-  _border-top: 2px solid #1f72a5;
 }
 .hexagon-tile:hover {
   cursor: pointer;
@@ -110,13 +115,13 @@ export default {
   display: flex;
   flex-wrap: wrap;
   width: 1000px;
-  height: 550px;
+  height: 592px;
   position: relative;
   background-color: gray;
 }
 .option-window {
   width: 255px;
-  height: 550px;
+  height: 592px;
   background-color: #00524e;
   text-align: start;
   position: absolute;

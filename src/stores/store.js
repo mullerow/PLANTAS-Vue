@@ -15,7 +15,8 @@ export const storeData = defineStore('store', {
       hexagonData: [],
       amountColumns: 20,
       amountRows: 13,
-      connectionToThePlant: false
+      connectionToThePlant: false,
+      determinationOfSurroundedHexagons: [0, [0, 0, 0, 0, 0, 0]] // der erste eintrag legt die Anzahl der bebauten nachbarfelder fest, der zweite Eintrag/Liste bestimmt anhand der Zahlen in welche Richtung bebaut ist
     }
   }),
   actions: {
@@ -106,6 +107,7 @@ export const storeData = defineStore('store', {
     },
     checkForConnectionToPlant(hexagon) {
       let yCoodinateNeighbourHexagon = null
+      this.playgroundData.determinationOfSurroundedHexagons[0] = 0
       for (let deltaY = -1; deltaY <= 1; deltaY++) {
         for (let deltaX = -1; deltaX <= 1; deltaX++) {
           /// Notwendige koordinaten Korrekturen für die versetzten kacheln
@@ -141,9 +143,12 @@ export const storeData = defineStore('store', {
               'freier Himmel'
           ) {
             this.playgroundData.connectionToThePlant = true
+
+            this.playgroundData.determinationOfSurroundedHexagons[0] += 1
           }
         }
       }
+      console.log('nachbaren:', this.playgroundData.determinationOfSurroundedHexagons[0])
     },
     buildPlantpart(hexagonId) {
       if (this.playgroundData.hexagonData[hexagonId - 1].hexagonType[0] === 'empty soil') {
