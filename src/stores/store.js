@@ -16,7 +16,17 @@ export const storeData = defineStore('store', {
       amountColumns: 20,
       amountRows: 13,
       connectionToThePlant: false,
-      determinationOfSurroundedHexagons: [0, [0, 0, 0, 0, 0, 0]] // der erste eintrag legt die Anzahl der bebauten nachbarfelder fest, der zweite Eintrag/Liste bestimmt anhand der Zahlen in welche Richtung bebaut ist
+      positionsOfDevelopedNeighbourHexagons: [0, [0, 0, 0, 0, 0, 0]] // der erste eintrag legt die Anzahl der bebauten nachbarfelder fest, der zweite Eintrag/Liste bestimmt anhand der Zahlen in welche Richtung bebaut ist
+    },
+    staticData: {
+      offsetsNeighbourHexagons: [
+        [0, -1],
+        [1, -1],
+        [1, 0],
+        [0, 1],
+        [-1, 0],
+        [-1, -1]
+      ]
     }
   }),
   actions: {
@@ -107,48 +117,47 @@ export const storeData = defineStore('store', {
     },
     checkForConnectionToPlant(hexagon) {
       let yCoodinateNeighbourHexagon = null
-      this.playgroundData.determinationOfSurroundedHexagons[0] = 0
-      for (let deltaY = -1; deltaY <= 1; deltaY++) {
-        for (let deltaX = -1; deltaX <= 1; deltaX++) {
-          /// Notwendige koordinaten Korrekturen für die versetzten kacheln
-          if (
-            (deltaX === -1 && deltaY === 1) ||
-            (deltaX === 1 && deltaY === 1) ||
-            (deltaX === 0 && deltaY === 0)
-          ) {
-            continue
-          }
-          if (hexagon.hexagonXCoordinate % 2 === 0 && deltaX !== 0) {
-            yCoodinateNeighbourHexagon = hexagon.hexagonYCoordinate + deltaY + 1
-          } else {
-            yCoodinateNeighbourHexagon = hexagon.hexagonYCoordinate + deltaY
-          }
-          let xCoodinateNeighbourHexagon = hexagon.hexagonXCoordinate + deltaX
-          if (
-            yCoodinateNeighbourHexagon <= 0 ||
-            xCoodinateNeighbourHexagon <= 0 ||
-            xCoodinateNeighbourHexagon > this.playgroundData.amountColumns ||
-            yCoodinateNeighbourHexagon > this.playgroundData.amountRows
-          ) {
-            continue
-          }
-          let idNeighbourHexagon =
-            yCoodinateNeighbourHexagon * this.playgroundData.amountColumns +
-            xCoodinateNeighbourHexagon -
-            this.playgroundData.amountColumns
-          if (
-            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[1] !==
-              'freier Boden' &&
-            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[1] !==
-              'freier Himmel'
-          ) {
-            this.playgroundData.connectionToThePlant = true
+      this.playgroundData.positionsOfDevelopedNeighbourHexagons = [0, [0, 0, 0, 0, 0, 0]]
+      let IndexPositionNeighbourList = 0
+      for (let [deltaX, deltaY] of this.staticData.offsetsNeighbourHexagons) {
+        /// Notwendige koordinaten Korrekturen für die versetzten kacheln
 
-            this.playgroundData.determinationOfSurroundedHexagons[0] += 1
-          }
+        if (hexagon.hexagonXCoordinate % 2 === 0 && deltaX !== 0) {
+          yCoodinateNeighbourHexagon = hexagon.hexagonYCoordinate + deltaY + 1
+        } else {
+          yCoodinateNeighbourHexagon = hexagon.hexagonYCoordinate + deltaY
         }
+        let xCoodinateNeighbourHexagon = hexagon.hexagonXCoordinate + deltaX
+        if (
+          yCoodinateNeighbourHexagon <= 0 ||
+          xCoodinateNeighbourHexagon <= 0 ||
+          xCoodinateNeighbourHexagon > this.playgroundData.amountColumns ||
+          yCoodinateNeighbourHexagon > this.playgroundData.amountRows
+        ) {
+          continue
+        }
+        let idNeighbourHexagon =
+          yCoodinateNeighbourHexagon * this.playgroundData.amountColumns +
+          xCoodinateNeighbourHexagon -
+          this.playgroundData.amountColumns
+        if (
+          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[1] !==
+            'freier Boden' &&
+          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[1] !== 'freier Himmel'
+        ) {
+          this.playgroundData.connectionToThePlant = true
+
+          this.playgroundData.positionsOfDevelopedNeighbourHexagons[0] += 1
+          this.playgroundData.positionsOfDevelopedNeighbourHexagons[1][IndexPositionNeighbourList] =
+            IndexPositionNeighbourList + 1
+
+          console.log('IndexPositionNeighbourList', IndexPositionNeighbourList)
+        }
+        IndexPositionNeighbourList += 1
+
+        console.log('nachbaren:', this.playgroundData.positionsOfDevelopedNeighbourHexagons[0])
+        console.log('X', this.playgroundData.positionsOfDevelopedNeighbourHexagons[1])
       }
-      console.log('nachbaren:', this.playgroundData.determinationOfSurroundedHexagons[0])
     },
     buildPlantpart(hexagonId) {
       if (this.playgroundData.hexagonData[hexagonId - 1].hexagonType[0] === 'empty soil') {
