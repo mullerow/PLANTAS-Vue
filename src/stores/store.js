@@ -85,6 +85,10 @@ export const storeData = defineStore('store', {
             backgroundImageHexagon = rootLvl1Center
             hexagonType = ['root1', 'Wurzel Lvl 1 Zentral']
           }
+          if ((x === 14 && y === 9) || (x === 16 && y === 9) || (x === 15 && y === 9)) {
+            backgroundImageHexagon = soilGroundImage
+            hexagonType = ['empty soil', 'freier Boden']
+          }
 
           ///// Erzeugen des Objekts für die individuellen HexagonDaten
           let hexagonObject = {
