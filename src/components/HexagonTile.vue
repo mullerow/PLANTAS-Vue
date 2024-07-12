@@ -10,7 +10,9 @@
         'hexagon-tile': true
       }"
       :style="{
-        transform: `translateX(${hexagon.additionalXShiftOfHexagon}px)translateY(${hexagon.additionalYShiftOfHexagon}px)`,
+        '--x': `${hexagon.additionalXShiftOfHexagon}px`,
+        '--y': `${hexagon.additionalYShiftOfHexagon}px`,
+        '--rotate': `${hexagon.degreeOfRotation}deg`,
         filter: `brightness(${hexagon.brightnessLevel})`
       }"
     >
@@ -106,6 +108,7 @@ export default {
   justify-content: center;
   flex-wrap: wrap;
   position: relative;
+  transform: translate(var(--x), var(--y)) rotate(var(--rotate));
 }
 .hexagon-tile:hover {
   cursor: pointer;

@@ -100,7 +100,8 @@ export const storeData = defineStore('store', {
             additionalXShiftOfHexagon: xShiftOfHexagon,
             backgroundImage: backgroundImageHexagon,
             hexagonType: hexagonType,
-            brightnessLevel: brightness
+            brightnessLevel: brightness,
+            degreeOfRotation: '0'
           }
           this.playgroundData.hexagonData.push(hexagonObject)
         }
@@ -159,8 +160,12 @@ export const storeData = defineStore('store', {
         }
         IndexPositionNeighbourList += 1
 
-        console.log('nachbaren:', this.playgroundData.positionsOfDevelopedNeighbourHexagons[0])
-        console.log('X', this.playgroundData.positionsOfDevelopedNeighbourHexagons[1])
+        /// TEST
+        if (this.playgroundData.positionsOfDevelopedNeighbourHexagons[0] >= 0) {
+          hexagon.degreeOfRotation = '60'
+        }
+
+        console.log('nachbaren:', this.playgroundData.positionsOfDevelopedNeighbourHexagons)
       }
     },
     buildPlantpart(hexagonId) {
