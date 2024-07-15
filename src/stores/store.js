@@ -158,21 +158,37 @@ export const storeData = defineStore('store', {
           this.playgroundData.positionsOfDevelopedNeighbourHexagons[0] += 1
           this.playgroundData.positionsOfDevelopedNeighbourHexagons[1][IndexPositionNeighbourList] =
             IndexPositionNeighbourList + 1
-
-          console.log('IndexPositionNeighbourList', IndexPositionNeighbourList)
         }
         IndexPositionNeighbourList += 1
-        /// Rotation des Hexagons um die Images an die benachtbarten hexagone anzupassen
-        const concatinatedPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1]
-          .filter((position) => position !== 0)
-          .join('')
-        const ImageNameofRootStyle = `rootLvl1_${this.playgroundData.positionsOfDevelopedNeighbourHexagons[0]}_${concatinatedPositions}`
-        console.log('imagename', ImageNameofRootStyle)
-        if (this.playgroundData.positionsOfDevelopedNeighbourHexagons[0] >= 0) {
-          hexagon.degreeOfRotation = '60'
-        }
-        console.log('nachbaren:', this.playgroundData.positionsOfDevelopedNeighbourHexagons)
       }
+      /// Rotation des Hexagons um das Image an die benachtbarten hexagone anzupassen
+      const concatinatedPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1]
+        .filter((position) => position !== 0)
+        .join('')
+      const ImageNameofRootStyle = `rootLvl1_${this.playgroundData.positionsOfDevelopedNeighbourHexagons[0]}_${concatinatedPositions}`
+      console.log('imagename', ImageNameofRootStyle)
+
+      // kalkulation des Rotationswinkels
+      let neighbourPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
+        (position) => position !== 0
+      )
+
+      console.log('mutatedPositions davor', neighbourPositions)
+      let mutatedPositions = []
+      for (let i = 0; i < 7; i++) {
+        mutatedPositions = neighbourPositions.map((item) => {
+          item += i
+          if (item === 7) {
+            item = 1
+          }
+          return item
+        })
+        console.log('mutatedPositions danach', mutatedPositions)
+      }
+
+      // hexagon.degreeOfRotation = '60'
+
+      console.log('nachbaren:', this.playgroundData.positionsOfDevelopedNeighbourHexagons)
     },
     buildPlantpart(hexagonId) {
       if (this.playgroundData.hexagonData[hexagonId - 1].hexagonType[0] === 'empty soil') {
