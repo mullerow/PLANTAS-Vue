@@ -161,32 +161,49 @@ export const storeData = defineStore('store', {
         }
         IndexPositionNeighbourList += 1
       }
-      /// Rotation des Hexagons um das Image an die benachtbarten hexagone anzupassen
+      //////// Rotation des Hexagons um das Image an die benachtbarten hexagone anzupassen //////////////////////////
+      //
       const concatinatedPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1]
         .filter((position) => position !== 0)
         .join('')
-      const ImageNameofRootStyle = `rootLvl1_${this.playgroundData.positionsOfDevelopedNeighbourHexagons[0]}_${concatinatedPositions}`
-      console.log('imagename', ImageNameofRootStyle)
+      const ImageNameOfRootStyle = `rootLvl1_${this.playgroundData.positionsOfDevelopedNeighbourHexagons[0]}_${concatinatedPositions}`
+      console.log('imagename', ImageNameOfRootStyle)
 
-      // kalkulation des Rotationswinkels
+      // bestimmung des passenden Images
       let neighbourPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
         (position) => position !== 0
       )
 
-      console.log('mutatedPositions davor', neighbourPositions)
+      console.log('neighbourPositions', neighbourPositions)
       let mutatedPositions = []
-      for (let i = 0; i < 7; i++) {
+      let countRotations = 0
+      for (let i = 1; i < 6; i++) {
         mutatedPositions = neighbourPositions.map((item) => {
           item += i
-          if (item === 7) {
-            item = 1
+          if (item > 6) {
+            item -= 6
           }
           return item
         })
-        console.log('mutatedPositions danach', mutatedPositions)
+        mutatedPositions.sort((a, b) => a - b)
+        console.log('mutatedPositions', mutatedPositions)
+        let concatinatedmutatedPositions = mutatedPositions.join('')
+        console.log('concatinatedmutatedPositions', concatinatedmutatedPositions)
+        if (concatinatedmutatedPositions === '13') {
+          hexagon.backgroundImage = rootLvl1_2_13
+          break
+        } else if (concatinatedmutatedPositions === '12') {
+          hexagon.backgroundImage = rootLvl1_2_12
+          break
+        } else if (concatinatedmutatedPositions === '14') {
+          hexagon.backgroundImage = rootLvl1_2_14
+          break
+        }
+        countRotations += 1
       }
-
-      // hexagon.degreeOfRotation = '60'
+      // kalkulation des Rotationswinkels
+      let calcDegreeRotation = (countRotations - 5) * 60
+      hexagon.degreeOfRotation = calcDegreeRotation
 
       console.log('nachbaren:', this.playgroundData.positionsOfDevelopedNeighbourHexagons)
     },
