@@ -6,7 +6,10 @@ import stemLvl1 from '@/assets/images/stems/stem-lvl1-2.png'
 import leafLvl1Left from '@/assets/images/leafs/leaf-lvl1-left-1.png'
 import leafLvl1right from '@/assets/images/leafs/leaf-lvl1-right-1.png'
 import leafLvl1straight from '@/assets/images/leafs/leaf-lvl1-straight1.png'
-import rootLvl1Center from '@/assets/images/roots/root-center-lvl1-1.png'
+import rootLvl1_1_1 from '@/assets/images/roots/roots-lvl-1/root-lvl1-1-1.png'
+import rootLvl1_2_12 from '@/assets/images/roots/roots-lvl-1/root-lvl1-2-12.png'
+import rootLvl1_2_13 from '@/assets/images/roots/roots-lvl-1/root-lvl1-2-13.png'
+import rootLvl1_2_14 from '@/assets/images/roots/roots-lvl-1/root-lvl1-2-14.png'
 import rootLvl2Center from '@/assets/images/roots/root-center-lvl2-1.png'
 
 export const storeData = defineStore('store', {
@@ -82,7 +85,7 @@ export const storeData = defineStore('store', {
             hexagonType = ['leaf1', 'Blatt Lvl 1 nach oben']
           }
           if ((x === 6 && y === 10) || (x === 8 && y === 10)) {
-            backgroundImageHexagon = rootLvl1Center
+            backgroundImageHexagon = rootLvl1_1_1
             hexagonType = ['root1', 'Wurzel Lvl 1 Zentral']
           }
           if ((x === 14 && y === 9) || (x === 16 && y === 9) || (x === 15 && y === 9)) {
@@ -159,18 +162,21 @@ export const storeData = defineStore('store', {
           console.log('IndexPositionNeighbourList', IndexPositionNeighbourList)
         }
         IndexPositionNeighbourList += 1
-
-        /// TEST
+        /// Rotation des Hexagons um die Images an die benachtbarten hexagone anzupassen
+        const concatinatedPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1]
+          .filter((position) => position !== 0)
+          .join('')
+        const ImageNameofRootStyle = `rootLvl1_${this.playgroundData.positionsOfDevelopedNeighbourHexagons[0]}_${concatinatedPositions}`
+        console.log('imagename', ImageNameofRootStyle)
         if (this.playgroundData.positionsOfDevelopedNeighbourHexagons[0] >= 0) {
           hexagon.degreeOfRotation = '60'
         }
-
         console.log('nachbaren:', this.playgroundData.positionsOfDevelopedNeighbourHexagons)
       }
     },
     buildPlantpart(hexagonId) {
       if (this.playgroundData.hexagonData[hexagonId - 1].hexagonType[0] === 'empty soil') {
-        this.playgroundData.hexagonData[hexagonId - 1].backgroundImage = rootLvl1Center
+        this.playgroundData.hexagonData[hexagonId - 1].backgroundImage = rootLvl1_1_1
         this.playgroundData.hexagonData[hexagonId - 1].hexagonType = [
           'root1',
           'Wurzel Lvl 1 Zentral'
