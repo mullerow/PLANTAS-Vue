@@ -19,7 +19,7 @@
       <img :src="`${hexagon.backgroundImage}`" alt="soil-ground" />
     </div>
     <div class="option-window" v-if="optionwindow">
-      <h3>OPTIONEN von {{ optionHexagonId }}</h3>
+      <h3>OPTIONEN von {{ optionHexagon.hexagonId }}</h3>
       <hr />
       Koordinaten: {{ optionHexagonXKoordinate }} : {{ optionHexagonYKoordinate }} <br />
       FeldTyp: {{ hexagonTypeName }}
@@ -30,14 +30,14 @@
             <button
               v-if="store.playgroundData.connectionToThePlant && hexagonCategory !== 'root1'"
               class="dropdown-item"
-              @click="this.store.buildPlantpart(optionHexagonId)"
+              @click="this.store.buildPlantpart(optionHexagon)"
             >
               Wurzel LvL 1
             </button>
             <button
               v-if="store.playgroundData.connectionToThePlant && hexagonCategory === 'root1'"
               class="dropdown-item"
-              @click="this.store.buildPlantpart(optionHexagonId)"
+              @click="this.store.buildPlantpart(optionHexagon)"
             >
               Wurzel LvL 2
             </button>
@@ -63,7 +63,7 @@ export default {
     return {
       store: storeData(),
       optionwindow: false,
-      optionHexagonId: null,
+      optionHexagon: null,
       optionHexagonXKoordinate: null,
       optionHexagonYKoordinate: null,
       hexagonTypeName: '',
@@ -83,7 +83,7 @@ export default {
     openOptionWindow(hexagon) {
       this.store.playgroundData.connectionToThePlant = false
       this.optionwindow = true
-      this.optionHexagonId = hexagon.hexagonId
+      this.optionHexagon = hexagon
       this.optionHexagonXKoordinate = hexagon.hexagonXCoordinate
       this.optionHexagonYKoordinate = hexagon.hexagonYCoordinate
       this.hexagonTypeName = hexagon.hexagonType[1]
