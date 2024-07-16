@@ -10,6 +10,11 @@ import rootLvl1_1_1 from '@/assets/images/roots/roots-lvl-1/root-lvl1-1-1.png'
 import rootLvl1_2_12 from '@/assets/images/roots/roots-lvl-1/root-lvl1-2-12.png'
 import rootLvl1_2_13 from '@/assets/images/roots/roots-lvl-1/root-lvl1-2-13.png'
 import rootLvl1_2_14 from '@/assets/images/roots/roots-lvl-1/root-lvl1-2-14.png'
+import rootLvl1_3_123 from '@/assets/images/roots/roots-lvl-1/root-lvl1-3-123.png'
+import rootLvl1_3_124 from '@/assets/images/roots/roots-lvl-1/root-lvl1-3-124.png'
+import rootLvl1_3_125 from '@/assets/images/roots/roots-lvl-1/root-lvl1-3-125.png'
+import rootLvl1_3_135 from '@/assets/images/roots/roots-lvl-1/root-lvl1-3-135.png'
+
 import rootLvl2Center from '@/assets/images/roots/root-center-lvl2-1.png'
 
 export const storeData = defineStore('store', {
@@ -207,6 +212,18 @@ export const storeData = defineStore('store', {
             break
           } else if (concatinatedmutatedPositions === '14') {
             hexagon.backgroundImage = rootLvl1_2_14
+            break
+          } else if (concatinatedmutatedPositions === '123') {
+            hexagon.backgroundImage = rootLvl1_3_123
+            break
+          } else if (concatinatedmutatedPositions === '124') {
+            hexagon.backgroundImage = rootLvl1_3_124
+            break
+          } else if (concatinatedmutatedPositions === '125') {
+            hexagon.backgroundImage = rootLvl1_3_125
+            break
+          } else if (concatinatedmutatedPositions === '135') {
+            hexagon.backgroundImage = rootLvl1_3_135
             break
           }
         }
