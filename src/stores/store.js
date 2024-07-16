@@ -127,6 +127,7 @@ export const storeData = defineStore('store', {
       let yCoodinateNeighbourHexagon = null
       this.playgroundData.positionsOfDevelopedNeighbourHexagons = [0, [0, 0, 0, 0, 0, 0]]
       let IndexPositionNeighbourList = 0
+      // die schleife umläuft das geklickte hexagon und bestimmt den zustand der nachbarhexagone
       for (let [deltaX, deltaY] of this.staticData.offsetsNeighbourHexagons) {
         /// Notwendige koordinaten Korrekturen für die versetzten kacheln
 
@@ -189,6 +190,7 @@ export const storeData = defineStore('store', {
         console.log('mutatedPositions', mutatedPositions)
         let concatinatedmutatedPositions = mutatedPositions.join('')
         console.log('concatinatedmutatedPositions', concatinatedmutatedPositions)
+        countRotations += 1
         if (concatinatedmutatedPositions === '13') {
           hexagon.backgroundImage = rootLvl1_2_13
           break
@@ -199,10 +201,9 @@ export const storeData = defineStore('store', {
           hexagon.backgroundImage = rootLvl1_2_14
           break
         }
-        countRotations += 1
       }
       // kalkulation des Rotationswinkels
-      let calcDegreeRotation = (countRotations - 5) * 60
+      let calcDegreeRotation = (6 - countRotations) * 60 // da die rotation anhand des umgebenden zustands bestimmt wird, muss die differenz zu 6 verwendet werden
       hexagon.degreeOfRotation = calcDegreeRotation
 
       console.log('nachbaren:', this.playgroundData.positionsOfDevelopedNeighbourHexagons)
