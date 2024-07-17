@@ -17,7 +17,7 @@ export default {
     }
   },
   created() {
-    this.store.createHexagons()
+    this.store.createDefaultHexagons()
   }
 }
 </script>

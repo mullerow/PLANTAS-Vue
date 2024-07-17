@@ -38,7 +38,7 @@ export const storeData = defineStore('store', {
     }
   }),
   actions: {
-    createHexagons() {
+    createDefaultHexagons() {
       let additionalIncreaseOfYShift = 0
       let brightness = 1.7
       for (let y = 1; y <= this.playgroundData.amountRows; y++) {
@@ -135,7 +135,6 @@ export const storeData = defineStore('store', {
       // die schleife umläuft das geklickte hexagon und bestimmt den zustand der nachbarhexagone
       for (let [deltaX, deltaY] of this.staticData.offsetsNeighbourHexagons) {
         /// Notwendige koordinaten Korrekturen für die versetzten kacheln
-
         if (hexagon.hexagonXCoordinate % 2 === 0 && deltaX !== 0) {
           yCoodinateNeighbourHexagon = hexagon.hexagonYCoordinate + deltaY + 1
         } else {
@@ -155,9 +154,8 @@ export const storeData = defineStore('store', {
           xCoodinateNeighbourHexagon -
           this.playgroundData.amountColumns
         if (
-          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[1] !==
-            'freier Boden' &&
-          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[1] !== 'freier Himmel'
+          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] !== 'empty soil' &&
+          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] !== 'empty sky'
         ) {
           this.playgroundData.connectionToThePlant = true
 
@@ -170,73 +168,101 @@ export const storeData = defineStore('store', {
     },
     buildPlantpart(hexagon) {
       if (this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType[0] === 'empty soil') {
-        //////// Rotation des Hexagons um das Image an die benachtbarten hexagone anzupassen //////////////////////////
-        //
-        const concatinatedPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1]
-          .filter((position) => position !== 0)
-          .join('')
-        const ImageNameOfRootStyle = `rootLvl1_${this.playgroundData.positionsOfDevelopedNeighbourHexagons[0]}_${concatinatedPositions}`
-        console.log('imagename', ImageNameOfRootStyle)
+        this.findImageOfHexagon(hexagon)
+        this.updateImageOfNeighbourHexagons(hexagon)
+      }
+    },
+    findImageOfHexagon(hexagon) {
+      //////// Rotation des Hexagons um das Image an die benachtbarten hexagone anzupassen ////////////////////////
+      const concatinatedPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1]
+        .filter((position) => position !== 0)
+        .join('')
+      const ImageNameOfRootStyle = `rootLvl1_${this.playgroundData.positionsOfDevelopedNeighbourHexagons[0]}_${concatinatedPositions}`
+      console.log('imagename', ImageNameOfRootStyle)
 
-        // bestimmung des passenden Images
-        let neighbourPositions =
-          this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
-            (position) => position !== 0
-          )
+      // Bestimmung des passenden Images
+      let neighbourPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
+        (position) => position !== 0
+      )
 
-        console.log('neighbourPositions', neighbourPositions)
-        let mutatedPositions = []
-        let countRotations = 0
-        for (let i = 1; i < 7; i++) {
-          mutatedPositions = neighbourPositions.map((item) => {
-            item += i
-            if (item > 6) {
-              item -= 6
-            }
-            return item
-          })
-          mutatedPositions.sort((a, b) => a - b)
-          console.log('mutatedPositions', mutatedPositions)
-          let concatinatedmutatedPositions = mutatedPositions.join('')
-          console.log('concatinatedmutatedPositions', concatinatedmutatedPositions)
-          countRotations += 1
-          // auswahl des richtigen Image
-          if (concatinatedmutatedPositions === '1') {
-            hexagon.backgroundImage = rootLvl1_1_1
-            break
-          } else if (concatinatedmutatedPositions === '12') {
-            hexagon.backgroundImage = rootLvl1_2_12
-            break
-          } else if (concatinatedmutatedPositions === '13') {
-            hexagon.backgroundImage = rootLvl1_2_13
-            break
-          } else if (concatinatedmutatedPositions === '14') {
-            hexagon.backgroundImage = rootLvl1_2_14
-            break
-          } else if (concatinatedmutatedPositions === '123') {
-            hexagon.backgroundImage = rootLvl1_3_123
-            break
-          } else if (concatinatedmutatedPositions === '124') {
-            hexagon.backgroundImage = rootLvl1_3_124
-            break
-          } else if (concatinatedmutatedPositions === '125') {
-            hexagon.backgroundImage = rootLvl1_3_125
-            break
-          } else if (concatinatedmutatedPositions === '135') {
-            hexagon.backgroundImage = rootLvl1_3_135
-            break
+      console.log('neighbourPositions', neighbourPositions)
+      let mutatedPositions = []
+      let countRotations = 0
+      for (let i = 1; i < 7; i++) {
+        mutatedPositions = neighbourPositions.map((item) => {
+          item += i
+          if (item > 6) {
+            item -= 6
           }
+          return item
+        })
+        mutatedPositions.sort((a, b) => a - b)
+        let concatinatedmutatedPositions = mutatedPositions.join('')
+        console.log('concatinatedmutatedPositions', concatinatedmutatedPositions)
+        countRotations += 1
+        // auswahl des richtigen Image
+        if (concatinatedmutatedPositions === '1') {
+          hexagon.backgroundImage = rootLvl1_1_1
+          break
+        } else if (concatinatedmutatedPositions === '12') {
+          hexagon.backgroundImage = rootLvl1_2_12
+          break
+        } else if (concatinatedmutatedPositions === '13') {
+          hexagon.backgroundImage = rootLvl1_2_13
+          break
+        } else if (concatinatedmutatedPositions === '14') {
+          hexagon.backgroundImage = rootLvl1_2_14
+          break
+        } else if (concatinatedmutatedPositions === '123') {
+          hexagon.backgroundImage = rootLvl1_3_123
+          break
+        } else if (concatinatedmutatedPositions === '124') {
+          hexagon.backgroundImage = rootLvl1_3_124
+          break
+        } else if (concatinatedmutatedPositions === '125') {
+          hexagon.backgroundImage = rootLvl1_3_125
+          break
+        } else if (concatinatedmutatedPositions === '135') {
+          hexagon.backgroundImage = rootLvl1_3_135
+          break
         }
+      }
+      // kalkulation des Rotationswinkels
+      hexagon.degreeOfRotation = (6 - countRotations) * 60 // da die rotation anhand des umgebenden zustands bestimmt wird, muss die differenz zu 6 verwendet werden
+      console.log('nachbaren:', this.playgroundData.positionsOfDevelopedNeighbourHexagons)
 
-        console.log('countRotations', countRotations)
-        // kalkulation des Rotationswinkels
-        hexagon.degreeOfRotation = (6 - countRotations) * 60 // da die rotation anhand des umgebenden zustands bestimmt wird, muss die differenz zu 6 verwendet werden
-        console.log('nachbaren:', this.playgroundData.positionsOfDevelopedNeighbourHexagons)
-
-        this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType = [
-          'root1',
-          'Wurzel Lvl 1'
-        ]
+      this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType = ['root1', 'Wurzel Lvl 1']
+    },
+    updateImageOfNeighbourHexagons(hexagon) {
+      let yCoodinateNeighbourHexagon = null
+      // die schleife umläuft das geklickte hexagon und bestimmt den zustand der nachbarhexagone
+      for (let [deltaX, deltaY] of this.staticData.offsetsNeighbourHexagons) {
+        this.playgroundData.positionsOfDevelopedNeighbourHexagons = [0, [0, 0, 0, 0, 0, 0]]
+        /// Notwendige koordinaten Korrekturen für die versetzten kacheln
+        if (hexagon.hexagonXCoordinate % 2 === 0 && deltaX !== 0) {
+          yCoodinateNeighbourHexagon = hexagon.hexagonYCoordinate + deltaY + 1
+        } else {
+          yCoodinateNeighbourHexagon = hexagon.hexagonYCoordinate + deltaY
+        }
+        let xCoodinateNeighbourHexagon = hexagon.hexagonXCoordinate + deltaX
+        if (
+          yCoodinateNeighbourHexagon <= 0 ||
+          xCoodinateNeighbourHexagon <= 0 ||
+          xCoodinateNeighbourHexagon > this.playgroundData.amountColumns ||
+          yCoodinateNeighbourHexagon > this.playgroundData.amountRows
+        ) {
+          continue
+        }
+        let idNeighbourHexagon =
+          yCoodinateNeighbourHexagon * this.playgroundData.amountColumns +
+          xCoodinateNeighbourHexagon -
+          this.playgroundData.amountColumns
+        this.checkForConnectionToPlant(this.playgroundData.hexagonData[idNeighbourHexagon - 1])
+        if (
+          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] !== 'empty soil'
+        ) {
+          this.findImageOfHexagon(this.playgroundData.hexagonData[idNeighbourHexagon - 1])
+        }
       }
     }
   },
