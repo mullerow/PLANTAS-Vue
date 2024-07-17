@@ -38,6 +38,18 @@ export const storeData = defineStore('store', {
         [-1, 0],
         [-1, -1]
       ]
+    },
+    resourcesData: {
+      currentAmounts: {
+        amountWater: 260,
+        amountEnergie: 440,
+        amountphosphat: 0.2,
+        amountNitrogen: 8,
+        amountCarbohydrates: 100,
+        amountLipids: 30,
+        amountProteins: 20,
+        amountMetabolites: 0
+      }
     }
   }),
   actions: {

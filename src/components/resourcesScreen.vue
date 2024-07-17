@@ -2,24 +2,55 @@
   <div>
     <div class="display-ressource-container">
       <h3>Ressourcen</h3>
-      <b>Kohlenhydrate</b> <span class="amount-resource"> &nbsp; 50 g </span>&nbsp;||||🌱||||
-      <b>Lipide</b> <span class="amount-resource">&nbsp;30 g </span> &nbsp; ||||||||||||🌱||||
-      <b>Proteine</b> <span class="amount-resource">&nbsp;10 g </span> &nbsp;||||🌱||||
-      <b>Wasser</b> <span class="amount-resource">&nbsp;40 g </span>&nbsp; <br />
+      <b>Kohlenhydrate</b>
+      <span class="amount-resource">
+        &nbsp; {{ store.resourcesData.currentAmounts.amountCarbohydrates }} g </span
+      >&nbsp;||||🌱|||| <b>Lipide</b>
+      <span class="amount-resource"
+        >&nbsp;{{ store.resourcesData.currentAmounts.amountLipids }} g
+      </span>
+      &nbsp; ||||||||||||🌱|||| <b>Proteine</b>
+      <span class="amount-resource"
+        >&nbsp;{{ store.resourcesData.currentAmounts.amountProteins }} g
+      </span>
+      &nbsp;||||🌱|||| <b>Wasser</b>
+      <span class="amount-resource"
+        >&nbsp;{{ store.resourcesData.currentAmounts.amountWater }} g </span
+      >&nbsp; <br />
       <hr />
       <b> Sekundäre Stoffe</b>
-      <span class="amount-resource">&nbsp;0 g </span>
+      <span class="amount-resource"
+        >&nbsp;{{ store.resourcesData.currentAmounts.amountMetabolites }} g
+      </span>
 
-      &nbsp;||||🌱|||| <b>Phosphor</b> <span class="amount-resource">&nbsp;0.2 g </span> &nbsp;
-      ||||🌱|||| <b>Stickstoff</b> <span class="amount-resource">&nbsp;4 g </span> &nbsp;||||🌱||||
+      &nbsp;||||🌱|||| <b>Phosphor</b>
+      <span class="amount-resource"
+        >&nbsp;{{ store.resourcesData.currentAmounts.amountphosphat }} g
+      </span>
+      &nbsp; ||||🌱|||| <b>Stickstoff</b>
+      <span class="amount-resource"
+        >&nbsp;{{ store.resourcesData.currentAmounts.amountNitrogen }} g
+      </span>
+      &nbsp;||||🌱||||
       <b>Energie</b>
-      <span class="amount-resource">&nbsp; 81 KJ </span>&nbsp;
+      <span class="amount-resource"
+        >&nbsp; {{ store.resourcesData.currentAmounts.amountEnergie }} KJ </span
+      >&nbsp;
       <hr />
     </div>
   </div>
 </template>
 
-<script></script>
+<script>
+import { storeData } from '@/stores/store.js'
+export default {
+  data() {
+    return {
+      store: storeData()
+    }
+  }
+}
+</script>
 
 <style scoped>
 .display-ressource-container {
