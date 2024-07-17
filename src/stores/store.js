@@ -25,7 +25,7 @@ export const storeData = defineStore('store', {
     playgroundData: {
       hexagonData: [],
       amountColumns: 20,
-      amountRows: 13,
+      amountRows: 14,
       connectionToThePlant: false,
       positionsOfDevelopedNeighbourHexagons: [0, [0, 0, 0, 0, 0, 0]] // der erste eintrag legt die Anzahl der bebauten nachbarfelder fest, der zweite Eintrag/Liste bestimmt anhand der Zahlen in welche Richtung bebaut ist
     },
@@ -72,27 +72,27 @@ export const storeData = defineStore('store', {
             hexagonType = ['empty soil', 'freier Boden']
           }
           // Start Keimlingimage
-          if (x === 8 && y === 9) {
+          if (x === 9 && y === 9) {
             backgroundImageHexagon = seedling50
             hexagonType = ['seemling', 'eigener Keimling']
           }
-          if (x === 6 && y === 9) {
+          if (x === 5 && y === 9) {
             backgroundImageHexagon = stemLvl1
             hexagonType = ['stam1', 'Stamm Lvl 1']
           }
-          if (x === 5 && y === 9) {
+          if (x === 4 && y === 8) {
             backgroundImageHexagon = leafLvl1Left
             hexagonType = ['leaf1', 'Blatt Lvl 1 links']
           }
-          if (x === 7 && y === 9) {
+          if (x === 6 && y === 8) {
             backgroundImageHexagon = leafLvl1right
             hexagonType = ['leaf1', 'Blatt Lvl 1 rechts']
           }
-          if (x === 6 && y === 8) {
+          if (x === 5 && y === 8) {
             backgroundImageHexagon = leafLvl1straight
             hexagonType = ['leaf1', 'Blatt Lvl 1 nach oben']
           }
-          if ((x === 6 && y === 10) || (x === 8 && y === 10)) {
+          if ((x === 5 && y === 10) || (x === 9 && y === 10)) {
             backgroundImageHexagon = rootLvl1_1_1
             hexagonType = ['root1', 'Wurzel Lvl 1 Zentral']
           }
@@ -156,13 +156,15 @@ export const storeData = defineStore('store', {
           yCoodinateNeighbourHexagon * this.playgroundData.amountColumns +
           xCoodinateNeighbourHexagon -
           this.playgroundData.amountColumns
+
+        /// differenzierung zwischen den Pflanzenbereichen
         if (
           this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] !== 'empty soil' &&
           this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] !== 'empty sky'
         ) {
           this.playgroundData.connectionToThePlant = true
-
-          this.playgroundData.positionsOfDevelopedNeighbourHexagons[0] += 1
+          if (this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] === 'root1')
+            this.playgroundData.positionsOfDevelopedNeighbourHexagons[0] += 1
           this.playgroundData.positionsOfDevelopedNeighbourHexagons[1][IndexPositionNeighbourList] =
             IndexPositionNeighbourList + 1
         }
