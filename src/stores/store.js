@@ -14,8 +14,11 @@ import rootLvl1_3_123 from '@/assets/images/roots/roots-lvl-1/root-lvl1-3-123.pn
 import rootLvl1_3_124 from '@/assets/images/roots/roots-lvl-1/root-lvl1-3-124.png'
 import rootLvl1_3_125 from '@/assets/images/roots/roots-lvl-1/root-lvl1-3-125.png'
 import rootLvl1_3_135 from '@/assets/images/roots/roots-lvl-1/root-lvl1-3-135.png'
-
-import rootLvl2Center from '@/assets/images/roots/root-center-lvl2-1.png'
+import rootLvl1_4_1234 from '@/assets/images/roots/roots-lvl-1/root-lvl1-4-1234.png'
+import rootLvl1_4_1235 from '@/assets/images/roots/roots-lvl-1/root-lvl1-4-1235.png'
+import rootLvl1_4_1245 from '@/assets/images/roots/roots-lvl-1/root-lvl1-4-1245.png'
+import rootLvl1_5_12345 from '@/assets/images/roots/roots-lvl-1/root-lvl1-5-12345.png'
+import rootLvl1_6_123456 from '@/assets/images/roots/roots-lvl-1/root-lvl1-6-123456.png'
 
 export const storeData = defineStore('store', {
   state: () => ({
@@ -167,6 +170,7 @@ export const storeData = defineStore('store', {
       }
     },
     buildPlantpart(hexagon) {
+      // BAUE EINE WURZEL
       if (this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType[0] === 'empty soil') {
         this.findImageOfHexagon(hexagon)
         this.updateImageOfNeighbourHexagons(hexagon)
@@ -174,12 +178,6 @@ export const storeData = defineStore('store', {
     },
     findImageOfHexagon(hexagon) {
       //////// Rotation des Hexagons um das Image an die benachtbarten hexagone anzupassen ////////////////////////
-      const concatinatedPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1]
-        .filter((position) => position !== 0)
-        .join('')
-      const ImageNameOfRootStyle = `rootLvl1_${this.playgroundData.positionsOfDevelopedNeighbourHexagons[0]}_${concatinatedPositions}`
-      console.log('imagename', ImageNameOfRootStyle)
-
       // Bestimmung des passenden Images
       let neighbourPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
         (position) => position !== 0
@@ -225,6 +223,21 @@ export const storeData = defineStore('store', {
         } else if (concatinatedmutatedPositions === '135') {
           hexagon.backgroundImage = rootLvl1_3_135
           break
+        } else if (concatinatedmutatedPositions === '1234') {
+          hexagon.backgroundImage = rootLvl1_4_1234
+          break
+        } else if (concatinatedmutatedPositions === '1235') {
+          hexagon.backgroundImage = rootLvl1_4_1235
+          break
+        } else if (concatinatedmutatedPositions === '1245') {
+          hexagon.backgroundImage = rootLvl1_4_1245
+          break
+        } else if (concatinatedmutatedPositions === '12345') {
+          hexagon.backgroundImage = rootLvl1_5_12345
+          break
+        } else if (concatinatedmutatedPositions === '123456') {
+          hexagon.backgroundImage = rootLvl1_6_123456
+          break
         }
       }
       // kalkulation des Rotationswinkels
@@ -258,9 +271,9 @@ export const storeData = defineStore('store', {
           xCoodinateNeighbourHexagon -
           this.playgroundData.amountColumns
         this.checkForConnectionToPlant(this.playgroundData.hexagonData[idNeighbourHexagon - 1])
-        if (
-          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] !== 'empty soil'
-        ) {
+        // Ausschließen, das hexagone aktualisiert werden, wenn sie keine wurzeln sind
+
+        if (this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] === 'root1') {
           this.findImageOfHexagon(this.playgroundData.hexagonData[idNeighbourHexagon - 1])
         }
       }
