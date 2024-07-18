@@ -53,7 +53,8 @@ export const storeData = defineStore('store', {
     },
     playTime: {
       timerValue: 0,
-      ingameSeason: 'Frühling'
+      ingameSeason: 'Frühling',
+      ingameYear: 0
     }
   }),
   actions: {

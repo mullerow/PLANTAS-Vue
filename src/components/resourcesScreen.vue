@@ -3,9 +3,8 @@
     <div class="display-ressource-container">
       <h3>Ressourcen</h3>
       <div class="display-time">
-        Abgelaufene Tage: {{ this.store.playTime.timerValue }} <br />{{
-          this.store.playTime.ingameSeason
-        }}
+        Abgelaufene Tage: {{ this.store.playTime.timerValue }} <br />
+        Jahr: {{ this.store.playTime.ingameYear }} - {{ this.store.playTime.ingameSeason }}
       </div>
       <button class="start-time-button" @click="changeRunTime()">
         <div v-if="this.runTimeActive === false">Start</div>
@@ -69,6 +68,9 @@ export default {
           this.store.playTime.timerValue += 1
           if (this.store.playTime.timerValue % 90 === 0) {
             this.changeSeason()
+          }
+          if (this.store.playTime.timerValue % 365 === 0) {
+            this.store.playTime.ingameYear += 1
           }
         }, 1000)
       } else {
