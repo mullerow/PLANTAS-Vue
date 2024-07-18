@@ -66,13 +66,13 @@ export default {
       if (this.runTimeActive) {
         this.timer = setInterval(() => {
           this.store.playTime.timerValue += 1
-          if (this.store.playTime.timerValue % 90 === 0) {
+          if (this.store.playTime.timerValue % 91 === 0) {
             this.changeSeason()
           }
           if (this.store.playTime.timerValue % 365 === 0) {
             this.store.playTime.ingameYear += 1
           }
-        }, 1000)
+        }, 100)
       } else {
         clearInterval(this.timer)
         this.timer = null

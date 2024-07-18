@@ -25,7 +25,9 @@
       FeldTyp: {{ hexagonTypeName }}
       <div class="container mt-5">
         <div class="dropdown" @click="toggleDropdown">
-          <button class="btn btn-primary dropdown-toggle" type="button">Wähle Ausprägung</button>
+          <button class="btn btn-primary dropdown-toggle plant-develop-option-button" type="button">
+            Wähle Ausprägung
+          </button>
           <div v-if="isDropdownOpen" class="dropdown-menu">
             <button
               v-if="store.playgroundData.connectionToThePlant && hexagonCategory !== 'root1'"
@@ -112,7 +114,6 @@ export default {
 }
 .hexagon-tile:hover {
   cursor: pointer;
-  border-top: 2px solid red;
 }
 .hexagon-field-container {
   display: flex;
@@ -143,7 +144,6 @@ h2 {
 .dropdown {
   position: relative;
   display: inline-block;
-  background-color: aquamarine;
 }
 
 .dropdown-menu {
@@ -156,9 +156,21 @@ h2 {
 .dropdown-item {
   padding: 6px 12px;
   display: block;
+  background-color: #0a918a;
 }
 
 .dropdown-item:hover {
   background-color: #ddd;
+}
+.plant-develop-option-button {
+  background-color: #0a918a;
+  color: wheat;
+  border-radius: 5px;
+  width: 200px;
+  font-weight: bold;
+}
+.plant-develop-option-button:hover {
+  background-color: #15d4cb;
+  cursor: pointer;
 }
 </style>
