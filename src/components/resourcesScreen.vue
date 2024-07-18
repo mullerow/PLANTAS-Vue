@@ -2,6 +2,7 @@
   <div>
     <div class="display-ressource-container">
       <h3>Ressourcen</h3>
+      <div class="display-time">Datum: 14.06.26</div>
       <b>Kohlenhydrate</b>
       <span class="amount-resource">
         &nbsp; {{ store.resourcesData.currentAmounts.amountCarbohydrates }} g </span
@@ -60,9 +61,22 @@ export default {
   width: 1000px;
   line-height: 1.5rem;
   padding: 5px;
+  position: relative;
 }
 .amount-resource {
   background-color: aliceblue;
+}
+.display-time {
+  position: absolute;
+  background-color: #00524e;
+  z-index: 6;
+  right: 20px;
+  top: 10px;
+  width: 250px;
+  font-weight: bold;
+  color: wheat;
+  border-radius: 20px;
+  padding: 5px 15px;
 }
 
 b {
