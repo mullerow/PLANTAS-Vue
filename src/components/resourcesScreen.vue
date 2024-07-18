@@ -10,6 +10,12 @@
         <div v-if="this.runTimeActive === false">Start</div>
         <div v-if="this.runTimeActive === true">Stop</div>
       </button>
+
+      <div class="change-speed-button-container">
+        <button @click="changeGameSpeed(100)">
+          <img :src="playButton" alt="play button" />
+        </button>
+      </div>
       <b>Kohlenhydrate</b>
       <span class="amount-resource">
         &nbsp; {{ store.resourcesData.currentAmounts.amountCarbohydrates }} g </span
@@ -51,12 +57,14 @@
 
 <script>
 import { storeData } from '@/stores/store.js'
+import playButton from '@/assets/icons/Play--Streamline-Font-Awesome.svg'
 export default {
   data() {
     return {
       store: storeData(),
       runTimeActive: false,
-      timer: null
+      timer: null,
+      playButton: playButton
     }
   },
   methods: {
@@ -72,7 +80,7 @@ export default {
           if (this.store.playTime.timerValue % 365 === 0) {
             this.store.playTime.ingameYear += 1
           }
-        }, 100)
+        }, this.store.playTime.ingameTimeSpeed)
       } else {
         clearInterval(this.timer)
         this.timer = null
@@ -88,6 +96,14 @@ export default {
         this.store.playTime.ingameSeason = 'Winter'
       } else if (this.store.playTime.ingameSeason === 'Winter') {
         this.store.playTime.ingameSeason = 'Frühling'
+      }
+    },
+    changeGameSpeed(timeIntervall) {
+      this.store.playTime.ingameTimeSpeed = timeIntervall
+      if (this.runTimeActive) {
+        this.runTimeActive = !this.runTimeActive
+        clearInterval(this.timer)
+        this.changeRunTime()
       }
     }
   }
@@ -111,8 +127,8 @@ export default {
   position: absolute;
   background-color: #00524e;
   z-index: 6;
-  right: 10px;
-  top: 10px;
+  right: 5px;
+  top: 5px;
   width: 250px;
   font-weight: bold;
   color: wheat;
@@ -122,9 +138,9 @@ export default {
 .start-time-button {
   position: absolute;
   width: 50px;
-  height: 58px;
+  height: 78px;
   z-index: 6;
-  right: 10px;
+  right: 5px;
   top: 10px;
   font-weight: bold;
   background-color: #0a918a;
@@ -135,6 +151,20 @@ export default {
 .start-time-button:hover {
   background-color: #15d4cb;
   cursor: pointer;
+}
+.change-speed-button-container {
+  position: absolute;
+  background-color: #01413d;
+  z-index: 5;
+  right: 5px;
+  top: 45px;
+  width: 250px;
+  height: 50px;
+  font-weight: bold;
+  color: wheat;
+  border-radius: 20px;
+  padding-left: 5px;
+  padding-top: 20px;
 }
 
 b {

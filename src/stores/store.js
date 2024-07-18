@@ -54,7 +54,8 @@ export const storeData = defineStore('store', {
     playTime: {
       timerValue: 0,
       ingameSeason: 'Frühling',
-      ingameYear: 0
+      ingameYear: 1,
+      ingameTimeSpeed: 500 // angaben in millisekunden
     }
   }),
   actions: {
@@ -88,8 +89,7 @@ export const storeData = defineStore('store', {
             backgroundImageHexagon = soilGroundImage
             hexagonType = ['empty soil', 'freier Boden']
           }
-          // Start Keimlingimage
-          if (x === 9 && y === 9) {
+          if ((x === 9 && y === 9) || (x === 15 && y === 8)) {
             backgroundImageHexagon = seedling50
             hexagonType = ['seemling', 'eigener Keimling']
           }
@@ -109,13 +109,13 @@ export const storeData = defineStore('store', {
             backgroundImageHexagon = leafLvl1straight
             hexagonType = ['leaf1', 'Blatt Lvl 1 nach oben']
           }
-          if ((x === 5 && y === 10) || (x === 9 && y === 10)) {
-            backgroundImageHexagon = rootLvl1_1_1
-            hexagonType = ['root1', 'Wurzel Lvl 1 Zentral']
-          }
           if ((x === 14 && y === 9) || (x === 16 && y === 9) || (x === 15 && y === 9)) {
             backgroundImageHexagon = soilGroundImage
             hexagonType = ['empty soil', 'freier Boden']
+          }
+          if ((x === 5 && y === 10) || (x === 9 && y === 10) || (x === 15 && y === 9)) {
+            backgroundImageHexagon = rootLvl1_1_1
+            hexagonType = ['root1', 'Wurzel Lvl 1 Zentral']
           }
 
           ///// Erzeugen des Objekts für die individuellen HexagonDaten
