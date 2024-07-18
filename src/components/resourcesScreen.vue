@@ -12,9 +12,14 @@
       </button>
 
       <div class="change-speed-button-container">
-        <button @click="changeGameSpeed(100)">
+        <button @click="changeGameSpeed(1000)">
           <img :src="playButton" alt="play button" />
         </button>
+        <button @click="changeGameSpeed(200)">
+          5x
+          <!-- <img :src="playFastButton" alt="play fast button" />-->
+        </button>
+        <button @click="changeGameSpeed(50)">20x</button>
       </div>
       <b>Kohlenhydrate</b>
       <span class="amount-resource">
@@ -58,13 +63,15 @@
 <script>
 import { storeData } from '@/stores/store.js'
 import playButton from '@/assets/icons/Play--Streamline-Font-Awesome.svg'
+import playFastButton from '@/assets/icons/Fast-Forward-Fill--Streamline-Bootstrap.svg'
 export default {
   data() {
     return {
       store: storeData(),
       runTimeActive: false,
       timer: null,
-      playButton: playButton
+      playButton: playButton,
+      playFastButton: playFastButton
     }
   },
   methods: {
