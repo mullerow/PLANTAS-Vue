@@ -3,7 +3,9 @@
     <div class="display-ressource-container">
       <h3>Ressourcen</h3>
       <div class="display-time">
-        Datum: 14.06.26 Abgelaufene Tage: {{ this.store.playTime.timerValue }}
+        Abgelaufene Tage: {{ this.store.playTime.timerValue }} <br />{{
+          this.store.playTime.ingameSeason
+        }}
       </div>
       <button class="start-time-button" @click="changeRunTime()">
         <div v-if="this.runTimeActive === false">Start</div>
@@ -65,11 +67,25 @@ export default {
       if (this.runTimeActive) {
         this.timer = setInterval(() => {
           this.store.playTime.timerValue += 1
+          if (this.store.playTime.timerValue % 90 === 0) {
+            this.changeSeason()
+          }
         }, 1000)
       } else {
         clearInterval(this.timer)
         this.timer = null
-        this.store.playTime.timerValue = 0
+        //this.store.playTime.timerValue = 0
+      }
+    },
+    changeSeason() {
+      if (this.store.playTime.ingameSeason === 'Frühling') {
+        this.store.playTime.ingameSeason = 'Sommer'
+      } else if (this.store.playTime.ingameSeason === 'Sommer') {
+        this.store.playTime.ingameSeason = 'Herbst'
+      } else if (this.store.playTime.ingameSeason === 'Herbst') {
+        this.store.playTime.ingameSeason = 'Winter'
+      } else if (this.store.playTime.ingameSeason === 'Winter') {
+        this.store.playTime.ingameSeason = 'Frühling'
       }
     }
   }
@@ -93,7 +109,7 @@ export default {
   position: absolute;
   background-color: #00524e;
   z-index: 6;
-  right: 20px;
+  right: 10px;
   top: 10px;
   width: 250px;
   font-weight: bold;
@@ -106,13 +122,17 @@ export default {
   width: 50px;
   height: 58px;
   z-index: 6;
-  right: 20px;
+  right: 10px;
   top: 10px;
   font-weight: bold;
   background-color: #0a918a;
   color: wheat;
   font-size: 18px;
   border-radius: 20px 4px 4px 20px;
+}
+.start-time-button:hover {
+  background-color: #15d4cb;
+  cursor: pointer;
 }
 
 b {
