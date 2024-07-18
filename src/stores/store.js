@@ -50,6 +50,9 @@ export const storeData = defineStore('store', {
         amountProteins: 20,
         amountMetabolites: 0
       }
+    },
+    playTime: {
+      timerValue: 0
     }
   }),
   actions: {

@@ -2,7 +2,13 @@
   <div>
     <div class="display-ressource-container">
       <h3>Ressourcen</h3>
-      <div class="display-time">Datum: 14.06.26</div>
+      <div class="display-time">
+        Datum: 14.06.26 Abgelaufene Tage: {{ this.store.playTime.timerValue }}
+      </div>
+      <button class="start-time-button" @click="changeRunTime()">
+        <div v-if="this.runTimeActive === false">Start</div>
+        <div v-if="this.runTimeActive === true">Stop</div>
+      </button>
       <b>Kohlenhydrate</b>
       <span class="amount-resource">
         &nbsp; {{ store.resourcesData.currentAmounts.amountCarbohydrates }} g </span
@@ -47,7 +53,24 @@ import { storeData } from '@/stores/store.js'
 export default {
   data() {
     return {
-      store: storeData()
+      store: storeData(),
+      runTimeActive: false,
+      timer: null
+    }
+  },
+  methods: {
+    changeRunTime() {
+      this.runTimeActive = !this.runTimeActive
+      console.log('Zeit gestartet', this.runTimeActive)
+      if (this.runTimeActive) {
+        this.timer = setInterval(() => {
+          this.store.playTime.timerValue += 1
+        }, 1000)
+      } else {
+        clearInterval(this.timer)
+        this.timer = null
+        this.store.playTime.timerValue = 0
+      }
     }
   }
 }
@@ -77,6 +100,15 @@ export default {
   color: wheat;
   border-radius: 20px;
   padding: 5px 15px;
+}
+.start-time-button {
+  position: absolute;
+  width: 50px;
+  height: 58px;
+  z-index: 6;
+  right: 20px;
+  top: 10px;
+  font-weight: bold;
 }
 
 b {
