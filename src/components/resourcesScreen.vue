@@ -109,6 +109,10 @@ export default {
   right: 20px;
   top: 10px;
   font-weight: bold;
+  background-color: #0a918a;
+  color: wheat;
+  font-size: 18px;
+  border-radius: 20px 4px 4px 20px;
 }
 
 b {
