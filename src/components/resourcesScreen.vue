@@ -12,14 +12,14 @@
       </button>
 
       <div class="change-speed-button-container">
-        <button @click="changeGameSpeed(1000)">
+        <button class="speed-changing-button" @click="changeGameSpeed(1000)">
           <img :src="playButton" alt="play button" />
         </button>
-        <button @click="changeGameSpeed(200)">
+        <button class="speed-changing-button" @click="changeGameSpeed(200)">
           5x
           <!-- <img :src="playFastButton" alt="play fast button" />-->
         </button>
-        <button @click="changeGameSpeed(50)">20x</button>
+        <button class="speed-changing-button" @click="changeGameSpeed(50)">20x</button>
       </div>
       <b>Kohlenhydrate</b>
       <span class="amount-resource">
@@ -91,7 +91,6 @@ export default {
       } else {
         clearInterval(this.timer)
         this.timer = null
-        //this.store.playTime.timerValue = 0
       }
     },
     changeSeason() {
@@ -134,8 +133,8 @@ export default {
   position: absolute;
   background-color: #00524e;
   z-index: 6;
-  right: 5px;
-  top: 5px;
+  right: 0px;
+  top: 0px;
   width: 250px;
   font-weight: bold;
   color: wheat;
@@ -147,7 +146,7 @@ export default {
   width: 50px;
   height: 78px;
   z-index: 6;
-  right: 5px;
+  right: 0px;
   top: 10px;
   font-weight: bold;
   background-color: #0a918a;
@@ -155,23 +154,35 @@ export default {
   font-size: 18px;
   border-radius: 20px 4px 4px 20px;
 }
-.start-time-button:hover {
+.start-time-button:hover,
+.speed-changing-button:hover {
   background-color: #15d4cb;
   cursor: pointer;
 }
 .change-speed-button-container {
   position: absolute;
+  display: flex;
+  justify-content: space-evenly;
   background-color: #01413d;
   z-index: 5;
-  right: 5px;
-  top: 45px;
+  right: 0px;
+  top: 35px;
   width: 250px;
-  height: 50px;
+  height: 55px;
   font-weight: bold;
   color: wheat;
   border-radius: 20px;
   padding-left: 5px;
   padding-top: 20px;
+  padding-right: 50px;
+  padding-top: 25px;
+}
+.speed-changing-button {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background-color: #0a918a;
+  color: wheat;
 }
 
 b {

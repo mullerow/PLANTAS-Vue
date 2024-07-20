@@ -49,6 +49,9 @@ export const storeData = defineStore('store', {
         amountLipids: 30,
         amountProteins: 20,
         amountMetabolites: 0
+      },
+      resourcesProductionRates: {
+        productionRateWater: 0
       }
     },
     playTime: {
