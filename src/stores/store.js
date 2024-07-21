@@ -43,7 +43,7 @@ export const storeData = defineStore('store', {
       currentAmounts: {
         amountWater: 260,
         amountEnergie: 440,
-        amountphosphat: 0.2,
+        amountphosphor: 0.2,
         amountNitrogen: 8,
         amountCarbohydrates: 100,
         amountLipids: 30,
@@ -51,17 +51,22 @@ export const storeData = defineStore('store', {
         amountMetabolites: 0
       },
       resourcesProductionRates: {
-        productionRateWater: 0
+        productionRateWater: 1,
+        productionRateNitrogen: 0.1,
+        productionRatePhosphor: 0.01
       }
     },
     playTime: {
       timerValue: 0,
       ingameSeason: 'Frühling',
       ingameYear: 1,
-      ingameTimeSpeed: 500 // angaben in millisekunden
+      ingameTimeSpeed: 1000 // Angabe in Millisekunden
     }
   }),
   actions: {
+    ///////////////////////////////////////////////////////////////////////////////////////
+    ////// Spielfeld initialisieren //////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////
     createDefaultHexagons() {
       let additionalIncreaseOfYShift = 0
       let brightness = 1.7
@@ -138,6 +143,9 @@ export const storeData = defineStore('store', {
         }
       }
     },
+    ///////////////////////////////////////////////////////////////////////////////////////
+    ////// Pflanzenentwicklung //////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////
     checkForDevelopmentOptions(hexagon) {
       if (hexagon.hexagonType[0] === 'empty sky') {
         console.log('freier Himmel')
@@ -299,6 +307,28 @@ export const storeData = defineStore('store', {
           this.findImageOfHexagon(this.playgroundData.hexagonData[idNeighbourHexagon - 1])
         }
       }
+    },
+    ///////////////////////////////////////////////////////////////////////////////////////
+    ////// RESSOURCEN MANAGMENT //////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////
+    harvestResources() {
+      this.resourcesData.currentAmounts.amountWater +=
+        this.resourcesData.resourcesProductionRates.productionRateWater
+
+      this.resourcesData.currentAmounts.amountNitrogen = this.roundDecimals(
+        (this.resourcesData.currentAmounts.amountNitrogen +=
+          this.resourcesData.resourcesProductionRates.productionRateNitrogen),
+        1
+      )
+
+      this.resourcesData.currentAmounts.amountphosphor = this.roundDecimals(
+        (this.resourcesData.currentAmounts.amountphosphor +=
+          this.resourcesData.resourcesProductionRates.productionRatePhosphor),
+        2
+      )
+    },
+    roundDecimals(value, decimals) {
+      return parseFloat(value.toFixed(decimals))
     }
   },
   getters: {}

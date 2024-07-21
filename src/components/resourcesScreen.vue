@@ -15,10 +15,7 @@
         <button class="speed-changing-button" @click="changeGameSpeed(1000)">
           <img :src="playButton" alt="play button" />
         </button>
-        <button class="speed-changing-button" @click="changeGameSpeed(200)">
-          5x
-          <!-- <img :src="playFastButton" alt="play fast button" />-->
-        </button>
+        <button class="speed-changing-button" @click="changeGameSpeed(200)">5x</button>
         <button class="speed-changing-button" @click="changeGameSpeed(50)">20x</button>
       </div>
       <b>Kohlenhydrate</b>
@@ -44,7 +41,7 @@
 
       &nbsp;||||🌱|||| <b>Phosphor</b>
       <span class="amount-resource"
-        >&nbsp;{{ store.resourcesData.currentAmounts.amountphosphat }} g
+        >&nbsp;{{ store.resourcesData.currentAmounts.amountphosphor }} g
       </span>
       &nbsp; ||||🌱|||| <b>Stickstoff</b>
       <span class="amount-resource"
@@ -63,24 +60,23 @@
 <script>
 import { storeData } from '@/stores/store.js'
 import playButton from '@/assets/icons/Play--Streamline-Font-Awesome.svg'
-import playFastButton from '@/assets/icons/Fast-Forward-Fill--Streamline-Bootstrap.svg'
 export default {
   data() {
     return {
       store: storeData(),
       runTimeActive: false,
       timer: null,
-      playButton: playButton,
-      playFastButton: playFastButton
+      playButton: playButton
     }
   },
   methods: {
     changeRunTime() {
       this.runTimeActive = !this.runTimeActive
-      console.log('Zeit gestartet', this.runTimeActive)
+
       if (this.runTimeActive) {
         this.timer = setInterval(() => {
           this.store.playTime.timerValue += 1
+          this.store.harvestResources()
           if (this.store.playTime.timerValue % 91 === 0) {
             this.changeSeason()
           }
@@ -135,7 +131,7 @@ export default {
   z-index: 6;
   right: 0px;
   top: 0px;
-  width: 250px;
+  width: 255px;
   font-weight: bold;
   color: wheat;
   border-radius: 20px;
@@ -147,7 +143,7 @@ export default {
   height: 78px;
   z-index: 6;
   right: 0px;
-  top: 10px;
+  top: 7px;
   font-weight: bold;
   background-color: #0a918a;
   color: wheat;
@@ -167,7 +163,7 @@ export default {
   z-index: 5;
   right: 0px;
   top: 35px;
-  width: 250px;
+  width: 255px;
   height: 55px;
   font-weight: bold;
   color: wheat;

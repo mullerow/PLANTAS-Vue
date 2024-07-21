@@ -49,7 +49,7 @@
         </div>
         <div>
           verfügbare Ressourcen: <br />
-          Wasser: 10 g/d<br />
+          Wasser: 1 g/d<br />
           Stickstoff: 0,1 g/d<br />
           Phosphor: 0 g/d
         </div>
