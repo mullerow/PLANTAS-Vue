@@ -204,6 +204,7 @@ export const storeData = defineStore('store', {
       if (this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType[0] === 'empty soil') {
         this.findImageOfHexagon(hexagon)
         this.updateImageOfNeighbourHexagons(hexagon)
+        this.updateResourceHarvest()
       }
     },
     findImageOfHexagon(hexagon) {
@@ -326,6 +327,11 @@ export const storeData = defineStore('store', {
           this.resourcesData.resourcesProductionRates.productionRatePhosphor),
         2
       )
+    },
+    updateResourceHarvest() {
+      this.resourcesData.resourcesProductionRates.productionRateWater += 1
+      this.resourcesData.resourcesProductionRates.productionRateNitrogen += 0.1
+      this.resourcesData.resourcesProductionRates.productionRatePhosphor += 0.01
     },
     roundDecimals(value, decimals) {
       return parseFloat(value.toFixed(decimals))
