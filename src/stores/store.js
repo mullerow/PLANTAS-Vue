@@ -106,6 +106,7 @@ export const storeData = defineStore('store', {
             backgroundImageHexagon = stemLvl1
             hexagonType = ['stam1', 'Stamm Lvl 1']
           }
+          /*
           if (x === 4 && y === 8) {
             backgroundImageHexagon = leafLvl1Left
             hexagonType = ['leaf1', 'Blatt Lvl 1 links']
@@ -118,6 +119,7 @@ export const storeData = defineStore('store', {
             backgroundImageHexagon = leafLvl1straight
             hexagonType = ['leaf1', 'Blatt Lvl 1 nach oben']
           }
+            */
           if ((x === 14 && y === 9) || (x === 16 && y === 9) || (x === 15 && y === 9)) {
             backgroundImageHexagon = soilGroundImage
             hexagonType = ['empty soil', 'freier Boden']
@@ -156,6 +158,9 @@ export const storeData = defineStore('store', {
         this.checkForConnectionToPlant(hexagon)
       } else if (hexagon.hexagonType[0] === 'root1') {
         this.checkForConnectionToPlant(hexagon)
+      } else if (hexagon.hexagonType[0] === 'leaf1') {
+        this.checkForConnectionToPlant(hexagon)
+        console.log('Blatt LvL1')
       } else {
         console.log('Fläche schon bebaut')
       }
@@ -200,22 +205,17 @@ export const storeData = defineStore('store', {
         IndexPositionNeighbourList += 1
       }
     },
-    buildPlantpart(hexagon, plantPartClass) {
-      console.log('davor class', plantPartClass)
+    buildPlantpart(hexagon, developmentPlantPartClass) {
       this.resourcesData.currentAmounts.sufficentResources = true
       // Baue eine Wurzel
-      this.resourceConsumtionToBuild(plantPartClass)
-      if (
-        this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType[0] === 'empty soil' &&
-        this.resourcesData.currentAmounts.sufficentResources === true
-      ) {
-        this.findImageOfHexagon(hexagon, plantPartClass)
-        this.updateImageOfNeighbourHexagons(hexagon, plantPartClass)
-        this.updateResourceHarvest(plantPartClass)
+      this.resourceConsumtionToBuild(developmentPlantPartClass)
+      if (this.resourcesData.currentAmounts.sufficentResources === true) {
+        this.findImageOfHexagon(hexagon, developmentPlantPartClass)
+        this.updateImageOfNeighbourHexagons(hexagon, developmentPlantPartClass)
+        this.updateResourceHarvest(developmentPlantPartClass)
       }
     },
-    findImageOfHexagon(hexagon, plantPartClass) {
-      console.log('find image class', plantPartClass)
+    findImageOfHexagon(hexagon, developmentPlantPartClass) {
       //////// Rotation des Hexagons um das Image an die benachtbarten hexagone anzupassen ////////////////////////
       // Bestimmung des passenden Images
       let neighbourPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
@@ -238,7 +238,7 @@ export const storeData = defineStore('store', {
         console.log('concatinatedmutatedPositions', concatinatedmutatedPositions)
         countRotations += 1
         // auswahl des richtigen Image für Wurzeln
-        if (plantPartClass === 'root') {
+        if (developmentPlantPartClass === 'root') {
           if (concatinatedmutatedPositions === '1') {
             hexagon.backgroundImage = rootLvl1_1_1
             break
@@ -280,6 +280,9 @@ export const storeData = defineStore('store', {
             break
           }
         }
+        if (developmentPlantPartClass === 'stem') {
+          hexagon.backgroundImage = stemLvl1
+        }
       }
 
       // kalkulation des Rotationswinkels
@@ -288,7 +291,7 @@ export const storeData = defineStore('store', {
 
       this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType = ['root1', 'Wurzel Lvl 1']
     },
-    updateImageOfNeighbourHexagons(hexagon, plantPartClass) {
+    updateImageOfNeighbourHexagons(hexagon, developmentPlantPartClass) {
       let yCoodinateNeighbourHexagon = null
       // die schleife umläuft das geklickte hexagon und bestimmt den zustand der nachbarhexagone
       for (let [deltaX, deltaY] of this.staticData.offsetsNeighbourHexagons) {
@@ -318,7 +321,7 @@ export const storeData = defineStore('store', {
         if (this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] === 'root1') {
           this.findImageOfHexagon(
             this.playgroundData.hexagonData[idNeighbourHexagon - 1],
-            plantPartClass
+            developmentPlantPartClass
           )
         }
       }
@@ -341,22 +344,39 @@ export const storeData = defineStore('store', {
         2
       )
     },
-    updateResourceHarvest(plantPartClass) {
-      if (plantPartClass === 'root') {
+    updateResourceHarvest(developmentPlantPartClass) {
+      if (developmentPlantPartClass === 'root') {
         this.resourcesData.resourcesProductionRates.productionRateWater += 1
         this.resourcesData.resourcesProductionRates.productionRateNitrogen += 0.1
         this.resourcesData.resourcesProductionRates.productionRatePhosphor += 0.01
       }
     },
-    resourceConsumtionToBuild(plantPartClass) {
-      if (plantPartClass === 'root') {
+    resourceConsumtionToBuild(developmentPlantPartClass) {
+      if (developmentPlantPartClass === 'root') {
         if (this.resourcesData.currentAmounts.amountWater - 50 >= 0) {
           this.resourcesData.currentAmounts.amountWater -= 50
         } else {
           this.resourcesData.currentAmounts.sufficentResources = false
         }
         if (this.resourcesData.currentAmounts.amountNitrogen - 5 >= 0) {
-          this.resourcesData.currentAmounts.amountNitrogen -= 1
+          this.resourcesData.currentAmounts.amountNitrogen -= 5
+        } else {
+          this.resourcesData.currentAmounts.sufficentResources = false
+        }
+        if (this.resourcesData.currentAmounts.amountphosphor - 0.1 >= 0) {
+          this.resourcesData.currentAmounts.amountphosphor -= 0.1
+        } else {
+          this.resourcesData.currentAmounts.sufficentResources = false
+        }
+      }
+      if (developmentPlantPartClass === 'stam') {
+        if (this.resourcesData.currentAmounts.amountWater - 10 >= 0) {
+          this.resourcesData.currentAmounts.amountWater -= 10
+        } else {
+          this.resourcesData.currentAmounts.sufficentResources = false
+        }
+        if (this.resourcesData.currentAmounts.amountNitrogen - 2 >= 0) {
+          this.resourcesData.currentAmounts.amountNitrogen -= 2
         } else {
           this.resourcesData.currentAmounts.sufficentResources = false
         }

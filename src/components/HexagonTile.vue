@@ -30,18 +30,18 @@
           </button>
           <div v-if="isDropdownOpen" class="dropdown-menu">
             <button
-              v-if="store.playgroundData.connectionToThePlant && hexagonCategory !== 'root1'"
+              v-if="store.playgroundData.connectionToThePlant && hexagonCategory === 'empty soil'"
               class="dropdown-item"
               @click="this.store.buildPlantpart(optionHexagon, 'root')"
             >
-              Stamm LvL 1
+              Wurzel LvL 1
             </button>
             <button
-              v-if="store.playgroundData.connectionToThePlant && hexagonCategory === 'root1'"
+              v-if="store.playgroundData.connectionToThePlant && hexagonCategory === 'empty sky'"
               class="dropdown-item"
-              @click="this.store.buildPlantpart(optionHexagon, 'stam')"
+              @click="this.store.buildPlantpart(optionHexagon, 'stem')"
             >
-              Wurzel LvL 2
+              Stamm LvL 1
             </button>
             <a class="dropdown-item" href="#">Stiel LvL 2</a>
             <a class="dropdown-item" href="#">Blatt LvL 2</a>
