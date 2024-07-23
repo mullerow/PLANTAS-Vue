@@ -32,14 +32,14 @@
             <button
               v-if="store.playgroundData.connectionToThePlant && hexagonCategory !== 'root1'"
               class="dropdown-item"
-              @click="this.store.buildPlantpart(optionHexagon)"
+              @click="this.store.buildPlantpart(optionHexagon, 'root')"
             >
-              Wurzel LvL 1
+              Stamm LvL 1
             </button>
             <button
               v-if="store.playgroundData.connectionToThePlant && hexagonCategory === 'root1'"
               class="dropdown-item"
-              @click="this.store.buildPlantpart(optionHexagon)"
+              @click="this.store.buildPlantpart(optionHexagon, 'stam')"
             >
               Wurzel LvL 2
             </button>

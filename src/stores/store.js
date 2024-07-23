@@ -41,6 +41,7 @@ export const storeData = defineStore('store', {
     },
     resourcesData: {
       currentAmounts: {
+        sufficentResources: true,
         amountWater: 260,
         amountEnergie: 440,
         amountphosphor: 0.2,
@@ -199,15 +200,22 @@ export const storeData = defineStore('store', {
         IndexPositionNeighbourList += 1
       }
     },
-    buildPlantpart(hexagon) {
-      // BAUE EINE WURZEL
-      if (this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType[0] === 'empty soil') {
-        this.findImageOfHexagon(hexagon)
-        this.updateImageOfNeighbourHexagons(hexagon)
-        this.updateResourceHarvest()
+    buildPlantpart(hexagon, plantPartClass) {
+      console.log('davor class', plantPartClass)
+      this.resourcesData.currentAmounts.sufficentResources = true
+      // Baue eine Wurzel
+      this.resourceConsumtionToBuild(plantPartClass)
+      if (
+        this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType[0] === 'empty soil' &&
+        this.resourcesData.currentAmounts.sufficentResources === true
+      ) {
+        this.findImageOfHexagon(hexagon, plantPartClass)
+        this.updateImageOfNeighbourHexagons(hexagon, plantPartClass)
+        this.updateResourceHarvest(plantPartClass)
       }
     },
-    findImageOfHexagon(hexagon) {
+    findImageOfHexagon(hexagon, plantPartClass) {
+      console.log('find image class', plantPartClass)
       //////// Rotation des Hexagons um das Image an die benachtbarten hexagone anzupassen ////////////////////////
       // Bestimmung des passenden Images
       let neighbourPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
@@ -229,55 +237,58 @@ export const storeData = defineStore('store', {
         let concatinatedmutatedPositions = mutatedPositions.join('')
         console.log('concatinatedmutatedPositions', concatinatedmutatedPositions)
         countRotations += 1
-        // auswahl des richtigen Image
-        if (concatinatedmutatedPositions === '1') {
-          hexagon.backgroundImage = rootLvl1_1_1
-          break
-        } else if (concatinatedmutatedPositions === '12') {
-          hexagon.backgroundImage = rootLvl1_2_12
-          break
-        } else if (concatinatedmutatedPositions === '13') {
-          hexagon.backgroundImage = rootLvl1_2_13
-          break
-        } else if (concatinatedmutatedPositions === '14') {
-          hexagon.backgroundImage = rootLvl1_2_14
-          break
-        } else if (concatinatedmutatedPositions === '123') {
-          hexagon.backgroundImage = rootLvl1_3_123
-          break
-        } else if (concatinatedmutatedPositions === '124') {
-          hexagon.backgroundImage = rootLvl1_3_124
-          break
-        } else if (concatinatedmutatedPositions === '125') {
-          hexagon.backgroundImage = rootLvl1_3_125
-          break
-        } else if (concatinatedmutatedPositions === '135') {
-          hexagon.backgroundImage = rootLvl1_3_135
-          break
-        } else if (concatinatedmutatedPositions === '1234') {
-          hexagon.backgroundImage = rootLvl1_4_1234
-          break
-        } else if (concatinatedmutatedPositions === '1235') {
-          hexagon.backgroundImage = rootLvl1_4_1235
-          break
-        } else if (concatinatedmutatedPositions === '1245') {
-          hexagon.backgroundImage = rootLvl1_4_1245
-          break
-        } else if (concatinatedmutatedPositions === '12345') {
-          hexagon.backgroundImage = rootLvl1_5_12345
-          break
-        } else if (concatinatedmutatedPositions === '123456') {
-          hexagon.backgroundImage = rootLvl1_6_123456
-          break
+        // auswahl des richtigen Image für Wurzeln
+        if (plantPartClass === 'root') {
+          if (concatinatedmutatedPositions === '1') {
+            hexagon.backgroundImage = rootLvl1_1_1
+            break
+          } else if (concatinatedmutatedPositions === '12') {
+            hexagon.backgroundImage = rootLvl1_2_12
+            break
+          } else if (concatinatedmutatedPositions === '13') {
+            hexagon.backgroundImage = rootLvl1_2_13
+            break
+          } else if (concatinatedmutatedPositions === '14') {
+            hexagon.backgroundImage = rootLvl1_2_14
+            break
+          } else if (concatinatedmutatedPositions === '123') {
+            hexagon.backgroundImage = rootLvl1_3_123
+            break
+          } else if (concatinatedmutatedPositions === '124') {
+            hexagon.backgroundImage = rootLvl1_3_124
+            break
+          } else if (concatinatedmutatedPositions === '125') {
+            hexagon.backgroundImage = rootLvl1_3_125
+            break
+          } else if (concatinatedmutatedPositions === '135') {
+            hexagon.backgroundImage = rootLvl1_3_135
+            break
+          } else if (concatinatedmutatedPositions === '1234') {
+            hexagon.backgroundImage = rootLvl1_4_1234
+            break
+          } else if (concatinatedmutatedPositions === '1235') {
+            hexagon.backgroundImage = rootLvl1_4_1235
+            break
+          } else if (concatinatedmutatedPositions === '1245') {
+            hexagon.backgroundImage = rootLvl1_4_1245
+            break
+          } else if (concatinatedmutatedPositions === '12345') {
+            hexagon.backgroundImage = rootLvl1_5_12345
+            break
+          } else if (concatinatedmutatedPositions === '123456') {
+            hexagon.backgroundImage = rootLvl1_6_123456
+            break
+          }
         }
       }
+
       // kalkulation des Rotationswinkels
       hexagon.degreeOfRotation = (6 - countRotations) * 60 // da die rotation anhand des umgebenden zustands bestimmt wird, muss die differenz zu 6 verwendet werden
       console.log('nachbaren:', this.playgroundData.positionsOfDevelopedNeighbourHexagons)
 
       this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType = ['root1', 'Wurzel Lvl 1']
     },
-    updateImageOfNeighbourHexagons(hexagon) {
+    updateImageOfNeighbourHexagons(hexagon, plantPartClass) {
       let yCoodinateNeighbourHexagon = null
       // die schleife umläuft das geklickte hexagon und bestimmt den zustand der nachbarhexagone
       for (let [deltaX, deltaY] of this.staticData.offsetsNeighbourHexagons) {
@@ -305,7 +316,10 @@ export const storeData = defineStore('store', {
         // Ausschließen, das hexagone aktualisiert werden, wenn sie keine wurzeln sind
 
         if (this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] === 'root1') {
-          this.findImageOfHexagon(this.playgroundData.hexagonData[idNeighbourHexagon - 1])
+          this.findImageOfHexagon(
+            this.playgroundData.hexagonData[idNeighbourHexagon - 1],
+            plantPartClass
+          )
         }
       }
     },
@@ -321,17 +335,37 @@ export const storeData = defineStore('store', {
           this.resourcesData.resourcesProductionRates.productionRateNitrogen),
         1
       )
-
       this.resourcesData.currentAmounts.amountphosphor = this.roundDecimals(
         (this.resourcesData.currentAmounts.amountphosphor +=
           this.resourcesData.resourcesProductionRates.productionRatePhosphor),
         2
       )
     },
-    updateResourceHarvest() {
-      this.resourcesData.resourcesProductionRates.productionRateWater += 1
-      this.resourcesData.resourcesProductionRates.productionRateNitrogen += 0.1
-      this.resourcesData.resourcesProductionRates.productionRatePhosphor += 0.01
+    updateResourceHarvest(plantPartClass) {
+      if (plantPartClass === 'root') {
+        this.resourcesData.resourcesProductionRates.productionRateWater += 1
+        this.resourcesData.resourcesProductionRates.productionRateNitrogen += 0.1
+        this.resourcesData.resourcesProductionRates.productionRatePhosphor += 0.01
+      }
+    },
+    resourceConsumtionToBuild(plantPartClass) {
+      if (plantPartClass === 'root') {
+        if (this.resourcesData.currentAmounts.amountWater - 50 >= 0) {
+          this.resourcesData.currentAmounts.amountWater -= 50
+        } else {
+          this.resourcesData.currentAmounts.sufficentResources = false
+        }
+        if (this.resourcesData.currentAmounts.amountNitrogen - 5 >= 0) {
+          this.resourcesData.currentAmounts.amountNitrogen -= 1
+        } else {
+          this.resourcesData.currentAmounts.sufficentResources = false
+        }
+        if (this.resourcesData.currentAmounts.amountphosphor - 0.1 >= 0) {
+          this.resourcesData.currentAmounts.amountphosphor -= 0.1
+        } else {
+          this.resourcesData.currentAmounts.sufficentResources = false
+        }
+      }
     },
     roundDecimals(value, decimals) {
       return parseFloat(value.toFixed(decimals))
