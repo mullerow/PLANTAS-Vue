@@ -199,7 +199,11 @@ export const storeData = defineStore('store', {
           this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] !== 'empty sky'
         ) {
           this.playgroundData.connectionToThePlant = true
-          if (this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] === 'root1')
+          if (
+            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] !==
+              'empty sky' &&
+            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] !== 'empty soil'
+          )
             this.playgroundData.positionsOfDevelopedNeighbourHexagons[0] += 1
           this.playgroundData.positionsOfDevelopedNeighbourHexagons[1][IndexPositionNeighbourList] =
             IndexPositionNeighbourList + 1
@@ -238,7 +242,6 @@ export const storeData = defineStore('store', {
         })
         mutatedPositions.sort((a, b) => a - b)
         let concatinatedmutatedPositions = mutatedPositions.join('')
-        console.log('concatinatedmutatedPositions', concatinatedmutatedPositions)
         countRotations += 1
         // auswahl des richtigen Image für Wurzeln
         if (developmentPlantPartClass === 'root') {
@@ -330,7 +333,10 @@ export const storeData = defineStore('store', {
         this.checkForConnectionToPlant(this.playgroundData.hexagonData[idNeighbourHexagon - 1])
         // Ausschließen, das hexagone aktualisiert werden, wenn sie keine wurzeln sind
 
-        if (this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] === 'root1') {
+        if (
+          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] !== 'empty sky' &&
+          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] !== 'empty soil'
+        ) {
           this.findImageOfHexagon(
             this.playgroundData.hexagonData[idNeighbourHexagon - 1],
             developmentPlantPartClass
@@ -405,6 +411,10 @@ export const storeData = defineStore('store', {
         hexagon.hexagonStemConnectionChainNumber =
           this.playgroundData.currentStemConnectionChainNumber
       }
+      console.warn(
+        'positionsOfDevelopedNeighbourHexagons',
+        this.playgroundData.positionsOfDevelopedNeighbourHexagons[0]
+      )
       console.log(
         'currentStemConnectionChainNumber',
         this.playgroundData.currentStemConnectionChainNumber
