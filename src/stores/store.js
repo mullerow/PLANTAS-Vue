@@ -27,7 +27,8 @@ export const storeData = defineStore('store', {
       amountColumns: 20,
       amountRows: 14,
       connectionToThePlant: false,
-      positionsOfDevelopedNeighbourHexagons: [0, [0, 0, 0, 0, 0, 0]] // der erste eintrag legt die Anzahl der bebauten nachbarfelder fest, der zweite Eintrag/Liste bestimmt anhand der Zahlen in welche Richtung bebaut ist
+      positionsOfDevelopedNeighbourHexagons: [0, [0, 0, 0, 0, 0, 0]], // der erste eintrag legt die Anzahl der bebauten nachbarfelder fest, der zweite Eintrag/Liste bestimmt anhand der Zahlen in welche Richtung bebaut ist
+      currentStemConnectionChainNumber: 0
     },
     staticData: {
       offsetsNeighbourHexagons: [
@@ -126,7 +127,7 @@ export const storeData = defineStore('store', {
           }
           if ((x === 5 && y === 10) || (x === 9 && y === 10) || (x === 15 && y === 9)) {
             backgroundImageHexagon = rootLvl1_1_1
-            hexagonType = ['root1', 'Wurzel Lvl 1 Zentral']
+            hexagonType = ['root1', 'Wurzel Lvl 1']
           }
 
           ///// Erzeugen des Objekts für die individuellen HexagonDaten
@@ -140,7 +141,8 @@ export const storeData = defineStore('store', {
             backgroundImage: backgroundImageHexagon,
             hexagonType: hexagonType,
             brightnessLevel: brightness,
-            degreeOfRotation: '0'
+            degreeOfRotation: '0',
+            currentStemConnectionChainNumber: 0
           }
           this.playgroundData.hexagonData.push(hexagonObject)
         }
@@ -210,6 +212,7 @@ export const storeData = defineStore('store', {
       // Baue eine Wurzel
       this.resourceConsumtionToBuild(developmentPlantPartClass)
       if (this.resourcesData.currentAmounts.sufficentResources === true) {
+        this.checkStemConnectionChain(hexagon, developmentPlantPartClass)
         this.findImageOfHexagon(hexagon, developmentPlantPartClass)
         this.updateImageOfNeighbourHexagons(hexagon, developmentPlantPartClass)
         this.updateResourceHarvest(developmentPlantPartClass)
@@ -288,8 +291,17 @@ export const storeData = defineStore('store', {
       // kalkulation des Rotationswinkels
       hexagon.degreeOfRotation = (6 - countRotations) * 60 // da die rotation anhand des umgebenden zustands bestimmt wird, muss die differenz zu 6 verwendet werden
       console.log('nachbaren:', this.playgroundData.positionsOfDevelopedNeighbourHexagons)
-
-      this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType = ['root1', 'Wurzel Lvl 1']
+      if (developmentPlantPartClass === 'root') {
+        this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType = [
+          'root1',
+          'Wurzel Lvl 1'
+        ]
+      } else if (developmentPlantPartClass === 'stem') {
+        this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType = [
+          'stem1',
+          'Stamm Lvl 1'
+        ]
+      }
     },
     updateImageOfNeighbourHexagons(hexagon, developmentPlantPartClass) {
       let yCoodinateNeighbourHexagon = null
@@ -386,6 +398,17 @@ export const storeData = defineStore('store', {
           this.resourcesData.currentAmounts.sufficentResources = false
         }
       }
+    },
+    checkStemConnectionChain(hexagon, developmentPlantPartClass) {
+      if (developmentPlantPartClass === 'stem') {
+        this.playgroundData.currentStemConnectionChainNumber += 1
+        hexagon.hexagonStemConnectionChainNumber =
+          this.playgroundData.currentStemConnectionChainNumber
+      }
+      console.log(
+        'currentStemConnectionChainNumber',
+        this.playgroundData.currentStemConnectionChainNumber
+      )
     },
     roundDecimals(value, decimals) {
       return parseFloat(value.toFixed(decimals))
