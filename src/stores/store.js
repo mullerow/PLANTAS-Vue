@@ -24,11 +24,12 @@ export const storeData = defineStore('store', {
   state: () => ({
     playgroundData: {
       hexagonData: [],
-      amountColumns: 20,
-      amountRows: 14,
+      amountColumns: 20, // Spielfeldgröße
+      amountRows: 14, // Spielfeldgröße
       connectionToThePlant: false,
       positionsOfDevelopedNeighbourHexagons: [0, [0, 0, 0, 0, 0, 0]], // der erste eintrag legt die Anzahl der bebauten nachbarfelder fest, der zweite Eintrag/Liste bestimmt anhand der Zahlen in welche Richtung bebaut ist
-      currentStemConnectionChainNumber: 0
+      currentStemConnectionChainNumber: 0,
+      ArrayOfNeighbourStemConnectionChainNumbers: []
     },
     staticData: {
       offsetsNeighbourHexagons: [
@@ -56,7 +57,11 @@ export const storeData = defineStore('store', {
         productionRateWater: 1,
         productionRateNitrogen: 0.1,
         productionRatePhosphor: 0.01
-      }
+      },
+      resourceConsumtionEffortList: [
+        [50, 5, 0.1], // erste Liste Kosten für Wurzel, zweite Liste für Stämme
+        [20, 1, 0.05]
+      ]
     },
     playTime: {
       timerValue: 0,
@@ -107,20 +112,6 @@ export const storeData = defineStore('store', {
             backgroundImageHexagon = stemLvl1
             hexagonType = ['stam1', 'Stamm Lvl 1']
           }
-          /*
-          if (x === 4 && y === 8) {
-            backgroundImageHexagon = leafLvl1Left
-            hexagonType = ['leaf1', 'Blatt Lvl 1 links']
-          }
-          if (x === 6 && y === 8) {
-            backgroundImageHexagon = leafLvl1right
-            hexagonType = ['leaf1', 'Blatt Lvl 1 rechts']
-          }
-          if (x === 5 && y === 8) {
-            backgroundImageHexagon = leafLvl1straight
-            hexagonType = ['leaf1', 'Blatt Lvl 1 nach oben']
-          }
-            */
           if ((x === 14 && y === 9) || (x === 16 && y === 9) || (x === 15 && y === 9)) {
             backgroundImageHexagon = soilGroundImage
             hexagonType = ['empty soil', 'freier Boden']
@@ -129,7 +120,6 @@ export const storeData = defineStore('store', {
             backgroundImageHexagon = rootLvl1_1_1
             hexagonType = ['root1', 'Wurzel Lvl 1']
           }
-
           ///// Erzeugen des Objekts für die individuellen HexagonDaten
           let hexagonObject = {
             hexagonId:
@@ -216,7 +206,10 @@ export const storeData = defineStore('store', {
       // Baue eine Wurzel
       this.resourceConsumtionToBuild(developmentPlantPartClass)
       if (this.resourcesData.currentAmounts.sufficentResources === true) {
-        this.checkStemConnectionChain(hexagon, developmentPlantPartClass)
+        if (developmentPlantPartClass === 'stem') {
+          this.checkStemConnectionChain(hexagon)
+        }
+
         this.findImageOfHexagon(hexagon, developmentPlantPartClass)
         this.updateImageOfNeighbourHexagons(hexagon, developmentPlantPartClass)
         this.updateResourceHarvest(developmentPlantPartClass)
@@ -370,46 +363,56 @@ export const storeData = defineStore('store', {
       }
     },
     resourceConsumtionToBuild(developmentPlantPartClass) {
+      let indexEffortList = null
       if (developmentPlantPartClass === 'root') {
-        if (this.resourcesData.currentAmounts.amountWater - 50 >= 0) {
-          this.resourcesData.currentAmounts.amountWater -= 50
-        } else {
-          this.resourcesData.currentAmounts.sufficentResources = false
-        }
-        if (this.resourcesData.currentAmounts.amountNitrogen - 5 >= 0) {
-          this.resourcesData.currentAmounts.amountNitrogen -= 5
-        } else {
-          this.resourcesData.currentAmounts.sufficentResources = false
-        }
-        if (this.resourcesData.currentAmounts.amountphosphor - 0.1 >= 0) {
-          this.resourcesData.currentAmounts.amountphosphor -= 0.1
-        } else {
-          this.resourcesData.currentAmounts.sufficentResources = false
-        }
+        indexEffortList = 0
       }
-      if (developmentPlantPartClass === 'stam') {
-        if (this.resourcesData.currentAmounts.amountWater - 10 >= 0) {
-          this.resourcesData.currentAmounts.amountWater -= 10
-        } else {
-          this.resourcesData.currentAmounts.sufficentResources = false
-        }
-        if (this.resourcesData.currentAmounts.amountNitrogen - 2 >= 0) {
-          this.resourcesData.currentAmounts.amountNitrogen -= 2
-        } else {
-          this.resourcesData.currentAmounts.sufficentResources = false
-        }
-        if (this.resourcesData.currentAmounts.amountphosphor - 0.1 >= 0) {
-          this.resourcesData.currentAmounts.amountphosphor -= 0.1
-        } else {
-          this.resourcesData.currentAmounts.sufficentResources = false
-        }
+      if (developmentPlantPartClass === 'stem') {
+        indexEffortList = 1
+      }
+      if (
+        this.resourcesData.currentAmounts.amountWater -
+          this.resourcesData.resourceConsumtionEffortList[indexEffortList][0] >=
+        0
+      ) {
+        this.resourcesData.currentAmounts.amountWater -=
+          this.resourcesData.resourceConsumtionEffortList[indexEffortList][0]
+      } else {
+        this.resourcesData.currentAmounts.sufficentResources = false
+      }
+      if (
+        this.resourcesData.currentAmounts.amountNitrogen -
+          this.resourcesData.resourceConsumtionEffortList[indexEffortList][1] >=
+        0
+      ) {
+        this.resourcesData.currentAmounts.amountNitrogen -=
+          this.resourcesData.resourceConsumtionEffortList[indexEffortList][1]
+      } else {
+        this.resourcesData.currentAmounts.sufficentResources = false
+      }
+      if (
+        this.resourcesData.currentAmounts.amountphosphor -
+          this.resourcesData.resourceConsumtionEffortList[indexEffortList][2] >=
+        0
+      ) {
+        this.resourcesData.currentAmounts.amountphosphor -=
+          this.resourcesData.resourceConsumtionEffortList[indexEffortList][2]
+      } else {
+        this.resourcesData.currentAmounts.sufficentResources = false
       }
     },
-    checkStemConnectionChain(hexagon, developmentPlantPartClass) {
-      if (developmentPlantPartClass === 'stem') {
+    checkStemConnectionChain(hexagon) {
+      if (this.playgroundData.positionsOfDevelopedNeighbourHexagons[0] === 1) {
         this.playgroundData.currentStemConnectionChainNumber += 1
         hexagon.hexagonStemConnectionChainNumber =
           this.playgroundData.currentStemConnectionChainNumber
+        this.playgroundData.ArrayOfNeighbourStemConnectionChainNumbers.push(
+          hexagon.hexagonStemConnectionChainNumber
+        )
+      }
+      // anpassen der ConnectionChainNumber wenn es zu einer abzweigung kommt
+      else {
+        this.playgroundData.currentStemConnectionChainNumber = 0
       }
       console.warn(
         'positionsOfDevelopedNeighbourHexagons',
@@ -418,6 +421,10 @@ export const storeData = defineStore('store', {
       console.log(
         'currentStemConnectionChainNumber',
         this.playgroundData.currentStemConnectionChainNumber
+      )
+      console.log(
+        'ArrayOfNeighbourStemConnectionChainNumbers',
+        this.playgroundData.ArrayOfNeighbourStemConnectionChainNumbers
       )
     },
     roundDecimals(value, decimals) {
