@@ -221,10 +221,6 @@ export const storeData = defineStore('store', {
           yCoodinateNeighbourHexagon * this.playgroundData.amountColumns +
           xCoodinateNeighbourHexagon -
           this.playgroundData.amountColumns
-        console.log(
-          'this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0]',
-          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0]
-        )
         if (this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] === 'stem1') {
           this.playgroundData.amountOfNeighbourStemConnections += 1
         }
@@ -435,7 +431,6 @@ export const storeData = defineStore('store', {
     },
     checkStemConnectionChain(hexagon) {
       if (this.playgroundData.amountOfNeighbourStemConnections === 1) {
-        console.log('bin im Äther')
         this.playgroundData.currentStemConnectionChainNumber += 1
         hexagon.hexagonStemConnectionChainNumber =
           this.playgroundData.currentStemConnectionChainNumber
@@ -455,7 +450,7 @@ export const storeData = defineStore('store', {
     },
     findSmallestStemConnectionChainNumber(hexagon) {
       let yCoodinateNeighbourHexagon = null
-      let smallestChainNumber = 10
+      let smallestChainNumber = 100 // muss ein ausreichend hoch bzw. unereichbarer Wert sein
       let idSmallestCHainNumberHexagon = null
       // die schleife umläuft das geklickte hexagon und bestimmt den zustand der nachbarhexagone
       for (let [deltaX, deltaY] of this.staticData.offsetsNeighbourHexagons) {
@@ -478,19 +473,23 @@ export const storeData = defineStore('store', {
           yCoodinateNeighbourHexagon * this.playgroundData.amountColumns +
           xCoodinateNeighbourHexagon -
           this.playgroundData.amountColumns
+
         console.log(
           'hexagonStemConnectionChainNumber',
           this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber
         )
         if (
           this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber <
-          smallestChainNumber
+            smallestChainNumber &&
+          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber >
+            0
         ) {
           smallestChainNumber =
             this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber
           idSmallestCHainNumberHexagon = idNeighbourHexagon
+          hexagon.hexagonStemConnectionChainNumber = smallestChainNumber + 1
           console.log('kleinere Nummer id', idSmallestCHainNumberHexagon)
-          console.log('kleinere CHainNumber', smallestChainNumber)
+          console.log('kleinere ChainNumber', smallestChainNumber)
         }
       }
     },

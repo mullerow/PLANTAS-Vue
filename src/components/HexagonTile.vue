@@ -21,7 +21,9 @@
     <div class="option-window" v-if="optionwindow">
       <h3>OPTIONEN von {{ optionHexagon.hexagonId }}</h3>
       <hr />
-      Koordinaten: {{ optionHexagonXKoordinate }} : {{ optionHexagonYKoordinate }} <br />
+      StammKettenNummer: {{ stemConnectionChainNumber }}
+      Koordinaten:
+      {{ optionHexagonXKoordinate }} : {{ optionHexagonYKoordinate }} <br />
       FeldTyp: {{ hexagonTypeName }}
       <div class="container mt-5">
         <div class="dropdown" @click="toggleDropdown">
@@ -91,6 +93,7 @@ export default {
       this.hexagonTypeName = hexagon.hexagonType[1]
       this.hexagonCategory = hexagon.hexagonType[0]
       this.store.checkForDevelopmentOptions(hexagon)
+      this.stemConnectionChainNumber = hexagon.hexagonStemConnectionChainNumber
     },
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen
