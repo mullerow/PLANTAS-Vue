@@ -232,7 +232,7 @@ export const storeData = defineStore('store', {
       this.resourceConsumtionToBuild(developmentPlantPartClass)
       if (this.resourcesData.currentAmounts.sufficentResources === true) {
         if (developmentPlantPartClass === 'stem') {
-          this.checkStemConnectionChain(hexagon)
+          this.findSmallestStemConnectionChainNumber(hexagon)
         }
         this.findImageOfHexagon(hexagon, developmentPlantPartClass)
         // Temporäre lösung da die chainnumber sonst verfälscht wird
@@ -429,26 +429,12 @@ export const storeData = defineStore('store', {
         this.resourcesData.currentAmounts.sufficentResources = false
       }
     },
-    checkStemConnectionChain(hexagon) {
+    findSmallestStemConnectionChainNumber(hexagon) {
       if (this.playgroundData.amountOfNeighbourStemConnections === 1) {
         this.playgroundData.currentStemConnectionChainNumber += 1
         hexagon.hexagonStemConnectionChainNumber =
           this.playgroundData.currentStemConnectionChainNumber
       }
-      // anpassen der ConnectionChainNumber wenn es zu einer abzweigung kommt
-      else {
-        this.findSmallestStemConnectionChainNumber(hexagon)
-      }
-      console.warn(
-        'amountOfNeighbourStemConnections',
-        this.playgroundData.amountOfNeighbourStemConnections
-      )
-      console.log(
-        'currentStemConnectionChainNumber',
-        this.playgroundData.currentStemConnectionChainNumber
-      )
-    },
-    findSmallestStemConnectionChainNumber(hexagon) {
       let yCoodinateNeighbourHexagon = null
       let smallestChainNumber = 100 // muss ein ausreichend hoch bzw. unereichbarer Wert sein
       let idSmallestCHainNumberHexagon = null
