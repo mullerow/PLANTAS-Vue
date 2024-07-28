@@ -19,6 +19,8 @@ import rootLvl1_4_1235 from '@/assets/images/roots/roots-lvl-1/root-lvl1-4-1235.
 import rootLvl1_4_1245 from '@/assets/images/roots/roots-lvl-1/root-lvl1-4-1245.png'
 import rootLvl1_5_12345 from '@/assets/images/roots/roots-lvl-1/root-lvl1-5-12345.png'
 import rootLvl1_6_123456 from '@/assets/images/roots/roots-lvl-1/root-lvl1-6-123456.png'
+import stemLvl1_1_1 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-1-1.png'
+import stemLvl1_2_12 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-2-12.png'
 
 export const storeData = defineStore('store', {
   state: () => ({
@@ -308,7 +310,13 @@ export const storeData = defineStore('store', {
           }
         }
         if (developmentPlantPartClass === 'stem') {
-          hexagon.backgroundImage = stemLvl1
+          if (concatinatedmutatedPositions === '1') {
+            hexagon.backgroundImage = stemLvl1_1_1
+            break
+          } else if (concatinatedmutatedPositions === '12') {
+            hexagon.backgroundImage = stemLvl1_2_12
+            break
+          }
         }
       }
 
@@ -369,6 +377,7 @@ export const storeData = defineStore('store', {
     ////// RESSOURCEN MANAGMENT //////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////
     harvestResources() {
+      // in einem definierten Zeitintervall werden entsprechend der produktionsraten die resourcen dem Vorrat hinzugefügt
       this.resourcesData.currentAmounts.amountWater +=
         this.resourcesData.resourcesProductionRates.productionRateWater
 
@@ -384,6 +393,7 @@ export const storeData = defineStore('store', {
       )
     },
     updateResourceHarvest(developmentPlantPartClass) {
+      // Die Resourcenproduktionsrate wird beim ausbau der Pflanze angepasst
       if (developmentPlantPartClass === 'root') {
         this.resourcesData.resourcesProductionRates.productionRateWater += 1
         this.resourcesData.resourcesProductionRates.productionRateNitrogen += 0.1
@@ -391,6 +401,7 @@ export const storeData = defineStore('store', {
       }
     },
     resourceConsumtionToBuild(developmentPlantPartClass) {
+      // die Resourcen die für den Bau benötigt werden, werden hier vom Vorrat abgezogen
       let indexEffortList = null
       if (developmentPlantPartClass === 'root') {
         indexEffortList = 0
@@ -429,7 +440,11 @@ export const storeData = defineStore('store', {
         this.resourcesData.currentAmounts.sufficentResources = false
       }
     },
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    //////// Kalkulationen rund um Blatt und Stiel ///////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////
     findSmallestStemConnectionChainNumber(hexagon) {
+      // Es wird der kürzeste Weg bis zu den Wurzeln gesucht, da Abzweigung immer möglichst nahe am hauptstamm gebaut werden sollen
       if (this.playgroundData.amountOfNeighbourStemConnections === 1) {
         this.playgroundData.currentStemConnectionChainNumber += 1
         hexagon.hexagonStemConnectionChainNumber =
@@ -437,7 +452,6 @@ export const storeData = defineStore('store', {
       }
       let yCoodinateNeighbourHexagon = null
       let smallestChainNumber = 100 // muss ein ausreichend hoch bzw. unereichbarer Wert sein
-      let idSmallestCHainNumberHexagon = null
       // die schleife umläuft das geklickte hexagon und bestimmt den zustand der nachbarhexagone
       for (let [deltaX, deltaY] of this.staticData.offsetsNeighbourHexagons) {
         /// Notwendige koordinaten Korrekturen für die versetzten kacheln
@@ -459,11 +473,6 @@ export const storeData = defineStore('store', {
           yCoodinateNeighbourHexagon * this.playgroundData.amountColumns +
           xCoodinateNeighbourHexagon -
           this.playgroundData.amountColumns
-
-        console.log(
-          'hexagonStemConnectionChainNumber',
-          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber
-        )
         if (
           this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber <
             smallestChainNumber &&
@@ -472,10 +481,7 @@ export const storeData = defineStore('store', {
         ) {
           smallestChainNumber =
             this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber
-          idSmallestCHainNumberHexagon = idNeighbourHexagon
           hexagon.hexagonStemConnectionChainNumber = smallestChainNumber + 1
-          console.log('kleinere Nummer id', idSmallestCHainNumberHexagon)
-          console.log('kleinere ChainNumber', smallestChainNumber)
         }
       }
     },
