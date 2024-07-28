@@ -32,6 +32,7 @@ export const storeData = defineStore('store', {
       positionsOfDevelopedNeighbourHexagons: [0, [0, 0, 0, 0, 0, 0]], // der erste eintrag legt die Anzahl der bebauten nachbarfelder fest, der zweite Eintrag/Liste bestimmt anhand der Zahlen in welche Richtung bebaut ist
       currentStemConnectionChainNumber: 0,
       amountOfNeighbourStemConnections: 0,
+      smallestChainNumber: 100, // muss ein ausreichend hoch bzw. unereichbarer Wert sein
       currentUpdateOfNeighbourHexagonImages: false
     },
     staticData: {
@@ -309,9 +310,10 @@ export const storeData = defineStore('store', {
           }
         }
         console.log(
-          'Zustand',
-          this.playgroundData.currentUpdateOfNeighbourHexagonImages,
-          concatinatedmutatedPositions
+          'smallestChainNumber',
+          this.playgroundData.smallestChainNumber,
+          hexagon.hexagonStemConnectionChainNumber,
+          this.playgroundData.currentUpdateOfNeighbourHexagonImages
         )
         if (developmentPlantPartClass === 'stem') {
           if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
@@ -322,15 +324,17 @@ export const storeData = defineStore('store', {
               hexagon.backgroundImage = stemLvl1_1_1
               break
             }
-          } else {
-            if (concatinatedmutatedPositions === '12') {
+          } else if (
+            this.playgroundData.currentUpdateOfNeighbourHexagonImages === true &&
+            this.playgroundData.smallestChainNumber === hexagon.hexagonStemConnectionChainNumber
+          ) {
+            if (concatinatedmutatedPositions === '124') {
               hexagon.backgroundImage = stemLvl1_2_12
               break
             }
           }
         }
       }
-
       // kalkulation des Rotationswinkels
       hexagon.degreeOfRotation = (6 - countRotations) * 60 // da die rotation anhand des umgebenden zustands bestimmt wird, muss die differenz zu 6 verwendet werden
       console.log('nachbaren:', this.playgroundData.positionsOfDevelopedNeighbourHexagons)
@@ -455,6 +459,7 @@ export const storeData = defineStore('store', {
     //////// Kalkulationen rund um Blatt und Stiel ///////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////////////////////////////////
     findSmallestStemConnectionChainNumber(hexagon) {
+      this.playgroundData.smallestChainNumber = 100
       // Es wird der kürzeste Weg bis zu den Wurzeln gesucht, da Abzweigung immer möglichst nahe am hauptstamm gebaut werden sollen
       if (this.playgroundData.amountOfNeighbourStemConnections === 1) {
         this.playgroundData.currentStemConnectionChainNumber += 1
@@ -462,7 +467,6 @@ export const storeData = defineStore('store', {
           this.playgroundData.currentStemConnectionChainNumber
       }
       let yCoodinateNeighbourHexagon = null
-      let smallestChainNumber = 100 // muss ein ausreichend hoch bzw. unereichbarer Wert sein
       // die schleife umläuft das geklickte hexagon und bestimmt den zustand der nachbarhexagone
       for (let [deltaX, deltaY] of this.staticData.offsetsNeighbourHexagons) {
         /// Notwendige koordinaten Korrekturen für die versetzten kacheln
@@ -486,13 +490,13 @@ export const storeData = defineStore('store', {
           this.playgroundData.amountColumns
         if (
           this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber <
-            smallestChainNumber &&
+            this.playgroundData.smallestChainNumber &&
           this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber >
             0
         ) {
-          smallestChainNumber =
+          this.playgroundData.smallestChainNumber =
             this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber
-          hexagon.hexagonStemConnectionChainNumber = smallestChainNumber + 1
+          hexagon.hexagonStemConnectionChainNumber = this.playgroundData.smallestChainNumber + 1
         }
       }
     },
