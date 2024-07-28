@@ -31,7 +31,8 @@ export const storeData = defineStore('store', {
       connectionToThePlant: false,
       positionsOfDevelopedNeighbourHexagons: [0, [0, 0, 0, 0, 0, 0]], // der erste eintrag legt die Anzahl der bebauten nachbarfelder fest, der zweite Eintrag/Liste bestimmt anhand der Zahlen in welche Richtung bebaut ist
       currentStemConnectionChainNumber: 0,
-      amountOfNeighbourStemConnections: 0
+      amountOfNeighbourStemConnections: 0,
+      currentUpdateOfNeighbourHexagonImages: false
     },
     staticData: {
       offsetsNeighbourHexagons: [
@@ -46,10 +47,10 @@ export const storeData = defineStore('store', {
     resourcesData: {
       currentAmounts: {
         sufficentResources: true,
-        amountWater: 260,
+        amountWater: 2600,
         amountEnergie: 440,
-        amountphosphor: 0.2,
-        amountNitrogen: 8,
+        amountphosphor: 2,
+        amountNitrogen: 80,
         amountCarbohydrates: 100,
         amountLipids: 30,
         amountProteins: 20,
@@ -111,7 +112,7 @@ export const storeData = defineStore('store', {
             hexagonType = ['seemling', 'eigener Keimling']
           }
           if (x === 5 && y === 9) {
-            backgroundImageHexagon = stemLvl1
+            backgroundImageHexagon = stemLvl1_2_12
             hexagonType = ['stem1', 'Stamm Lvl 1']
           }
           if ((x === 14 && y === 9) || (x === 16 && y === 9) || (x === 15 && y === 9)) {
@@ -237,11 +238,9 @@ export const storeData = defineStore('store', {
           this.findSmallestStemConnectionChainNumber(hexagon)
         }
         this.findImageOfHexagon(hexagon, developmentPlantPartClass)
-        // Temporäre lösung da die chainnumber sonst verfälscht wird
-        if (developmentPlantPartClass !== 'stem') {
-          this.updateImageOfNeighbourHexagons(hexagon, developmentPlantPartClass)
-        }
-
+        this.playgroundData.currentUpdateOfNeighbourHexagonImages = true // notwendig, damit die images der stämme korrekt ausgewählt werden
+        this.updateImageOfNeighbourHexagons(hexagon, developmentPlantPartClass)
+        this.playgroundData.currentUpdateOfNeighbourHexagonImages = false
         this.updateResourceHarvest(developmentPlantPartClass)
       }
     },
@@ -309,13 +308,25 @@ export const storeData = defineStore('store', {
             break
           }
         }
+        console.log(
+          'Zustand',
+          this.playgroundData.currentUpdateOfNeighbourHexagonImages,
+          concatinatedmutatedPositions
+        )
         if (developmentPlantPartClass === 'stem') {
-          if (concatinatedmutatedPositions === '1') {
-            hexagon.backgroundImage = stemLvl1_1_1
-            break
-          } else if (concatinatedmutatedPositions === '12') {
-            hexagon.backgroundImage = stemLvl1_2_12
-            break
+          if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
+            if (concatinatedmutatedPositions === '1') {
+              hexagon.backgroundImage = stemLvl1_1_1
+              break
+            } else if (concatinatedmutatedPositions === '12') {
+              hexagon.backgroundImage = stemLvl1_1_1
+              break
+            }
+          } else {
+            if (concatinatedmutatedPositions === '12') {
+              hexagon.backgroundImage = stemLvl1_2_12
+              break
+            }
           }
         }
       }
