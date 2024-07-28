@@ -21,6 +21,7 @@ import rootLvl1_5_12345 from '@/assets/images/roots/roots-lvl-1/root-lvl1-5-1234
 import rootLvl1_6_123456 from '@/assets/images/roots/roots-lvl-1/root-lvl1-6-123456.png'
 import stemLvl1_1_1 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-1-1.png'
 import stemLvl1_2_12 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-2-12.png'
+import stemLvl1_2_146 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-2-146.png'
 
 export const storeData = defineStore('store', {
   state: () => ({
@@ -328,8 +329,14 @@ export const storeData = defineStore('store', {
             this.playgroundData.currentUpdateOfNeighbourHexagonImages === true &&
             this.playgroundData.smallestChainNumber === hexagon.hexagonStemConnectionChainNumber
           ) {
-            if (concatinatedmutatedPositions === '124') {
+            if (concatinatedmutatedPositions === '14') {
+              hexagon.backgroundImage = stemLvl1_1_1
+              break
+            } else if (concatinatedmutatedPositions === '124') {
               hexagon.backgroundImage = stemLvl1_2_12
+              break
+            } else if (concatinatedmutatedPositions === '146') {
+              hexagon.backgroundImage = stemLvl1_2_146
               break
             }
           }
