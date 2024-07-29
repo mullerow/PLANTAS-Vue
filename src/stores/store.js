@@ -85,7 +85,7 @@ export const storeData = defineStore('store', {
     ///////////////////////////////////////////////////////////////////////////////////////
     createDefaultHexagons() {
       let additionalIncreaseOfYShift = 0
-      let brightness = 1.7
+      let brightness = 1.8
       for (let y = 1; y <= this.playgroundData.amountRows; y++) {
         let xShiftOfHexagon = 13
         additionalIncreaseOfYShift -= 6
@@ -123,7 +123,6 @@ export const storeData = defineStore('store', {
           if ((x === 14 && y === 10) || (x === 16 && y === 10) || (x === 15 && y === 10)) {
             backgroundImageHexagon = soilGroundImage
             hexagonType = ['empty soil', 'freier Boden']
-            brightness = 0.8
           }
           if ((x === 5 && y === 11) || (x === 9 && y === 11) || (x === 15 && y === 10)) {
             backgroundImageHexagon = rootLvl1_1_1
@@ -146,7 +145,7 @@ export const storeData = defineStore('store', {
           this.playgroundData.hexagonData.push(hexagonObject)
         }
       }
-      this.playgroundData.hexagonData[164].hexagonStemConnectionChainNumber = 1
+      this.playgroundData.hexagonData[184].hexagonStemConnectionChainNumber = 1
     },
     ///////////////////////////////////////////////////////////////////////////////////////
     ////// Pflanzenentwicklung //////////////////////////////////////////////////////////
