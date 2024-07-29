@@ -28,7 +28,7 @@ export const storeData = defineStore('store', {
     playgroundData: {
       hexagonData: [],
       amountColumns: 20, // Spielfeldgröße
-      amountRows: 14, // Spielfeldgröße
+      amountRows: 16, // Spielfeldgröße
       connectionToThePlant: false,
       positionsOfDevelopedNeighbourHexagons: [0, [0, 0, 0, 0, 0, 0]], // der erste eintrag legt die Anzahl der bebauten nachbarfelder fest, der zweite Eintrag/Liste bestimmt anhand der Zahlen in welche Richtung bebaut ist
       currentStemConnectionChainNumber: 0,
@@ -89,7 +89,7 @@ export const storeData = defineStore('store', {
       for (let y = 1; y <= this.playgroundData.amountRows; y++) {
         let xShiftOfHexagon = 13
         additionalIncreaseOfYShift -= 6
-        if (y <= 9) {
+        if (y <= 10) {
           brightness -= 0.1
         } else {
           brightness = 1
@@ -105,26 +105,27 @@ export const storeData = defineStore('store', {
           }
           yShiftOfHexagon = yShiftOfHexagon + additionalIncreaseOfYShift
           // hinzufügen der hintergrundbilder für den Start bzw. Tests
-          if (y < 10) {
+          if (y < 11) {
             backgroundImageHexagon = skyImage
             hexagonType = ['empty sky', 'freier Himmel']
           } else {
             backgroundImageHexagon = soilGroundImage
             hexagonType = ['empty soil', 'freier Boden']
           }
-          if ((x === 9 && y === 9) || (x === 15 && y === 8)) {
+          if ((x === 9 && y === 10) || (x === 15 && y === 9)) {
             backgroundImageHexagon = seedling50
             hexagonType = ['seemling', 'eigener Keimling']
           }
-          if (x === 5 && y === 9) {
+          if (x === 5 && y === 10) {
             backgroundImageHexagon = stemLvl1_2_124
             hexagonType = ['stem1', 'Stamm Lvl 1']
           }
-          if ((x === 14 && y === 9) || (x === 16 && y === 9) || (x === 15 && y === 9)) {
+          if ((x === 14 && y === 10) || (x === 16 && y === 10) || (x === 15 && y === 10)) {
             backgroundImageHexagon = soilGroundImage
             hexagonType = ['empty soil', 'freier Boden']
+            brightness = 0.8
           }
-          if ((x === 5 && y === 10) || (x === 9 && y === 10) || (x === 15 && y === 9)) {
+          if ((x === 5 && y === 11) || (x === 9 && y === 11) || (x === 15 && y === 10)) {
             backgroundImageHexagon = rootLvl1_1_1
             hexagonType = ['root1', 'Wurzel Lvl 1']
           }
@@ -329,6 +330,9 @@ export const storeData = defineStore('store', {
           ) {
             if (concatinatedmutatedPositions === '14') {
               hexagon.backgroundImage = stemLvl1_1_1
+              break
+            } else if (concatinatedmutatedPositions === '13') {
+              hexagon.backgroundImage = stemLvl1_2_124
               break
             } else if (concatinatedmutatedPositions === '124') {
               hexagon.backgroundImage = stemLvl1_2_124
