@@ -360,7 +360,7 @@ export const storeData = defineStore('store', {
           this.playgroundData.YCoordinateBuildedHexagon = hexagon.hexagonYCoordinate
           hexagon.degreeOfRotation = this.calculateStemDegreeOfRotation(hexagon)
           // Bestimmung des statischen Hebelarms
-          this.structuralAnalysisData.balanceLevel =
+          this.structuralAnalysisData.balanceLevel +=
             this.structuralAnalysisData.stemBasicXLevel -
             this.playgroundData.XCoordinateBuildedHexagon
           console.log(
