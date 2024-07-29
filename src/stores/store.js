@@ -78,6 +78,9 @@ export const storeData = defineStore('store', {
       ingameSeason: 'Frühling',
       ingameYear: 1,
       ingameTimeSpeed: 1000 // Angabe in Millisekunden
+    },
+    structuralAnalysisData: {
+      balanceLevel: 0
     }
   }),
   actions: {
@@ -529,7 +532,7 @@ export const storeData = defineStore('store', {
         } else if (deltaX === 0 && deltaY === 0) {
           return 90
         } else if (deltaX === -1 && deltaY === 0) {
-          return 120
+          return 300
         } else {
           console.log('nichts gefunden für die rotation', deltaX, deltaY)
           return 90

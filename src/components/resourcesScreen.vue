@@ -1,7 +1,12 @@
 <template>
   <div>
     <div class="display-ressource-container">
-      <h3>Ressourcen</h3>
+      <h3>
+        Ressourcen /////////////////// Statische Balance:<span class="amount-resource">
+          {{ store.structuralAnalysisData.balanceLevel }}</span
+        >
+      </h3>
+
       <div class="display-time">
         Abgelaufene Tage: {{ this.store.playTime.timerValue }} <br />
         Jahr: {{ this.store.playTime.ingameYear }} - {{ this.store.playTime.ingameSeason }}
