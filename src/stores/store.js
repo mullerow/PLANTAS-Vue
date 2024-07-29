@@ -2,7 +2,6 @@ import { defineStore } from 'pinia'
 import soilGroundImage from '@/assets/images/ground-soil.png'
 import skyImage from '@/assets/images/blue-sky.png'
 import seedling50 from '@/assets/images/seedling50x50.png'
-import stemLvl1 from '@/assets/images/stems/stem-lvl1-2.png'
 import leafLvl1Left from '@/assets/images/leafs/leaf-lvl1-left-1.png'
 import leafLvl1right from '@/assets/images/leafs/leaf-lvl1-right-1.png'
 import leafLvl1straight from '@/assets/images/leafs/leaf-lvl1-straight1.png'
@@ -20,7 +19,7 @@ import rootLvl1_4_1245 from '@/assets/images/roots/roots-lvl-1/root-lvl1-4-1245.
 import rootLvl1_5_12345 from '@/assets/images/roots/roots-lvl-1/root-lvl1-5-12345.png'
 import rootLvl1_6_123456 from '@/assets/images/roots/roots-lvl-1/root-lvl1-6-123456.png'
 import stemLvl1_1_1 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-1-1.png'
-import stemLvl1_2_12 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-2-12.png'
+import stemLvl1_2_124 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-2-124.png'
 import stemLvl1_2_146 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-2-146.png'
 
 export const storeData = defineStore('store', {
@@ -34,7 +33,11 @@ export const storeData = defineStore('store', {
       currentStemConnectionChainNumber: 0,
       amountOfNeighbourStemConnections: 0,
       smallestChainNumber: 100, // muss ein ausreichend hoch bzw. unereichbarer Wert sein
-      currentUpdateOfNeighbourHexagonImages: false
+      currentUpdateOfNeighbourHexagonImages: false,
+      XCoordinateBuildedHexagon: 0,
+      YCoordinateBuildedHexagon: 0,
+      XCoordinateNeighbourHexagonSmallestChainNumber: 0,
+      YCoordinateNeighbourHexagonSmallestChainNumber: 0
     },
     staticData: {
       offsetsNeighbourHexagons: [
@@ -95,7 +98,6 @@ export const storeData = defineStore('store', {
           let yShiftOfHexagon = 0
           let backgroundImageHexagon = ''
           let hexagonType = []
-
           xShiftOfHexagon -= 13
           if (x % 2 === 0) {
             yShiftOfHexagon += 22
@@ -114,7 +116,7 @@ export const storeData = defineStore('store', {
             hexagonType = ['seemling', 'eigener Keimling']
           }
           if (x === 5 && y === 9) {
-            backgroundImageHexagon = stemLvl1_2_12
+            backgroundImageHexagon = stemLvl1_2_124
             hexagonType = ['stem1', 'Stamm Lvl 1']
           }
           if ((x === 14 && y === 9) || (x === 16 && y === 9) || (x === 15 && y === 9)) {
@@ -142,6 +144,7 @@ export const storeData = defineStore('store', {
           this.playgroundData.hexagonData.push(hexagonObject)
         }
       }
+      this.playgroundData.hexagonData[164].hexagonStemConnectionChainNumber = 1
     },
     ///////////////////////////////////////////////////////////////////////////////////////
     ////// Pflanzenentwicklung //////////////////////////////////////////////////////////
@@ -248,7 +251,7 @@ export const storeData = defineStore('store', {
     },
     findImageOfHexagon(hexagon, developmentPlantPartClass) {
       //////// Rotation des Hexagons um das Image an die benachtbarten hexagone anzupassen ////////////////////////
-      // Bestimmung des passenden Images
+      // Bestimmung des passenden Images (es werden die Positionen der bebauten nachbarhexagone schritweise "gedreht" bis sie deckungsgelcih mit einem vorhandenen Image sind)
       let neighbourPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
         (position) => position !== 0
       )
@@ -310,12 +313,6 @@ export const storeData = defineStore('store', {
             break
           }
         }
-        console.log(
-          'smallestChainNumber',
-          this.playgroundData.smallestChainNumber,
-          hexagon.hexagonStemConnectionChainNumber,
-          this.playgroundData.currentUpdateOfNeighbourHexagonImages
-        )
         if (developmentPlantPartClass === 'stem') {
           if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
             if (concatinatedmutatedPositions === '1') {
@@ -333,7 +330,7 @@ export const storeData = defineStore('store', {
               hexagon.backgroundImage = stemLvl1_1_1
               break
             } else if (concatinatedmutatedPositions === '124') {
-              hexagon.backgroundImage = stemLvl1_2_12
+              hexagon.backgroundImage = stemLvl1_2_124
               break
             } else if (concatinatedmutatedPositions === '146') {
               hexagon.backgroundImage = stemLvl1_2_146
@@ -342,9 +339,20 @@ export const storeData = defineStore('store', {
           }
         }
       }
-      // kalkulation des Rotationswinkels
-      hexagon.degreeOfRotation = (6 - countRotations) * 60 // da die rotation anhand des umgebenden zustands bestimmt wird, muss die differenz zu 6 verwendet werden
-      console.log('nachbaren:', this.playgroundData.positionsOfDevelopedNeighbourHexagons)
+
+      // kalkulation des Rotationswinkels für Stämme
+      if (developmentPlantPartClass === 'stem') {
+        if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
+          // zunächst die Koordinaten des zu bebauenden Hexagons bestimmen
+          this.playgroundData.XCoordinateBuildedHexagon = hexagon.hexagonXCoordinate
+          this.playgroundData.YCoordinateBuildedHexagon = hexagon.hexagonYCoordinate
+          hexagon.degreeOfRotation = this.calculateStemDegreeOfRotation(hexagon)
+        }
+      }
+      // kalkulation des Rotationswinkels für Wurzeln
+      else {
+        hexagon.degreeOfRotation = (6 - countRotations) * 60 // da die rotation anhand des umgebenden zustands bestimmt wird, muss die differenz zu 6 verwendet werden
+      }
       if (developmentPlantPartClass === 'root') {
         this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType = [
           'root1',
@@ -394,6 +402,123 @@ export const storeData = defineStore('store', {
           )
         }
       }
+    },
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    //////// Kalkulationen rund um Blatt und Stiel ///////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    findSmallestStemConnectionChainNumber(hexagon) {
+      this.playgroundData.smallestChainNumber = 100
+      // Es wird der kürzeste Weg bis zu den Wurzeln gesucht, da Abzweigung immer möglichst nahe am hauptstamm gebaut werden sollen
+      if (this.playgroundData.amountOfNeighbourStemConnections === 1) {
+        this.playgroundData.currentStemConnectionChainNumber += 1
+        hexagon.hexagonStemConnectionChainNumber =
+          this.playgroundData.currentStemConnectionChainNumber
+      }
+      let yCoodinateNeighbourHexagon = null
+      // die schleife umläuft das geklickte hexagon und bestimmt den zustand der nachbarhexagone
+      for (let [deltaX, deltaY] of this.staticData.offsetsNeighbourHexagons) {
+        /// Notwendige koordinaten Korrekturen für die versetzten kacheln
+        if (hexagon.hexagonXCoordinate % 2 === 0 && deltaX !== 0) {
+          yCoodinateNeighbourHexagon = hexagon.hexagonYCoordinate + deltaY + 1
+        } else {
+          yCoodinateNeighbourHexagon = hexagon.hexagonYCoordinate + deltaY
+        }
+        let xCoodinateNeighbourHexagon = hexagon.hexagonXCoordinate + deltaX
+        if (
+          yCoodinateNeighbourHexagon <= 0 ||
+          xCoodinateNeighbourHexagon <= 0 ||
+          xCoodinateNeighbourHexagon > this.playgroundData.amountColumns ||
+          yCoodinateNeighbourHexagon > this.playgroundData.amountRows
+        ) {
+          continue
+        }
+        let idNeighbourHexagon =
+          yCoodinateNeighbourHexagon * this.playgroundData.amountColumns +
+          xCoodinateNeighbourHexagon -
+          this.playgroundData.amountColumns
+        if (
+          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber <
+            this.playgroundData.smallestChainNumber &&
+          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber >
+            0
+        ) {
+          this.playgroundData.smallestChainNumber =
+            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber
+          hexagon.hexagonStemConnectionChainNumber = this.playgroundData.smallestChainNumber + 1
+          // speichern der Koordinaten des Hexagons mit der kleinsten chainnummer für die rotation
+          this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber =
+            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonXCoordinate
+          this.playgroundData.YCoordinateNeighbourHexagonSmallestChainNumber =
+            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonYCoordinate
+          console.log(
+            'XCoordinateNeighbourHexagonSmallestChainNumber',
+            this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber,
+            this.playgroundData.YCoordinateNeighbourHexagonSmallestChainNumber
+          )
+        }
+      }
+    },
+    calculateStemDegreeOfRotation() {
+      let deltaX = 0
+      let deltaY = 0
+      // bestimme die Koordinaten des zu bebauenden Hexagons
+
+      // Suche das Hexagon welches als Stam am nächsten zur Wurzel ist
+      if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
+        deltaX =
+          this.playgroundData.XCoordinateBuildedHexagon -
+          this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber
+        deltaY =
+          this.playgroundData.YCoordinateBuildedHexagon -
+          this.playgroundData.YCoordinateNeighbourHexagonSmallestChainNumber
+      }
+      if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === true)
+        if (deltaX === -1 && deltaY === -1) {
+          return 300
+        } else if (deltaX === 0 && deltaY === -1) {
+          return 0
+        } else if (deltaX === 0 && deltaY === 1) {
+          return 180
+        } else if (deltaX === 1 && deltaY === 1) {
+          return 120
+        } else if (deltaX === -1 && deltaY === 1) {
+          return 240
+        } else if (deltaX === 1 && deltaY === -1) {
+          return 60
+        } else if (deltaX === 0 && deltaY === 0) {
+          return 90
+        } else {
+          console.log('nichts gefunden für die rotation', deltaX, deltaY)
+          return 90
+        }
+      else {
+        console.log('fü bauhexagon', deltaX, deltaY)
+        if (deltaX === 1 && deltaY === 0) {
+          return 120
+        } else if (deltaX === -1 && deltaY === -1) {
+          return 300
+        } else if (deltaX === 0 && deltaY === -1) {
+          return 0
+        } else if (deltaX === 0 && deltaY === 1) {
+          return 180
+        } else if (deltaX === 1 && deltaY === 1) {
+          return 120
+        } else if (deltaX === -1 && deltaY === 1) {
+          return 240
+        } else if (deltaX === 1 && deltaY === -1) {
+          return 60
+        } else if (deltaX === 0 && deltaY === 0) {
+          return 90
+        } else if (deltaX === -1 && deltaY === 0) {
+          return 120
+        } else {
+          console.log('nichts gefunden für die rotation', deltaX, deltaY)
+          return 90
+        }
+      }
+    },
+    roundDecimals(value, decimals) {
+      return parseFloat(value.toFixed(decimals))
     },
     ///////////////////////////////////////////////////////////////////////////////////////
     ////// RESSOURCEN MANAGMENT //////////////////////////////////////////////////////////
@@ -461,54 +586,6 @@ export const storeData = defineStore('store', {
       } else {
         this.resourcesData.currentAmounts.sufficentResources = false
       }
-    },
-    ///////////////////////////////////////////////////////////////////////////////////////////////
-    //////// Kalkulationen rund um Blatt und Stiel ///////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    findSmallestStemConnectionChainNumber(hexagon) {
-      this.playgroundData.smallestChainNumber = 100
-      // Es wird der kürzeste Weg bis zu den Wurzeln gesucht, da Abzweigung immer möglichst nahe am hauptstamm gebaut werden sollen
-      if (this.playgroundData.amountOfNeighbourStemConnections === 1) {
-        this.playgroundData.currentStemConnectionChainNumber += 1
-        hexagon.hexagonStemConnectionChainNumber =
-          this.playgroundData.currentStemConnectionChainNumber
-      }
-      let yCoodinateNeighbourHexagon = null
-      // die schleife umläuft das geklickte hexagon und bestimmt den zustand der nachbarhexagone
-      for (let [deltaX, deltaY] of this.staticData.offsetsNeighbourHexagons) {
-        /// Notwendige koordinaten Korrekturen für die versetzten kacheln
-        if (hexagon.hexagonXCoordinate % 2 === 0 && deltaX !== 0) {
-          yCoodinateNeighbourHexagon = hexagon.hexagonYCoordinate + deltaY + 1
-        } else {
-          yCoodinateNeighbourHexagon = hexagon.hexagonYCoordinate + deltaY
-        }
-        let xCoodinateNeighbourHexagon = hexagon.hexagonXCoordinate + deltaX
-        if (
-          yCoodinateNeighbourHexagon <= 0 ||
-          xCoodinateNeighbourHexagon <= 0 ||
-          xCoodinateNeighbourHexagon > this.playgroundData.amountColumns ||
-          yCoodinateNeighbourHexagon > this.playgroundData.amountRows
-        ) {
-          continue
-        }
-        let idNeighbourHexagon =
-          yCoodinateNeighbourHexagon * this.playgroundData.amountColumns +
-          xCoodinateNeighbourHexagon -
-          this.playgroundData.amountColumns
-        if (
-          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber <
-            this.playgroundData.smallestChainNumber &&
-          this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber >
-            0
-        ) {
-          this.playgroundData.smallestChainNumber =
-            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber
-          hexagon.hexagonStemConnectionChainNumber = this.playgroundData.smallestChainNumber + 1
-        }
-      }
-    },
-    roundDecimals(value, decimals) {
-      return parseFloat(value.toFixed(decimals))
     }
   },
   getters: {}
