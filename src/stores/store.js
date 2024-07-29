@@ -21,6 +21,7 @@ import rootLvl1_6_123456 from '@/assets/images/roots/roots-lvl-1/root-lvl1-6-123
 import stemLvl1_1_1 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-1-1.png'
 import stemLvl1_2_124 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-2-124.png'
 import stemLvl1_2_146 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-2-146.png'
+import stemLvl1_4_1246 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-4-1246.png'
 
 export const storeData = defineStore('store', {
   state: () => ({
@@ -334,6 +335,9 @@ export const storeData = defineStore('store', {
               break
             } else if (concatinatedmutatedPositions === '146') {
               hexagon.backgroundImage = stemLvl1_2_146
+              break
+            } else if (concatinatedmutatedPositions === '1246') {
+              hexagon.backgroundImage = stemLvl1_4_1246
               break
             }
           }
