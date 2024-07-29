@@ -343,7 +343,6 @@ export const storeData = defineStore('store', {
           }
         }
       }
-
       // kalkulation des Rotationswinkels für Stämme
       if (developmentPlantPartClass === 'stem') {
         if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
@@ -476,6 +475,7 @@ export const storeData = defineStore('store', {
           this.playgroundData.YCoordinateBuildedHexagon -
           this.playgroundData.YCoordinateNeighbourHexagonSmallestChainNumber
       }
+      // Die NachtbarHexagone werden gedreht
       if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === true)
         if (deltaX === -1 && deltaY === -1) {
           return 300
@@ -495,10 +495,21 @@ export const storeData = defineStore('store', {
           console.log('nichts gefunden für die rotation', deltaX, deltaY)
           return 90
         }
+      // Das auszubauende Hexagon wird gedreht
       else {
         console.log('fü bauhexagon', deltaX, deltaY)
-        if (deltaX === 1 && deltaY === 0) {
+        if (
+          deltaX === 1 &&
+          deltaY === 0 &&
+          this.playgroundData.XCoordinateBuildedHexagon % 2 === 0
+        ) {
           return 120
+        } else if (
+          deltaX === 1 &&
+          deltaY === 0 &&
+          this.playgroundData.XCoordinateBuildedHexagon % 2 !== 0
+        ) {
+          return 60
         } else if (deltaX === -1 && deltaY === -1) {
           return 300
         } else if (deltaX === 0 && deltaY === -1) {
