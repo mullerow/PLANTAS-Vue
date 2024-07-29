@@ -546,7 +546,17 @@ export const storeData = defineStore('store', {
           return 60
         } else if (deltaX === 0 && deltaY === 0) {
           return 90
-        } else if (deltaX === -1 && deltaY === 0) {
+        } else if (
+          deltaX === -1 &&
+          deltaY === 0 &&
+          this.playgroundData.XCoordinateBuildedHexagon % 2 === 0
+        ) {
+          return 240
+        } else if (
+          deltaX === -1 &&
+          deltaY === 0 &&
+          this.playgroundData.XCoordinateBuildedHexagon % 2 !== 0
+        ) {
           return 300
         } else {
           console.log('nichts gefunden für die rotation', deltaX, deltaY)
