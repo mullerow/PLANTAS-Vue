@@ -80,7 +80,8 @@ export const storeData = defineStore('store', {
       ingameTimeSpeed: 1000 // Angabe in Millisekunden
     },
     structuralAnalysisData: {
-      balanceLevel: 0
+      balanceLevel: 0,
+      stemBasicXLevel: null
     }
   }),
   actions: {
@@ -123,6 +124,7 @@ export const storeData = defineStore('store', {
           if (x === 5 && y === 10) {
             backgroundImageHexagon = stemLvl1_2_124
             hexagonType = ['stem1', 'Stamm Lvl 1']
+            stemBasicXLevel = 5
           }
           if ((x === 14 && y === 10) || (x === 16 && y === 10) || (x === 15 && y === 10)) {
             backgroundImageHexagon = soilGroundImage
