@@ -66,7 +66,8 @@ export const storeData = defineStore('store', {
       resourcesProductionRates: {
         productionRateWater: 1,
         productionRateNitrogen: 0.1,
-        productionRatePhosphor: 0.01
+        productionRatePhosphor: 0.01,
+        productionRateEnergie: 0
       },
       resourceConsumtionEffortList: [
         [50, 5, 0.1], // erste Liste Kosten für Wurzel, zweite Liste für Stämme
@@ -253,7 +254,7 @@ export const storeData = defineStore('store', {
         this.playgroundData.currentUpdateOfNeighbourHexagonImages = true // notwendig, damit die images der stämme korrekt ausgewählt werden
         this.updateImageOfNeighbourHexagons(hexagon, developmentPlantPartClass)
         this.playgroundData.currentUpdateOfNeighbourHexagonImages = false
-        this.updateResourceHarvest(developmentPlantPartClass)
+        this.updateResourceHarvest(hexagon, developmentPlantPartClass)
       }
     },
     findImageOfHexagon(hexagon, developmentPlantPartClass) {
@@ -585,13 +586,20 @@ export const storeData = defineStore('store', {
           this.resourcesData.resourcesProductionRates.productionRatePhosphor),
         2
       )
+      this.resourcesData.currentAmounts.amountEnergie = this.roundDecimals(
+        (this.resourcesData.currentAmounts.amountEnergie +=
+          this.resourcesData.resourcesProductionRates.productionRateEnergie),
+        2
+      )
     },
-    updateResourceHarvest(developmentPlantPartClass) {
+    updateResourceHarvest(hexagon, developmentPlantPartClass) {
       // Die Resourcenproduktionsrate wird beim ausbau der Pflanze angepasst
       if (developmentPlantPartClass === 'root') {
         this.resourcesData.resourcesProductionRates.productionRateWater += 1
         this.resourcesData.resourcesProductionRates.productionRateNitrogen += 0.1
         this.resourcesData.resourcesProductionRates.productionRatePhosphor += 0.01
+      } else if ((hexagon.backgroundImage = stemLvl1_1_1)) {
+        this.resourcesData.resourcesProductionRates.productionRateEnergie += 20
       }
     },
     resourceConsumtionToBuild(developmentPlantPartClass) {

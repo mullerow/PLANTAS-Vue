@@ -2,9 +2,10 @@
   <div>
     <div class="display-ressource-container">
       <h3>
-        Ressourcen /////////////////// Statische Balance:<span class="amount-resource">
-          {{ store.structuralAnalysisData.balanceLevel }}</span
-        >
+        Ressourcen
+        /|\&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        Statische Balance:[[[[
+        <span class="amount-resource"> {{ store.structuralAnalysisData.balanceLevel }}</span> ]]]]
       </h3>
 
       <div class="display-time">
