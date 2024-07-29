@@ -81,7 +81,7 @@ export const storeData = defineStore('store', {
     },
     structuralAnalysisData: {
       balanceLevel: 0,
-      stemBasicXLevel: null
+      stemBasicXLevel: 5
     }
   }),
   actions: {
@@ -124,7 +124,7 @@ export const storeData = defineStore('store', {
           if (x === 5 && y === 10) {
             backgroundImageHexagon = stemLvl1_2_124
             hexagonType = ['stem1', 'Stamm Lvl 1']
-            stemBasicXLevel = 5
+            this.stemBasicXLevel = 5
           }
           if ((x === 14 && y === 10) || (x === 16 && y === 10) || (x === 15 && y === 10)) {
             backgroundImageHexagon = soilGroundImage
@@ -359,6 +359,19 @@ export const storeData = defineStore('store', {
           this.playgroundData.XCoordinateBuildedHexagon = hexagon.hexagonXCoordinate
           this.playgroundData.YCoordinateBuildedHexagon = hexagon.hexagonYCoordinate
           hexagon.degreeOfRotation = this.calculateStemDegreeOfRotation(hexagon)
+          // Bestimmung des statischen Hebelarms
+          this.structuralAnalysisData.balanceLevel =
+            this.structuralAnalysisData.stemBasicXLevel -
+            this.playgroundData.XCoordinateBuildedHexagon
+          console.log(
+            'mal kucken',
+            this.structuralAnalysisData.stemBasicXLevel,
+            this.playgroundData.XCoordinateBuildedHexagon
+          )
+          console.log(
+            'this.structuralAnalysisData.balanceLevel',
+            this.structuralAnalysisData.balanceLevel
+          )
         }
       }
       // kalkulation des Rotationswinkels für Wurzeln
