@@ -123,7 +123,7 @@ export const storeData = defineStore('store', {
             hexagonType = ['seemling', 'eigener Keimling']
           }
           if (x === 5 && y === 10) {
-            backgroundImageHexagon = stemLvl1_2_124
+            backgroundImageHexagon = stemLvl1_1_1
             hexagonType = ['stem1', 'Stamm Lvl 1']
             this.stemBasicXLevel = 5
           }
@@ -359,20 +359,11 @@ export const storeData = defineStore('store', {
           // zunächst die Koordinaten des zu bebauenden Hexagons bestimmen
           this.playgroundData.XCoordinateBuildedHexagon = hexagon.hexagonXCoordinate
           this.playgroundData.YCoordinateBuildedHexagon = hexagon.hexagonYCoordinate
-          hexagon.degreeOfRotation = this.calculateStemDegreeOfRotation(hexagon)
+          hexagon.degreeOfRotation = this.calculateStemDegreeOfRotation()
           // Bestimmung des statischen Hebelarms
           this.structuralAnalysisData.balanceLevel +=
             this.structuralAnalysisData.stemBasicXLevel -
             this.playgroundData.XCoordinateBuildedHexagon
-          console.log(
-            'mal kucken',
-            this.structuralAnalysisData.stemBasicXLevel,
-            this.playgroundData.XCoordinateBuildedHexagon
-          )
-          console.log(
-            'this.structuralAnalysisData.balanceLevel',
-            this.structuralAnalysisData.balanceLevel
-          )
         }
       }
       // kalkulation des Rotationswinkels für Wurzeln
@@ -498,71 +489,44 @@ export const storeData = defineStore('store', {
           this.playgroundData.YCoordinateBuildedHexagon -
           this.playgroundData.YCoordinateNeighbourHexagonSmallestChainNumber
       }
-      // Die NachtbarHexagone werden gedreht
-      if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === true)
-        if (deltaX === -1 && deltaY === -1) {
-          return 300
-        } else if (deltaX === 0 && deltaY === -1) {
-          return 0
-        } else if (deltaX === 0 && deltaY === 1) {
-          return 180
-        } else if (deltaX === 1 && deltaY === 1) {
-          return 120
-        } else if (deltaX === -1 && deltaY === 1) {
-          return 240
-        } else if (deltaX === 1 && deltaY === -1) {
-          return 60
-        } else if (deltaX === 0 && deltaY === 0) {
-          return 90
-        } else {
-          console.log('nichts gefunden für die rotation', deltaX, deltaY)
-          return 90
-        }
-      // Das auszubauende Hexagon wird gedreht
-      else {
-        console.log('fü bauhexagon', deltaX, deltaY)
-        if (
-          deltaX === 1 &&
-          deltaY === 0 &&
-          this.playgroundData.XCoordinateBuildedHexagon % 2 === 0
-        ) {
-          return 120
-        } else if (
-          deltaX === 1 &&
-          deltaY === 0 &&
-          this.playgroundData.XCoordinateBuildedHexagon % 2 !== 0
-        ) {
-          return 60
-        } else if (deltaX === -1 && deltaY === -1) {
-          return 300
-        } else if (deltaX === 0 && deltaY === -1) {
-          return 0
-        } else if (deltaX === 0 && deltaY === 1) {
-          return 180
-        } else if (deltaX === 1 && deltaY === 1) {
-          return 120
-        } else if (deltaX === -1 && deltaY === 1) {
-          return 240
-        } else if (deltaX === 1 && deltaY === -1) {
-          return 60
-        } else if (deltaX === 0 && deltaY === 0) {
-          return 90
-        } else if (
-          deltaX === -1 &&
-          deltaY === 0 &&
-          this.playgroundData.XCoordinateBuildedHexagon % 2 === 0
-        ) {
-          return 240
-        } else if (
-          deltaX === -1 &&
-          deltaY === 0 &&
-          this.playgroundData.XCoordinateBuildedHexagon % 2 !== 0
-        ) {
-          return 300
-        } else {
-          console.log('nichts gefunden für die rotation', deltaX, deltaY)
-          return 90
-        }
+      // bestimmung des Rotationswinkels anhand der relativen position zum hexagon mit der niedrigsten chainNumber
+      if (deltaX === 1 && deltaY === 0 && this.playgroundData.XCoordinateBuildedHexagon % 2 === 0) {
+        return 120
+      } else if (deltaX === -1 && deltaY === -1) {
+        return 300
+      } else if (deltaX === 0 && deltaY === -1) {
+        return 0
+      } else if (deltaX === 0 && deltaY === 1) {
+        return 180
+      } else if (deltaX === 1 && deltaY === 1) {
+        return 120
+      } else if (deltaX === -1 && deltaY === 1) {
+        return 240
+      } else if (deltaX === 1 && deltaY === -1) {
+        return 60
+      } else if (deltaX === 0 && deltaY === 0) {
+        return 90
+      } else if (
+        deltaX === 1 &&
+        deltaY === 0 &&
+        this.playgroundData.XCoordinateBuildedHexagon % 2 !== 0
+      ) {
+        return 60
+      } else if (
+        deltaX === -1 &&
+        deltaY === 0 &&
+        this.playgroundData.XCoordinateBuildedHexagon % 2 === 0
+      ) {
+        return 240
+      } else if (
+        deltaX === -1 &&
+        deltaY === 0 &&
+        this.playgroundData.XCoordinateBuildedHexagon % 2 !== 0
+      ) {
+        return 300
+      } else {
+        console.log('nichts gefunden für die rotation', deltaX, deltaY)
+        return 90
       }
     },
     roundDecimals(value, decimals) {
@@ -599,7 +563,7 @@ export const storeData = defineStore('store', {
         this.resourcesData.resourcesProductionRates.productionRateNitrogen += 0.1
         this.resourcesData.resourcesProductionRates.productionRatePhosphor += 0.01
       } else if ((hexagon.backgroundImage = stemLvl1_1_1)) {
-        this.resourcesData.resourcesProductionRates.productionRateEnergie += 20
+        this.resourcesData.resourcesProductionRates.productionRateEnergie += 2
       }
     },
     resourceConsumtionToBuild(developmentPlantPartClass) {
