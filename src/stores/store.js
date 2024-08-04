@@ -338,21 +338,34 @@ export const storeData = defineStore('store', {
               hexagon.backgroundImage = stemLvl1_2_14
               break
             } else if (concatinatedmutatedPositions === '13') {
+              // temporäre lösung
               hexagon.backgroundImage = stemLvl1_2_124
               break
+
+              ///////// aktuelle Baustelle: wenn das hexagon genau über dem smallestchain hecagon ein stamm ist, dan soll das image 14 graede aus gewählt werden
+              ////////////////////////////////////////////////////////////////////////////
+              //////////////////////////////////////////////////////////////////////////
+              /////////////////////////////////////////////////////////////////////////////
             } else if (concatinatedmutatedPositions === '124') {
-              hexagon.backgroundImage = stemLvl1_2_124
-              break
-            } else if (concatinatedmutatedPositions === '146') {
-              hexagon.backgroundImage = stemLvl1_2_146
-              break
-            } else if (concatinatedmutatedPositions === '1246') {
-              hexagon.backgroundImage = stemLvl1_4_1246
-              break
+              if (
+                this.playgroundData.hexagonData[
+                  this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber
+                ]
+              )
+                console.log('Hier ist die Baustelle')
             }
+            hexagon.backgroundImage = stemLvl1_2_124
+            break
+          } else if (concatinatedmutatedPositions === '146') {
+            hexagon.backgroundImage = stemLvl1_2_146
+            break
+          } else if (concatinatedmutatedPositions === '1246') {
+            hexagon.backgroundImage = stemLvl1_4_1246
+            break
           }
         }
       }
+
       // kalkulation des Rotationswinkels für Stämme
       if (developmentPlantPartClass === 'stem') {
         if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
@@ -382,6 +395,7 @@ export const storeData = defineStore('store', {
         ]
       }
     },
+
     updateImageOfNeighbourHexagons(hexagon, developmentPlantPartClass) {
       let yCoodinateNeighbourHexagon = null
       // die schleife umläuft das geklickte hexagon und bestimmt den zustand der nachbarhexagone
@@ -567,7 +581,7 @@ export const storeData = defineStore('store', {
       }
     },
     resourceConsumtionToBuild(developmentPlantPartClass) {
-      // die Resourcen die für den Bau benötigt werden, werden hier vom Vorrat abgezogen
+      // die Ressourcen die für den Bau benötigt werden, werden hier vom Vorrat abgezogen
       let indexEffortList = null
       if (developmentPlantPartClass === 'root') {
         indexEffortList = 0
