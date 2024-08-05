@@ -2,9 +2,7 @@ import { defineStore } from 'pinia'
 import soilGroundImage from '@/assets/images/ground-soil.png'
 import skyImage from '@/assets/images/blue-sky.png'
 import seedling50 from '@/assets/images/seedling50x50.png'
-import leafLvl1Left from '@/assets/images/leafs/leaf-lvl1-left-1.png'
-import leafLvl1right from '@/assets/images/leafs/leaf-lvl1-right-1.png'
-import leafLvl1straight from '@/assets/images/leafs/leaf-lvl1-straight1.png'
+import leafLvl1_1_1 from '@/assets/images/leafs/leaf-lvl1-3-1.png'
 import rootLvl1_1_1 from '@/assets/images/roots/roots-lvl-1/root-lvl1-1-1.png'
 import rootLvl1_2_12 from '@/assets/images/roots/roots-lvl-1/root-lvl1-2-12.png'
 import rootLvl1_2_13 from '@/assets/images/roots/roots-lvl-1/root-lvl1-2-13.png'
@@ -328,10 +326,11 @@ export const storeData = defineStore('store', {
         if (developmentPlantPartClass === 'stem') {
           if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
             if (concatinatedmutatedPositions === '1') {
-              hexagon.backgroundImage = stemLvl1_1_1
+              console.log('WARUMMMMM?????')
+              hexagon.backgroundImage = leafLvl1_1_1
               break
             } else if (concatinatedmutatedPositions === '12') {
-              hexagon.backgroundImage = stemLvl1_1_1
+              hexagon.backgroundImage = leafLvl1_1_1
               break
             }
           }
@@ -617,7 +616,7 @@ export const storeData = defineStore('store', {
         this.resourcesData.resourcesProductionRates.productionRateWater += 1
         this.resourcesData.resourcesProductionRates.productionRateNitrogen += 0.1
         this.resourcesData.resourcesProductionRates.productionRatePhosphor += 0.01
-      } else if ((hexagon.backgroundImage = stemLvl1_1_1)) {
+      } else if (hexagon.backgroundImage === stemLvl1_1_1) {
         this.resourcesData.resourcesProductionRates.productionRateEnergie += 2
       }
     },
