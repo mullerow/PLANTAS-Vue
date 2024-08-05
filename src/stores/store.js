@@ -321,7 +321,6 @@ export const storeData = defineStore('store', {
             break
           }
         }
-        console.log('concatinatedmutatedPositions', concatinatedmutatedPositions)
         // bestimmung des auzubauenden hexagon image
         if (developmentPlantPartClass === 'stem') {
           if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
@@ -355,18 +354,36 @@ export const storeData = defineStore('store', {
             //////////////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////////////////
             else if (concatinatedmutatedPositions === '124') {
-              console.log('124')
-              hexagon.backgroundImage = stemLvl1_3_124
-              break
-            } else if (concatinatedmutatedPositions === '146') {
-              /*
+              console.log('smallestChainNumber', this.playgroundData.smallestChainNumber)
+              /// Zusatz kondition die prüft, ob das an position 1 befindliche hexagon eine fortführung des stamms ist, und somit keine verbindung dazu aufgebaut werden muss
               if (
                 this.playgroundData.hexagonData[
-                  this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber
-                ]
-              )
-                console.log('Hier ist die Baustelle')
-             */
+                  (this.playgroundData.YCoordinateNeighbourHexagonSmallestChainNumber - 1) *
+                    this.playgroundData.amountColumns +
+                    this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber -
+                    this.playgroundData.amountColumns -
+                    1
+                ].hexagonStemConnectionChainNumber !==
+                this.playgroundData.smallestChainNumber + 1
+              ) {
+                ////////////////////////////////////////////////////
+                hexagon.backgroundImage = stemLvl1_2_14
+                console.log(
+                  'Hier ist die Baustelle',
+                  this.playgroundData.hexagonData[
+                    (this.playgroundData.YCoordinateNeighbourHexagonSmallestChainNumber - 1) *
+                      this.playgroundData.amountColumns +
+                      this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber -
+                      this.playgroundData.amountColumns -
+                      1
+                  ]
+                )
+              } else {
+                console.log('124')
+                hexagon.backgroundImage = stemLvl1_3_124
+              }
+              break
+            } else if (concatinatedmutatedPositions === '146') {
               console.log('146')
               hexagon.backgroundImage = stemLvl1_3_146
               break
