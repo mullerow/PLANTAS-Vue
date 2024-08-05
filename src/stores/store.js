@@ -20,8 +20,8 @@ import rootLvl1_5_12345 from '@/assets/images/roots/roots-lvl-1/root-lvl1-5-1234
 import rootLvl1_6_123456 from '@/assets/images/roots/roots-lvl-1/root-lvl1-6-123456.png'
 import stemLvl1_1_1 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-1-1.png'
 import stemLvl1_2_14 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-2-14.png'
-import stemLvl1_2_124 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-2-124.png'
-import stemLvl1_2_146 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-2-146.png'
+import stemLvl1_3_124 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-3-124.png'
+import stemLvl1_3_146 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-3-146.png'
 import stemLvl1_4_1246 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-4-1246.png'
 
 export const storeData = defineStore('store', {
@@ -321,6 +321,8 @@ export const storeData = defineStore('store', {
             break
           }
         }
+        console.log('concatinatedmutatedPositions', concatinatedmutatedPositions)
+        // bestimmung des auzubauenden hexagon image
         if (developmentPlantPartClass === 'stem') {
           if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
             if (concatinatedmutatedPositions === '1') {
@@ -330,7 +332,9 @@ export const storeData = defineStore('store', {
               hexagon.backgroundImage = stemLvl1_1_1
               break
             }
-          } else if (
+          }
+          // update des benachtbarten Hexagon images mit der kleinsten chainnumber
+          else if (
             this.playgroundData.currentUpdateOfNeighbourHexagonImages === true &&
             this.playgroundData.smallestChainNumber === hexagon.hexagonStemConnectionChainNumber
           ) {
@@ -339,25 +343,27 @@ export const storeData = defineStore('store', {
               break
             } else if (concatinatedmutatedPositions === '13') {
               // temporäre lösung
-              hexagon.backgroundImage = stemLvl1_2_124
+              hexagon.backgroundImage = stemLvl1_3_124
               break
-
-              ///////// aktuelle Baustelle: wenn das hexagon genau über dem smallestchain hecagon ein stamm ist, dan soll das image 14 graede aus gewählt werden
-              ////////////////////////////////////////////////////////////////////////////
-              //////////////////////////////////////////////////////////////////////////
-              /////////////////////////////////////////////////////////////////////////////
-            } else if (concatinatedmutatedPositions === '124') {
+            }
+            ///////// aktuelle Baustelle: wenn das hexagon genau über dem smallestchain hexagon ein stamm ist, dan soll das image 14 graede aus gewählt werden
+            ////////////////////////////////////////////////////////////////////////////
+            //////////////////////////////////////////////////////////////////////////
+            /////////////////////////////////////////////////////////////////////////////
+            else if (concatinatedmutatedPositions === '124') {
+              hexagon.backgroundImage = stemLvl1_3_124
+              break
+            }
+            /*
               if (
                 this.playgroundData.hexagonData[
                   this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber
                 ]
               )
                 console.log('Hier ist die Baustelle')
-            }
-            hexagon.backgroundImage = stemLvl1_2_124
-            break
+             */
           } else if (concatinatedmutatedPositions === '146') {
-            hexagon.backgroundImage = stemLvl1_2_146
+            hexagon.backgroundImage = stemLvl1_3_146
             break
           } else if (concatinatedmutatedPositions === '1246') {
             hexagon.backgroundImage = stemLvl1_4_1246
