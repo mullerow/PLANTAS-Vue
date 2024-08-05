@@ -2,7 +2,8 @@ import { defineStore } from 'pinia'
 import soilGroundImage from '@/assets/images/ground-soil.png'
 import skyImage from '@/assets/images/blue-sky.png'
 import seedling50 from '@/assets/images/seedling50x50.png'
-import leafLvl1_1_1 from '@/assets/images/leafs/leaf-lvl1-3-1.png'
+import leafLvl1_1_1 from '@/assets/images/leafs/leaf-lvl1-1-1.png'
+import leafLvl1_3_1 from '@/assets/images/leafs/leaf-lvl1-3-1.png'
 import rootLvl1_1_1 from '@/assets/images/roots/roots-lvl-1/root-lvl1-1-1.png'
 import rootLvl1_2_12 from '@/assets/images/roots/roots-lvl-1/root-lvl1-2-12.png'
 import rootLvl1_2_13 from '@/assets/images/roots/roots-lvl-1/root-lvl1-2-13.png'
@@ -40,7 +41,8 @@ export const storeData = defineStore('store', {
       XCoordinateBuildedHexagon: 0,
       YCoordinateBuildedHexagon: 0,
       XCoordinateNeighbourHexagonSmallestChainNumber: 0,
-      YCoordinateNeighbourHexagonSmallestChainNumber: 0
+      YCoordinateNeighbourHexagonSmallestChainNumber: 0,
+      counterBuildedLeafs: 0
     },
     staticData: {
       offsetsNeighbourHexagons: [
@@ -325,14 +327,16 @@ export const storeData = defineStore('store', {
         // bestimmung des auzubauenden hexagon image
         if (developmentPlantPartClass === 'stem') {
           if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
-            if (concatinatedmutatedPositions === '1') {
-              console.log('WARUMMMMM?????')
-              hexagon.backgroundImage = leafLvl1_1_1
-              break
-            } else if (concatinatedmutatedPositions === '12') {
-              hexagon.backgroundImage = leafLvl1_1_1
-              break
+            if (concatinatedmutatedPositions === '1' || concatinatedmutatedPositions === '12') {
+              if (this.playgroundData.counterBuildedLeafs % 2 === 0) {
+                hexagon.backgroundImage = leafLvl1_1_1
+                break
+              } else {
+                hexagon.backgroundImage = leafLvl1_3_1
+                break
+              }
             }
+            this.playgroundData.counterBuildedLeafs += 1
           }
           // update des benachtbarten Hexagon images mit der kleinsten chainnumber
           else if (
