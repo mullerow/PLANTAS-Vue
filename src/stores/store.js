@@ -20,8 +20,11 @@ import rootLvl1_5_12345 from '@/assets/images/roots/roots-lvl-1/root-lvl1-5-1234
 import rootLvl1_6_123456 from '@/assets/images/roots/roots-lvl-1/root-lvl1-6-123456.png'
 import stemLvl1_1_1 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-1-1.png'
 import stemLvl1_2_14 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-2-14.png'
+import stemLvl1_2_13 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-2-13.png'
+import stemLvl1_2_15 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-2-15.png'
 import stemLvl1_3_124 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-3-124.png'
 import stemLvl1_3_146 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-3-146.png'
+import stemLvl1_3_136 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-3-136.png'
 import stemLvl1_4_1246 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-4-1246.png'
 
 export const storeData = defineStore('store', {
@@ -325,11 +328,9 @@ export const storeData = defineStore('store', {
         if (developmentPlantPartClass === 'stem') {
           if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
             if (concatinatedmutatedPositions === '1') {
-              console.log('1')
               hexagon.backgroundImage = stemLvl1_1_1
               break
             } else if (concatinatedmutatedPositions === '12') {
-              console.log('12')
               hexagon.backgroundImage = stemLvl1_1_1
               break
             }
@@ -340,13 +341,19 @@ export const storeData = defineStore('store', {
             this.playgroundData.smallestChainNumber === hexagon.hexagonStemConnectionChainNumber
           ) {
             if (concatinatedmutatedPositions === '14') {
-              console.log('14')
               hexagon.backgroundImage = stemLvl1_2_14
               break
             } else if (concatinatedmutatedPositions === '13') {
-              console.log('13')
-              // temporäre lösung
-              hexagon.backgroundImage = stemLvl1_3_124
+              hexagon.backgroundImage = stemLvl1_2_13
+              break
+            } else if (concatinatedmutatedPositions === '15') {
+              hexagon.backgroundImage = stemLvl1_2_15
+              break
+            } else if (
+              concatinatedmutatedPositions === '135' ||
+              concatinatedmutatedPositions === '246'
+            ) {
+              hexagon.backgroundImage = stemLvl1_3_136
               break
             }
             ///////// aktuelle Baustelle: wenn das hexagon genau über dem smallestchain hexagon ein stamm ist, dan soll das image 14 graede aus gewählt werden
@@ -354,7 +361,6 @@ export const storeData = defineStore('store', {
             //////////////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////////////////
             else if (concatinatedmutatedPositions === '124') {
-              console.log('smallestChainNumber', this.playgroundData.smallestChainNumber)
               /// Zusatz kondition die prüft, ob das an position 1 befindliche hexagon eine fortführung des stamms ist, und somit keine verbindung dazu aufgebaut werden muss
               if (
                 this.playgroundData.hexagonData[
@@ -366,29 +372,34 @@ export const storeData = defineStore('store', {
                 ].hexagonStemConnectionChainNumber !==
                 this.playgroundData.smallestChainNumber + 1
               ) {
-                ////////////////////////////////////////////////////
                 hexagon.backgroundImage = stemLvl1_2_14
-                console.log(
-                  'Hier ist die Baustelle',
-                  this.playgroundData.hexagonData[
-                    (this.playgroundData.YCoordinateNeighbourHexagonSmallestChainNumber - 1) *
-                      this.playgroundData.amountColumns +
-                      this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber -
-                      this.playgroundData.amountColumns -
-                      1
-                  ]
-                )
               } else {
-                console.log('124')
                 hexagon.backgroundImage = stemLvl1_3_124
               }
               break
             } else if (concatinatedmutatedPositions === '146') {
-              console.log('146')
-              hexagon.backgroundImage = stemLvl1_3_146
+              if (
+                this.playgroundData.hexagonData[
+                  (this.playgroundData.YCoordinateNeighbourHexagonSmallestChainNumber - 1) *
+                    this.playgroundData.amountColumns +
+                    this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber -
+                    this.playgroundData.amountColumns -
+                    1
+                ].hexagonStemConnectionChainNumber !==
+                this.playgroundData.smallestChainNumber + 1
+              ) {
+                hexagon.backgroundImage = stemLvl1_2_14
+              } else {
+                hexagon.backgroundImage = stemLvl1_3_146
+              }
               break
             } else if (concatinatedmutatedPositions === '1246') {
-              console.log('1246')
+              hexagon.backgroundImage = stemLvl1_4_1246
+              break
+            } else if (concatinatedmutatedPositions === '1245') {
+              hexagon.backgroundImage = stemLvl1_3_146
+              break
+            } else if (concatinatedmutatedPositions === '12345') {
               hexagon.backgroundImage = stemLvl1_4_1246
               break
             }
