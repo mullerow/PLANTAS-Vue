@@ -391,10 +391,8 @@ export const storeData = defineStore('store', {
                     this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber <
                     hexagon.hexagonXCoordinate
                   ) {
-                    console.warn('hab dich!')
                     hexagon.backgroundImage = stemLvl1_3_146
                   } else {
-                    console.warn('hab dich nicht!!')
                     hexagon.backgroundImage = stemLvl1_3_124
                   }
                 } else {
@@ -402,15 +400,12 @@ export const storeData = defineStore('store', {
                     this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber >
                     hexagon.hexagonXCoordinate
                   ) {
-                    console.warn('hab dich!')
                     hexagon.backgroundImage = stemLvl1_3_124
                   } else {
-                    console.warn('hab dich nicht!!')
                     hexagon.backgroundImage = stemLvl1_3_146
                   }
                 }
               }
-
               break
             } else if (concatinatedmutatedPositions === '1246') {
               hexagon.backgroundImage = stemLvl1_4_1246

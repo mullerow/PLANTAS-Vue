@@ -61,6 +61,12 @@
       <hr />
     </div>
   </div>
+  <h4
+    class="display-sufficent-resources"
+    v-if="this.store.resourcesData.currentAmounts.sufficentResources"
+  >
+    Aussreichend Ressourcen
+  </h4>
 </template>
 
 <script>
@@ -185,6 +191,16 @@ export default {
   border-radius: 10px;
   background-color: #0a918a;
   color: wheat;
+}
+.display-sufficent-resources {
+  position: absolute;
+  z-index: 20;
+  bottom: 100px;
+  left: 800px;
+  color: wheat;
+  border: 2px solid black;
+  margin-right: 20px;
+  padding: 10px;
 }
 
 b {
