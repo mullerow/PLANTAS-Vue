@@ -3,6 +3,7 @@ import soilGroundImage from '@/assets/images/ground-soil.png'
 import skyImage from '@/assets/images/blue-sky.png'
 import seedling50 from '@/assets/images/seedling50x50.png'
 import leafLvl1_1_1 from '@/assets/images/leafs/leaf-lvl1-1-1.png'
+import leafLvl1_2_1 from '@/assets/images/leafs/leaf-lvl1-2-1.png'
 import leafLvl1_3_1 from '@/assets/images/leafs/leaf-lvl1-3-1.png'
 import rootLvl1_1_1 from '@/assets/images/roots/roots-lvl-1/root-lvl1-1-1.png'
 import rootLvl1_2_12 from '@/assets/images/roots/roots-lvl-1/root-lvl1-2-12.png'
@@ -69,12 +70,12 @@ export const storeData = defineStore('store', {
       resourcesProductionRates: {
         productionRateWater: 1,
         productionRateNitrogen: 0.1,
-        productionRatePhosphor: 0.01,
+        productionRatePhosphor: 0.1,
         productionRateEnergie: 0
       },
       resourceConsumtionEffortList: [
         [50, 5, 0.1], // erste Liste Kosten für Wurzel, zweite Liste für Stämme
-        [20, 1, 0.05]
+        [20, 1, 0.1]
       ]
     },
     playTime: {
@@ -326,17 +327,20 @@ export const storeData = defineStore('store', {
         }
         // bestimmung des auzubauenden hexagon image
         if (developmentPlantPartClass === 'stem') {
+          /// ALLE endständigen Stämme sollen automatisch Blätter sein, und derzeit eine abwechselnde anzahl blätter haben
           if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
-            if (concatinatedmutatedPositions === '1' || concatinatedmutatedPositions === '12') {
-              if (this.playgroundData.counterBuildedLeafs % 2 === 0) {
-                hexagon.backgroundImage = leafLvl1_1_1
-                break
-              } else {
-                hexagon.backgroundImage = leafLvl1_3_1
-                break
-              }
+            if (this.playgroundData.counterBuildedLeafs % 2 === 0) {
+              hexagon.backgroundImage = leafLvl1_1_1
+            } else if (
+              this.playgroundData.counterBuildedLeafs % 2 !== 0 &&
+              this.playgroundData.counterBuildedLeafs % 3 === 0
+            ) {
+              hexagon.backgroundImage = leafLvl1_2_1
+            } else {
+              hexagon.backgroundImage = leafLvl1_3_1
             }
             this.playgroundData.counterBuildedLeafs += 1
+            break
           }
           // update des benachtbarten Hexagon images mit der kleinsten chainnumber
           else if (
@@ -363,7 +367,10 @@ export const storeData = defineStore('store', {
             ////////////////////////////////////////////////////////////////////////////
             //////////////////////////////////////////////////////////////////////////
             /////////////////////////////////////////////////////////////////////////////
-            else if (concatinatedmutatedPositions === '124') {
+            else if (
+              concatinatedmutatedPositions === '124' ||
+              concatinatedmutatedPositions === '146'
+            ) {
               /// Zusatz kondition die prüft, ob das an position 1 befindliche hexagon eine fortführung des stamms ist, und somit keine verbindung dazu aufgebaut werden muss
               if (
                 this.playgroundData.hexagonData[
@@ -376,25 +383,34 @@ export const storeData = defineStore('store', {
                 this.playgroundData.smallestChainNumber + 1
               ) {
                 hexagon.backgroundImage = stemLvl1_2_14
-              } else {
-                hexagon.backgroundImage = stemLvl1_3_124
               }
-              break
-            } else if (concatinatedmutatedPositions === '146') {
-              if (
-                this.playgroundData.hexagonData[
-                  (this.playgroundData.YCoordinateNeighbourHexagonSmallestChainNumber - 1) *
-                    this.playgroundData.amountColumns +
-                    this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber -
-                    this.playgroundData.amountColumns -
-                    1
-                ].hexagonStemConnectionChainNumber !==
-                this.playgroundData.smallestChainNumber + 1
-              ) {
-                hexagon.backgroundImage = stemLvl1_2_14
-              } else {
-                hexagon.backgroundImage = stemLvl1_3_146
+              // Unterschiedliche behandlung der gespiegelten abzweigungen
+              else {
+                if (concatinatedmutatedPositions === '124') {
+                  if (
+                    this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber <
+                    hexagon.hexagonXCoordinate
+                  ) {
+                    console.warn('hab dich!')
+                    hexagon.backgroundImage = stemLvl1_3_146
+                  } else {
+                    console.warn('hab dich nicht!!')
+                    hexagon.backgroundImage = stemLvl1_3_124
+                  }
+                } else {
+                  if (
+                    this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber >
+                    hexagon.hexagonXCoordinate
+                  ) {
+                    console.warn('hab dich!')
+                    hexagon.backgroundImage = stemLvl1_3_124
+                  } else {
+                    console.warn('hab dich nicht!!')
+                    hexagon.backgroundImage = stemLvl1_3_146
+                  }
+                }
               }
+
               break
             } else if (concatinatedmutatedPositions === '1246') {
               hexagon.backgroundImage = stemLvl1_4_1246
@@ -619,7 +635,7 @@ export const storeData = defineStore('store', {
       if (developmentPlantPartClass === 'root') {
         this.resourcesData.resourcesProductionRates.productionRateWater += 1
         this.resourcesData.resourcesProductionRates.productionRateNitrogen += 0.1
-        this.resourcesData.resourcesProductionRates.productionRatePhosphor += 0.01
+        this.resourcesData.resourcesProductionRates.productionRatePhosphor += 0.1
       } else if (hexagon.backgroundImage === stemLvl1_1_1) {
         this.resourcesData.resourcesProductionRates.productionRateEnergie += 2
       }
