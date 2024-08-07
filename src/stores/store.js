@@ -43,6 +43,7 @@ export const storeData = defineStore('store', {
       YCoordinateBuildedHexagon: 0,
       XCoordinateNeighbourHexagonSmallestChainNumber: 0,
       YCoordinateNeighbourHexagonSmallestChainNumber: 0,
+      idNeighbourHexagonSmallestChainNumber: 0,
       counterBuildedLeafs: 0
     },
     staticData: {
@@ -266,6 +267,34 @@ export const storeData = defineStore('store', {
       // Bestimmung des passenden Images (es werden die Positionen der bebauten nachbarhexagone schritweise "gedreht" bis sie deckungsgelcih mit einem vorhandenen Image sind)
 
       /////// HIER DIE NEUE REGEL FÜR BENACHTBARTE bebauten einfügen
+      //////////////////////////////////////////////////////////////////////////////////////7
+      if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
+        let deltaID = this.playgroundData.idNeighbourHexagonSmallestChainNumber - hexagon.hexagonId
+
+        console.log(
+          'Test',
+          this.playgroundData.idNeighbourHexagonSmallestChainNumber,
+          '-',
+          hexagon.hexagonId
+        )
+        console.log('hexagon.hexagonXCoordinate', hexagon.hexagonXCoordinate)
+        // nötige korrektur, aufgrund der versetzten hexagone
+        if (
+          hexagon.hexagonXCoordinate % 2 === 0 &&
+          this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber !==
+            hexagon.hexagonXCoordinate
+        ) {
+          deltaID -= this.playgroundData.amountColumns
+        }
+        /// es werden aus den benachtbarten bebauten hexagon positionen die direkten nachtbarn des hexagons mit der kleinsten StemChainNumber entfernt, sodass die Images korrekt gewählt werden
+        console.log('deltaID', deltaID)
+        if (deltaID === -20) {
+          this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
+            (position) => position !== 1 && position !== 6
+          )
+        } else if (deltaID === -19) {
+        }
+      }
 
       let neighbourPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
         (position) => position !== 0
@@ -366,10 +395,10 @@ export const storeData = defineStore('store', {
               hexagon.backgroundImage = stemLvl1_3_136
               break
             } else if (concatinatedmutatedPositions === '124') {
-              hexagon.backgroundImage = stemLvl1_3_146
+              hexagon.backgroundImage = stemLvl1_3_124
               break
             } else if (concatinatedmutatedPositions === '146') {
-              hexagon.backgroundImage = stemLvl1_3_124
+              hexagon.backgroundImage = stemLvl1_3_146
               break
             } else if (concatinatedmutatedPositions === '1246') {
               hexagon.backgroundImage = stemLvl1_4_1246
@@ -505,6 +534,9 @@ export const storeData = defineStore('store', {
             this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber,
             this.playgroundData.YCoordinateNeighbourHexagonSmallestChainNumber
           )
+          // Speichern der id des nachbar hexagons mit der kleinsten StemChainNumber
+          this.playgroundData.idNeighbourHexagonSmallestChainNumber =
+            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonId
         }
       }
     },
