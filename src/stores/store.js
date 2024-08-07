@@ -205,7 +205,7 @@ export const storeData = defineStore('store', {
           xCoodinateNeighbourHexagon -
           this.playgroundData.amountColumns
 
-        /// differenzierung zwischen den Pflanzenbereichen
+        /// Speichern der bebauten Nachbarpositionen
         if (
           this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] !== 'empty soil' &&
           this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonType[0] !== 'empty sky'
@@ -264,6 +264,9 @@ export const storeData = defineStore('store', {
     findImageOfHexagon(hexagon, developmentPlantPartClass) {
       //////// Rotation des Hexagons um das Image an die benachtbarten hexagone anzupassen ////////////////////////
       // Bestimmung des passenden Images (es werden die Positionen der bebauten nachbarhexagone schritweise "gedreht" bis sie deckungsgelcih mit einem vorhandenen Image sind)
+
+      /////// HIER DIE NEUE REGEL FÜR BENACHTBARTE bebauten einfügen
+
       let neighbourPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
         (position) => position !== 0
       )
@@ -325,7 +328,7 @@ export const storeData = defineStore('store', {
             break
           }
         }
-        // bestimmung des auzubauenden hexagon image
+        // bestimmung des auzubauenden hexagon image für Stämme und Blätter
         if (developmentPlantPartClass === 'stem') {
           /// ALLE endständigen Stämme sollen automatisch Blätter sein, und derzeit eine abwechselnde anzahl blätter haben
           if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
@@ -362,50 +365,11 @@ export const storeData = defineStore('store', {
             ) {
               hexagon.backgroundImage = stemLvl1_3_136
               break
-            }
-            ///////// aktuelle Baustelle: wenn das hexagon genau über dem smallestchain hexagon ein stamm ist, dan soll das image 14 graede aus gewählt werden
-            ////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////
-            /////////////////////////////////////////////////////////////////////////////
-            else if (
-              concatinatedmutatedPositions === '124' ||
-              concatinatedmutatedPositions === '146'
-            ) {
-              /// Zusatz kondition die prüft, ob das an position 1 befindliche hexagon eine fortführung des stamms ist, und somit keine verbindung dazu aufgebaut werden muss
-              if (
-                this.playgroundData.hexagonData[
-                  (this.playgroundData.YCoordinateNeighbourHexagonSmallestChainNumber - 1) *
-                    this.playgroundData.amountColumns +
-                    this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber -
-                    this.playgroundData.amountColumns -
-                    1
-                ].hexagonStemConnectionChainNumber !==
-                this.playgroundData.smallestChainNumber + 1
-              ) {
-                hexagon.backgroundImage = stemLvl1_2_14
-              }
-              // Unterschiedliche behandlung der gespiegelten abzweigungen
-              else {
-                if (concatinatedmutatedPositions === '124') {
-                  if (
-                    this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber <
-                    hexagon.hexagonXCoordinate
-                  ) {
-                    hexagon.backgroundImage = stemLvl1_3_146
-                  } else {
-                    hexagon.backgroundImage = stemLvl1_3_124
-                  }
-                } else {
-                  if (
-                    this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber >
-                    hexagon.hexagonXCoordinate
-                  ) {
-                    hexagon.backgroundImage = stemLvl1_3_124
-                  } else {
-                    hexagon.backgroundImage = stemLvl1_3_146
-                  }
-                }
-              }
+            } else if (concatinatedmutatedPositions === '124') {
+              hexagon.backgroundImage = stemLvl1_3_146
+              break
+            } else if (concatinatedmutatedPositions === '146') {
+              hexagon.backgroundImage = stemLvl1_3_124
               break
             } else if (concatinatedmutatedPositions === '1246') {
               hexagon.backgroundImage = stemLvl1_4_1246

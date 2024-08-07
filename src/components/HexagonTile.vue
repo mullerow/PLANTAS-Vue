@@ -128,7 +128,7 @@ export default {
 }
 .option-window {
   width: 255px;
-  height: 632px;
+  height: 725px;
   background-color: #00524e;
   text-align: start;
   position: absolute;

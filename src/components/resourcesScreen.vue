@@ -128,10 +128,11 @@ export default {
 .display-ressource-container {
   background-color: silver;
   z-index: 5;
-  height: 90px;
+  height: 85px;
   width: 1000px;
   line-height: 1.5rem;
   padding: 5px;
+  margin-bottom: 3px;
   position: relative;
 }
 .amount-resource {
