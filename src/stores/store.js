@@ -254,6 +254,7 @@ export const storeData = defineStore('store', {
     },
     buildPlantpart(hexagon, developmentPlantPartClass) {
       this.resourcesData.currentAmounts.sufficentResources = true
+      this.playgroundData.smallestTestChainNumber = 100
       // Baue eine Wurzel
       this.resourceConsumtionToBuild(developmentPlantPartClass)
       if (this.resourcesData.currentAmounts.sufficentResources === true) {
@@ -284,13 +285,15 @@ export const storeData = defineStore('store', {
         )
 
         // nötige korrektur, aufgrund der versetzten hexagone
-        if (
-          (hexagon.hexagonXCoordinate % 2 === 0 &&
-            this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber !==
-              hexagon.hexagonXCoordinate) ||
-          (hexagon.hexagonXCoordinate % 2 === 0 &&
-            this.playgroundData.XCoordinateTestSmallestChainNumber !== hexagon.hexagonXCoordinate)
-        ) {
+        console.log(
+          'XCoordinateNeighbourHexagonSmallestChainNumber',
+          this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber
+        )
+        ////////////////////////////////////////////////
+        /////////// HIER LIEGT DER HUND BEGRABEN!!!!
+        //////////////////////////////////////////////////////////////////
+
+        if (hexagon.hexagonXCoordinate % 2 === 0) {
           deltaID -= this.playgroundData.amountColumns
         }
         /// es werden aus den benachtbarten bebauten hexagon positionen die direkten nachtbarn des hexagons mit der kleinsten StemChainNumber entfernt, sodass die Images korrekt gewählt werden
@@ -569,7 +572,6 @@ export const storeData = defineStore('store', {
       }
     },
     findSmallestStemConnectionChainNumberNextToNeighbourHexagon(hexagon) {
-      this.playgroundData.smallestTestChainNumber = 100
       // Es wird der kürzeste Weg bis zu den Wurzeln gesucht, da Abzweigung immer möglichst nahe am hauptstamm gebaut werden sollen
       /*
       if (this.playgroundData.amountOfNeighbourStemConnections === 1) {
@@ -600,6 +602,10 @@ export const storeData = defineStore('store', {
           yCoodinateNeighbourHexagon * this.playgroundData.amountColumns +
           xCoodinateNeighbourHexagon -
           this.playgroundData.amountColumns
+        console.log(
+          'this.playgroundData.smallestTestChainNumber',
+          this.playgroundData.smallestTestChainNumber
+        )
         if (
           this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber <
             this.playgroundData.smallestTestChainNumber &&
@@ -614,6 +620,8 @@ export const storeData = defineStore('store', {
             'ID',
             this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonId
           )
+          this.playgroundData.smallestTestChainNumber =
+            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber
           this.playgroundData.XCoordinateTestSmallestChainNumber =
             this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonXCoordinate
           this.playgroundData.YCoordinateTestSmallestChainNumber =
