@@ -65,7 +65,7 @@
     class="display-sufficent-resources"
     v-if="this.store.resourcesData.currentAmounts.sufficentResources"
   >
-    Aussreichend Ressourcen
+    Ausreichend Ressourcen
   </h4>
 </template>
 

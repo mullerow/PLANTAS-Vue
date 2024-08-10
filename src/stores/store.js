@@ -46,7 +46,6 @@ export const storeData = defineStore('store', {
       idNeighbourHexagonSmallestChainNumber: 0,
       idTestSmallestChainNumber: 0,
       XCoordinateTestSmallestChainNumber: 0,
-      YCoordinateTestSmallestChainNumber: 0,
       smallestTestChainNumber: 100,
       counterBuildedLeafs: 0
     },
@@ -270,12 +269,18 @@ export const storeData = defineStore('store', {
     },
     findImageOfHexagon(hexagon, developmentPlantPartClass) {
       //////// Rotation des Hexagons um das Image an die benachtbarten hexagone anzupassen ////////////////////////
+      // Bestimmen aller bebauten Nachbar Hexagone
+      let neighbourPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
+        (position) => position !== 0
+      )
+      console.log('neighbourPositions', neighbourPositions)
+      let positionWithoutSmallestChainNumber = 0
+      let positonOfNeighbourSmallestChainNumber = 0
       // Bestimmung des passenden Images (es werden die Positionen der bebauten nachbarhexagone schritweise "gedreht" bis sie deckungsgelcih mit einem vorhandenen Image sind)
       if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === true) {
         this.findSmallestStemConnectionChainNumberNextToNeighbourHexagon(hexagon)
         let deltaID = this.playgroundData.idTestSmallestChainNumber - hexagon.hexagonId
-        console.warn('Nachbar HEXAGON')
-        console.log(
+        console.warn(
           'Test',
           this.playgroundData.idTestSmallestChainNumber,
           '-',
@@ -283,22 +288,34 @@ export const storeData = defineStore('store', {
           '=',
           deltaID
         )
-
         // nötige korrektur, aufgrund der versetzten hexagone
-        console.log(
-          'XCoordinateNeighbourHexagonSmallestChainNumber',
-          this.playgroundData.XCoordinateNeighbourHexagonSmallestChainNumber
-        )
-        ////////////////////////////////////////////////
-        /////////// HIER LIEGT DER HUND BEGRABEN!!!!
-        //////////////////////////////////////////////////////////////////
-
-        if (hexagon.hexagonXCoordinate % 2 === 0) {
+        if (
+          hexagon.hexagonXCoordinate % 2 === 0 &&
+          this.playgroundData.XCoordinateTestSmallestChainNumber !== hexagon.hexagonXCoordinate
+        ) {
           deltaID -= this.playgroundData.amountColumns
+        } /// es werden aus den benachtbarten bebauten hexagon positionen die direkten nachtbarn des hexagons mit der kleinsten StemChainNumber entfernt, sodass die Images korrekt gewählt werden
+        console.log('deltaID', deltaID) // Für die spiegelverkehrten Image von 2,4 und 4,6 muss die relative position der beiden anbindungen zueinander ermittelt werden
+        if (deltaID === -20) {
+          positonOfNeighbourSmallestChainNumber = 1
+        } else if (deltaID === -19) {
+          positonOfNeighbourSmallestChainNumber = 2
+        } else if (deltaID === 1) {
+          positonOfNeighbourSmallestChainNumber = 3
+        } else if (deltaID === 20) {
+          positonOfNeighbourSmallestChainNumber = 4
+        } else if (deltaID === -1) {
+          positonOfNeighbourSmallestChainNumber = 5
+        } else if (deltaID === -21) {
+          positonOfNeighbourSmallestChainNumber = 6
         }
-        /// es werden aus den benachtbarten bebauten hexagon positionen die direkten nachtbarn des hexagons mit der kleinsten StemChainNumber entfernt, sodass die Images korrekt gewählt werden
-        console.log('deltaID', deltaID)
 
+        positionWithoutSmallestChainNumber = neighbourPositions.filter((item) => {
+          return item !== positonOfNeighbourSmallestChainNumber
+        })
+        console.log('positionWithoutSmallestChainNumber', positionWithoutSmallestChainNumber)
+
+        console.log('positon SCN', positonOfNeighbourSmallestChainNumber)
         if (deltaID === -20) {
           this.playgroundData.positionsOfDevelopedNeighbourHexagons[1] =
             this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
@@ -330,17 +347,11 @@ export const storeData = defineStore('store', {
               (position) => position !== 5 && position !== 1
             )
         }
-        console.log('nach filter:', this.playgroundData.positionsOfDevelopedNeighbourHexagons[1])
       }
 
-      let neighbourPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
-        (position) => position !== 0
-      )
-
-      console.log('neighbourPositions', neighbourPositions)
       let mutatedPositions = []
       let countRotations = 0
-      for (let i = 1; i < 7; i++) {
+      for (let i = 0; i < 6; i++) {
         mutatedPositions = neighbourPositions.map((item) => {
           item += i
           if (item > 6) {
@@ -394,17 +405,18 @@ export const storeData = defineStore('store', {
             break
           }
         }
+        console.log('concatinatedmutatedPositions', concatinatedmutatedPositions)
         // bestimmung des auzubauenden hexagon image für Stämme und Blätter
         if (developmentPlantPartClass === 'stem') {
           /// ALLE endständigen Stämme sollen automatisch Blätter sein, und derzeit eine abwechselnde anzahl blätter haben
           if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === false) {
             if (this.playgroundData.counterBuildedLeafs % 2 === 0) {
-              hexagon.backgroundImage = leafLvl1_1_1
+              hexagon.backgroundImage = leafLvl1_2_1
             } else if (
               this.playgroundData.counterBuildedLeafs % 2 !== 0 &&
               this.playgroundData.counterBuildedLeafs % 3 === 0
             ) {
-              hexagon.backgroundImage = leafLvl1_2_1
+              hexagon.backgroundImage = leafLvl1_1_1
             } else {
               hexagon.backgroundImage = leafLvl1_3_1
             }
@@ -419,11 +431,20 @@ export const storeData = defineStore('store', {
             if (concatinatedmutatedPositions === '14') {
               hexagon.backgroundImage = stemLvl1_2_14
               break
-            } else if (concatinatedmutatedPositions === '13') {
-              hexagon.backgroundImage = stemLvl1_2_13
+            }
+            // 46 kommt als kombination für beide spiegelvarianten vor! benötigt spezialregel
+            else if (
+              concatinatedmutatedPositions === '46' ||
+              concatinatedmutatedPositions === '24'
+            ) {
+              if (positionWithoutSmallestChainNumber < positonOfNeighbourSmallestChainNumber) {
+                hexagon.backgroundImage = stemLvl1_2_15
+              } else {
+                hexagon.backgroundImage = stemLvl1_2_13
+              }
               break
             } else if (concatinatedmutatedPositions === '15') {
-              hexagon.backgroundImage = stemLvl1_2_15
+              hexagon.backgroundImage = stemLvl1_2_13
               break
             } else if (
               concatinatedmutatedPositions === '135' ||
@@ -466,7 +487,7 @@ export const storeData = defineStore('store', {
       }
       // kalkulation des Rotationswinkels für Wurzeln
       else {
-        hexagon.degreeOfRotation = (6 - countRotations) * 60 // da die rotation anhand des umgebenden zustands bestimmt wird, muss die differenz zu 6 verwendet werden
+        hexagon.degreeOfRotation = (7 - countRotations) * 60 // da die rotation anhand des umgebenden zustands bestimmt wird, muss die differenz zu 6 verwendet werden
       }
       if (developmentPlantPartClass === 'root') {
         this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType = [
@@ -572,14 +593,6 @@ export const storeData = defineStore('store', {
       }
     },
     findSmallestStemConnectionChainNumberNextToNeighbourHexagon(hexagon) {
-      // Es wird der kürzeste Weg bis zu den Wurzeln gesucht, da Abzweigung immer möglichst nahe am hauptstamm gebaut werden sollen
-      /*
-      if (this.playgroundData.amountOfNeighbourStemConnections === 1) {
-        this.playgroundData.currentStemConnectionChainNumber += 1
-        hexagon.hexagonStemConnectionChainNumber =
-          this.playgroundData.currentStemConnectionChainNumber
-      }
-      */
       let yCoodinateNeighbourHexagon = null
       // die schleife umläuft das geklickte hexagon und bestimmt den zustand der nachbarhexagone
       for (let [deltaX, deltaY] of this.staticData.offsetsNeighbourHexagons) {
@@ -624,8 +637,6 @@ export const storeData = defineStore('store', {
             this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonStemConnectionChainNumber
           this.playgroundData.XCoordinateTestSmallestChainNumber =
             this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonXCoordinate
-          this.playgroundData.YCoordinateTestSmallestChainNumber =
-            this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonYCoordinate
           this.playgroundData.idTestSmallestChainNumber =
             this.playgroundData.hexagonData[idNeighbourHexagon - 1].hexagonId
         }
