@@ -365,6 +365,10 @@ export const storeData = defineStore('store', {
         countRotations += 1
         // auswahl des richtigen Image für Wurzeln
         if (developmentPlantPartClass === 'root') {
+          this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType = [
+            'root1',
+            'Wurzel Lvl 1'
+          ]
           if (concatinatedmutatedPositions === '1') {
             hexagon.backgroundImage = rootLvl1_1_1
             break
@@ -422,6 +426,10 @@ export const storeData = defineStore('store', {
               hexagon.backgroundImage = leafLvl1_3_1
             }
             this.playgroundData.counterBuildedLeafs += 1
+            this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType = [
+              'leaf1',
+              'Blatt Lvl 1'
+            ]
             break
           }
           // update des benachtbarten Hexagon images mit der kleinsten chainnumber
@@ -429,6 +437,10 @@ export const storeData = defineStore('store', {
             this.playgroundData.currentUpdateOfNeighbourHexagonImages === true &&
             this.playgroundData.smallestChainNumber === hexagon.hexagonStemConnectionChainNumber
           ) {
+            this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType = [
+              'stem1',
+              'Stamm Lvl 1'
+            ]
             if (concatinatedmutatedPositions === '14') {
               hexagon.backgroundImage = stemLvl1_2_14
               break
@@ -438,11 +450,6 @@ export const storeData = defineStore('store', {
               concatinatedmutatedPositions === '46' ||
               concatinatedmutatedPositions === '24'
             ) {
-              console.log(
-                'positionWithoutSmallestChainNumber,positonOfNeighbourSmallestChainNumber',
-                positionWithoutSmallestChainNumber,
-                positonOfNeighbourSmallestChainNumber
-              )
               ////// während der rotation des images starten die positionen wenn sie die 6 überschreiten wieder bei 1, weshalb das berücksichtig werden musss
               if (
                 positonOfNeighbourSmallestChainNumber - positionWithoutSmallestChainNumber === 2 ||
@@ -498,17 +505,6 @@ export const storeData = defineStore('store', {
       // kalkulation des Rotationswinkels für Wurzeln
       else {
         hexagon.degreeOfRotation = (7 - countRotations) * 60 // da die rotation anhand des umgebenden zustands bestimmt wird, muss die differenz zu 6 verwendet werden
-      }
-      if (developmentPlantPartClass === 'root') {
-        this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType = [
-          'root1',
-          'Wurzel Lvl 1'
-        ]
-      } else if (developmentPlantPartClass === 'stem') {
-        this.playgroundData.hexagonData[hexagon.hexagonId - 1].hexagonType = [
-          'stem1',
-          'Stamm Lvl 1'
-        ]
       }
     },
     updateImageOfNeighbourHexagons(hexagon, developmentPlantPartClass) {
