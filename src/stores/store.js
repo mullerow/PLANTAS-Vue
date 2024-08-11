@@ -269,13 +269,9 @@ export const storeData = defineStore('store', {
     },
     findImageOfHexagon(hexagon, developmentPlantPartClass) {
       //////// Rotation des Hexagons um das Image an die benachtbarten hexagone anzupassen ////////////////////////
-      // Bestimmen aller bebauten Nachbar Hexagone
-      let neighbourPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
-        (position) => position !== 0
-      )
-      console.log('neighbourPositions', neighbourPositions)
-      let positionWithoutSmallestChainNumber = 0
-      let positonOfNeighbourSmallestChainNumber = 0
+      let neighbourPositions = []
+      let positionWithoutSmallestChainNumber = null
+      let positonOfNeighbourSmallestChainNumber = null
       // Bestimmung des passenden Images (es werden die Positionen der bebauten nachbarhexagone schritweise "gedreht" bis sie deckungsgelcih mit einem vorhandenen Image sind)
       if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === true) {
         this.findSmallestStemConnectionChainNumberNextToNeighbourHexagon(hexagon)
@@ -310,12 +306,6 @@ export const storeData = defineStore('store', {
           positonOfNeighbourSmallestChainNumber = 6
         }
 
-        positionWithoutSmallestChainNumber = neighbourPositions.filter((item) => {
-          return item !== positonOfNeighbourSmallestChainNumber
-        })
-        console.log('positionWithoutSmallestChainNumber', positionWithoutSmallestChainNumber)
-
-        console.log('positon SCN', positonOfNeighbourSmallestChainNumber)
         if (deltaID === -20) {
           this.playgroundData.positionsOfDevelopedNeighbourHexagons[1] =
             this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
@@ -349,6 +339,17 @@ export const storeData = defineStore('store', {
         }
       }
 
+      // Bestimmen aller bebauten Nachbar Hexagone
+      neighbourPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
+        (position) => position !== 0
+      )
+      console.log('neighbourPositions', neighbourPositions)
+      for (let item of neighbourPositions) {
+        console.log('item', item, positonOfNeighbourSmallestChainNumber)
+        if (item !== positonOfNeighbourSmallestChainNumber) {
+          positionWithoutSmallestChainNumber = item
+        }
+      }
       let mutatedPositions = []
       let countRotations = 0
       for (let i = 0; i < 6; i++) {
@@ -432,12 +433,21 @@ export const storeData = defineStore('store', {
               hexagon.backgroundImage = stemLvl1_2_14
               break
             }
-            // 46 kommt als kombination für beide spiegelvarianten vor! benötigt spezialregel
+            // die concatinatedmutatedPositions 46 kommt als kombination für beide spiegelvarianten vor! benötigt spezialregel
             else if (
               concatinatedmutatedPositions === '46' ||
               concatinatedmutatedPositions === '24'
             ) {
-              if (positionWithoutSmallestChainNumber < positonOfNeighbourSmallestChainNumber) {
+              console.log(
+                'positionWithoutSmallestChainNumber,positonOfNeighbourSmallestChainNumber',
+                positionWithoutSmallestChainNumber,
+                positonOfNeighbourSmallestChainNumber
+              )
+              ////// während der rotation des images starten die positionen wenn sie die 6 überschreiten wieder bei 1, weshalb das berücksichtig werden musss
+              if (
+                positonOfNeighbourSmallestChainNumber - positionWithoutSmallestChainNumber === 2 ||
+                positonOfNeighbourSmallestChainNumber - positionWithoutSmallestChainNumber === -4
+              ) {
                 hexagon.backgroundImage = stemLvl1_2_15
               } else {
                 hexagon.backgroundImage = stemLvl1_2_13
