@@ -58,14 +58,18 @@
       </div>
     </div>
   </div>
+  <button class="musik-button" @click="playAudio">MUSIK</button>
+  <audio ref="audioPlayer" :src="audioSource" controls></audio>
 </template>
 
 <script>
 import { storeData } from '@/stores/store.js'
+import audioFile from '@/assets/audio/Rotkäppchen Export 1.mp3'
 export default {
   data() {
     return {
       store: storeData(),
+      audioSource: audioFile,
       optionwindow: false,
       optionHexagon: null,
       optionHexagonXKoordinate: null,
@@ -97,6 +101,11 @@ export default {
     },
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen
+    },
+    playAudio() {
+      this.$refs.audioPlayer.play().catch((error) => {
+        console.error('Playback failed:', error)
+      })
     }
   }
 }
@@ -175,5 +184,8 @@ h2 {
 .plant-develop-option-button:hover {
   background-color: #15d4cb;
   cursor: pointer;
+}
+.musik-button {
+  margin-top: 150px;
 }
 </style>

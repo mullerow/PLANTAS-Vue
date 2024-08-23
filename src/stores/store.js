@@ -26,6 +26,7 @@ import stemLvl1_3_124 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-3-124.pn
 import stemLvl1_3_146 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-3-146.png'
 import stemLvl1_3_136 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-3-136.png'
 import stemLvl1_4_1246 from '@/assets/images/stems/stems-lvl-1/stem-lvl1-4-1246.png'
+import flowerLvl1_1_1 from '@/assets/images/flowers/flower-lvl1-1-1.png'
 
 export const storeData = defineStore('store', {
   state: () => ({
@@ -276,22 +277,13 @@ export const storeData = defineStore('store', {
       if (this.playgroundData.currentUpdateOfNeighbourHexagonImages === true) {
         this.findSmallestStemConnectionChainNumberNextToNeighbourHexagon(hexagon)
         let deltaID = this.playgroundData.idTestSmallestChainNumber - hexagon.hexagonId
-        console.warn(
-          'Test',
-          this.playgroundData.idTestSmallestChainNumber,
-          '-',
-          hexagon.hexagonId,
-          '=',
-          deltaID
-        )
         // nötige korrektur, aufgrund der versetzten hexagone
         if (
           hexagon.hexagonXCoordinate % 2 === 0 &&
           this.playgroundData.XCoordinateTestSmallestChainNumber !== hexagon.hexagonXCoordinate
         ) {
           deltaID -= this.playgroundData.amountColumns
-        } /// es werden aus den benachtbarten bebauten hexagon positionen die direkten nachtbarn des hexagons mit der kleinsten StemChainNumber entfernt, sodass die Images korrekt gewählt werden
-        console.log('deltaID', deltaID) // Für die spiegelverkehrten Image von 2,4 und 4,6 muss die relative position der beiden anbindungen zueinander ermittelt werden
+        } /// es werden aus den benachtbarten bebauten hexagon positionen die direkten nachtbarn des hexagons mit der kleinsten StemChainNumber entfernt, sodass die Images korrekt gewählt werden// Für die spiegelverkehrten Image von 2,4 und 4,6 muss die relative position der beiden anbindungen zueinander ermittelt werden
         if (deltaID === -20) {
           positonOfNeighbourSmallestChainNumber = 1
         } else if (deltaID === -19) {
@@ -340,12 +332,16 @@ export const storeData = defineStore('store', {
       }
 
       // Bestimmen aller bebauten Nachbar Hexagone
+      //////////// BAUSTELLEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
+      //////////////////////////////////////////////////////
       neighbourPositions = this.playgroundData.positionsOfDevelopedNeighbourHexagons[1].filter(
-        (position) => position !== 0
+        (position) =>
+          position !== 0 &&
+          this.playgroundData.hexagonData[hexagon.hexagonId - 1].smallestChainNumber !==
+            this.playgroundData.smallestChainNumber
       )
       console.log('neighbourPositions', neighbourPositions)
       for (let item of neighbourPositions) {
-        console.log('item', item, positonOfNeighbourSmallestChainNumber)
         if (item !== positonOfNeighbourSmallestChainNumber) {
           positionWithoutSmallestChainNumber = item
         }
@@ -419,9 +415,10 @@ export const storeData = defineStore('store', {
               hexagon.backgroundImage = leafLvl1_2_1
             } else if (
               this.playgroundData.counterBuildedLeafs % 2 !== 0 &&
-              this.playgroundData.counterBuildedLeafs % 3 === 0
+              this.playgroundData.counterBuildedLeafs % 3 === 0 &&
+              hexagon.hexagonYCoordinate < 6
             ) {
-              hexagon.backgroundImage = leafLvl1_1_1
+              hexagon.backgroundImage = flowerLvl1_1_1 //leafLvl1_1_1
             } else {
               hexagon.backgroundImage = leafLvl1_3_1
             }
