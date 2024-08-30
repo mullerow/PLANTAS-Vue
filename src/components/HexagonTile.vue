@@ -58,7 +58,7 @@
       </div>
     </div>
   </div>
-  <button class="musik-button" @click="playAudio">MUSIK</button>
+  <button class="musik-button" @click="toggleAudio">MUSIK</button>
   <audio ref="audioPlayer" :src="audioSource" controls></audio>
 </template>
 
@@ -76,7 +76,8 @@ export default {
       optionHexagonYKoordinate: null,
       hexagonTypeName: '',
       hexagonCategory: '',
-      isDropdownOpen: false
+      isDropdownOpen: false,
+      isPlayingMusik: false
     }
   },
   methods: {
@@ -102,10 +103,21 @@ export default {
     toggleDropdown() {
       this.isDropdownOpen = !this.isDropdownOpen
     },
-    playAudio() {
-      this.$refs.audioPlayer.play().catch((error) => {
-        console.error('Playback failed:', error)
-      })
+    toggleAudio() {
+      const audioPlayer = this.$refs.audioPlayer
+      if (this.isPlaying) {
+        audioPlayer.pause()
+        this.isPlaying = false
+      } else {
+        audioPlayer
+          .play()
+          .then(() => {
+            this.isPlaying = true
+          })
+          .catch((error) => {
+            console.error('Playback failed:', error)
+          })
+      }
     }
   }
 }
