@@ -55,6 +55,11 @@
           Stickstoff: 0,1 g/d<br />
           Phosphor: 0 g/d
         </div>
+        <hr />
+        <div>
+          Alter des Pflanzenteils: <br />
+          14 Tage
+        </div>
       </div>
     </div>
   </div>
